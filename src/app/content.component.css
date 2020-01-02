@@ -1,0 +1,44 @@
+.overlay {
+  position: relative;
+  opacity: 0.8;
+  width: 80%;
+  left: 10%;
+  padding: unset;
+}
+
+.textbackground {
+  background: darkblue;
+  color: white;
+  border-top: 1em;
+  border-left: 1em;
+}
+
+.textcontent {
+  padding: 1em;
+}
+
+#contentsidebyside {
+  display: flex;
+  height: 75vh;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#topnav {
+  height:10vh;
+  width: 100%;
+}
+
+#left {
+  flex: 0 0 35%;
+}
+
+.spacerbackground {
+  min-width: 1em;
+  min-height: 1em;
+  opacity: 0.6;
+  background: darkblue;
+}
+
+#right {
+  flex: 1;
+}
