@@ -1,0 +1,61 @@
+<style>
+  .sizing {
+    position: fixed;
+    width: 80%;
+    height: 80%;
+    left: calc(10% - 8px);
+    top: calc(10% - 8px);
+    display: inline-block;
+  }
+  .bluredBackground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 8px solid;
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(8px) grayscale(0.7);;
+    filter: blur(12px);
+  }
+  @supports not (backdrop-filter: blur(2px)) {
+    .bluredBackground {
+      opacity: 0.9;
+      background-color: #777777;
+    }
+  }
+  .login-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  .input-wrapper {
+    left: 20%;
+    width: 60%;
+    top: calc(50% - 20px);
+    position: absolute;
+  }
+  #code {
+    width: 100%;
+    position: relative;
+    font-size: xx-large;
+    text-align: center;
+  }
+  .xxbutton
+  {
+    width: 50px;
+    height: 50px;
+    font-size: xx-large;
+    position: relative;
+  }
+</style>
+<div class="login-container">
+  <div class="sizing">
+    <div class="bluredBackground">
+    </div>
+    <div class="login-overlay">
+      <div class="input-wrapper">
+        <input id="code" type="password" autocomplete="off" placeholder="Enter code" autofocus name="code" [(ngModel)]="code" (keyup)='checkCode()' >
+      </div>
+    </div>
+  </div>
+</div>

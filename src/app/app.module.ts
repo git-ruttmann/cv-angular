@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { ContentComponent } from './content.component';
 import { LoginComponent } from './login.component';
 import { BaseFlightComponent } from './base-flight.component';
+import { FormsModule } from '@angular/forms';
 import {APP_BASE_HREF} from '@angular/common';
 
 @NgModule({
@@ -19,7 +20,8 @@ import {APP_BASE_HREF} from '@angular/common';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [
     {provide: APP_BASE_HREF, useValue: "/"},

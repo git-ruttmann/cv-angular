@@ -12,7 +12,12 @@ export class AuthenticateService {
 
   public Authenticate(code: String) {
     console.log("Authenticating")
-    this.isAuthenticated = true;
+    if (code.trim() === "xx") {
+      this.isAuthenticated = true;
+    }
+    else {
+      return false;
+    }
 
     return this.isAuthenticated;
   }

@@ -1,27 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { AuthenticateService } from './authenticate.service';
 import { Router } from '@angular/router';
+import { isDevMode } from '@angular/core';
 
 @Component({
   selector: 'app-login',
-  template: `
-<div class="overlay login-container">
-  <p>login works - fine!</p>
-  <div class="xxbutton" (click)='onLogin()'>
-      <p>Let's go</p>
-  </div>
-</div>`,
-  styles: [`
-.xxbutton
-{
-    width: 50px;
-    height: 50px;
-    position: relative;
-}
-`],
-  styleUrls: ['./app.component.css']
+  templateUrl: './login.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class LoginComponent implements OnInit {
+  code: string = "";
 
   constructor(private authService : AuthenticateService, private router : Router) {
   }
@@ -32,8 +20,19 @@ export class LoginComponent implements OnInit {
 
   public onLogin() 
   {
-    this.authService.Authenticate("abc")
+    if (isDevMode())
+    {
+      this.authService.Authenticate("abc")
+    }
+
     if (this.authService.IsLoggedIn()) {
+      this.router.navigate(["/authenticated"]);
+    }
+  }
+
+  public checkCode()
+  {
+    if (this.authService.Authenticate(this.code)) {
       this.router.navigate(["/authenticated"]);
     }
   }

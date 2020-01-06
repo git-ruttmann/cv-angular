@@ -46,7 +46,7 @@ export const baseAnimations = trigger("routeAnimations", [
         query('.flyPathHead',  [ style({ strokeDashoffset: 1600 }) ]),
         query('[id^="poi"]', [ style({ opacity: 0 }) ]),
 
-        query('.login-container', animate(100, style({ opacity : 0.0 }))),
+        query('.login-container', animate(200, style({ opacity : 0.0 }))),
         group([
             query('.flyPathLine',  [ 
                 animate(duration, AnimationStuff.flyPathKeyFrames(style({ offset:0.4 }))) 
