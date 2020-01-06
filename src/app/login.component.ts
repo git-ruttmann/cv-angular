@@ -10,6 +10,7 @@ import { isDevMode } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
   code: string = "";
+  codeReadonly: boolean = false;
 
   constructor(private authService : AuthenticateService, private router : Router) {
   }
@@ -30,10 +31,12 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  public checkCode()
+  public checkCode(event: Event)
   {
     if (this.authService.Authenticate(this.code)) {
-      this.router.navigate(["/authenticated"]);
+      this.codeReadonly = true;
+
+      setTimeout(() => { this.router.navigate(["/authenticated"]); }, 1);
     }
   }
 }

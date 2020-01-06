@@ -54,7 +54,15 @@
     </div>
     <div class="login-overlay">
       <div class="input-wrapper">
-        <input id="code" type="password" autocomplete="off" placeholder="Enter code" autofocus name="code" [(ngModel)]="code" (keyup)='checkCode()' >
+        <input id="code"
+          type="password" 
+          autocomplete="off" 
+          placeholder="Enter code" 
+          autofocus 
+          name="code" 
+          [(ngModel)]="code" 
+          [appReadonly]="codeReadonly"
+          (keyup)='checkCode($event)' >
       </div>
     </div>
   </div>

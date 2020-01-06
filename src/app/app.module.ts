@@ -9,13 +9,15 @@ import { LoginComponent } from './login.component';
 import { BaseFlightComponent } from './base-flight.component';
 import { FormsModule } from '@angular/forms';
 import {APP_BASE_HREF} from '@angular/common';
+import { ReadonlyDirective } from './readonly.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     ContentComponent,
     LoginComponent,
-    BaseFlightComponent
+    BaseFlightComponent,
+    ReadonlyDirective
   ],
   imports: [
     BrowserModule,
