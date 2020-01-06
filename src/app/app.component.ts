@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
-import { baseAnimations } from './animation';
+import { routeAnimations } from './animation';
+import { BaseStateService } from './base-state.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  animations: [ baseAnimations ],
+  animations: [ routeAnimations ],
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
@@ -13,12 +14,16 @@ export class AppComponent {
   isFlyPathVisible = false;
   isOpen = false;
 
-  constructor(private router: Router)
+  constructor(private baseStateService : BaseStateService)
   {
   }
 
   getAnimatedState(outlet: RouterOutlet) {
     var value = outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
     return value;
+  }
+
+  onAnimationDone() {
+    this.baseStateService.globalAnimationFinished();
   }
 }

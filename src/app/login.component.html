@@ -60,6 +60,7 @@
           placeholder="Enter code" 
           autofocus 
           name="code" 
+          (click)='checkCode($event)'
           [(ngModel)]="code" 
           [appReadonly]="codeReadonly"
           (keyup)='checkCode($event)' >

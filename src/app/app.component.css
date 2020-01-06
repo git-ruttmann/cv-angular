@@ -21,6 +21,17 @@
   }
 }
 
+/* for mobile devices */
+@media screen and (-webkit-min-device-pixel-ratio:0) and (orientation: portrait) and (max-width: 520px) { 
+  .overlaybackground {
+    width: unset;
+    height: 130%;
+    min-height: unset;
+    min-width: unset;
+    max-width: unset;
+  }
+}
+
 .overlay
 {
     position: relative;
