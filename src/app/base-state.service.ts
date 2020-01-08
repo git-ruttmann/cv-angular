@@ -24,7 +24,6 @@ export class BaseStateService {
 
   public globalAnimationFinished()
   {
-    console.log('global finished active: ' + this.isActive + ' first: ' + this.isFirstActivation);
     clearInterval(this.timerHandle);
     if (this.isActive == false) {
       return;

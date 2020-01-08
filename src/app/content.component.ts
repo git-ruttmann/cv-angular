@@ -1,10 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import {Location} from '@angular/common';
-import { VitaeEntryService } from './vitae-entry.service';
+import { VitaEntryService } from './vita-entry.service';
 import { Observable } from 'rxjs';
-import { VitaeEntry } from './vitae-entry';
+import { VitaEntry, VitaEntryEnum } from './vita-entry';
 import { BaseStateService } from './base-state.service';
+
+const urlToVitaEntryEnum = {
+  "person" : VitaEntryEnum.Person,
+  "projects" : VitaEntryEnum.Project,
+  "technologies" : VitaEntryEnum.Technology,
+  "strength" : VitaEntryEnum.Strength,
+  "interests" : VitaEntryEnum.Interest,
+};
 
 @Component({
   selector: 'app-content',
@@ -13,7 +21,8 @@ import { BaseStateService } from './base-state.service';
 })
 export class ContentComponent implements OnInit {
 
-  private content = "Hello";
+  public content = "Hello";
+  entries: Observable<VitaEntry[]>;
 
   @ViewChild('textcontent', { static : true })
   contentElt: ElementRef;
@@ -21,10 +30,14 @@ export class ContentComponent implements OnInit {
   constructor(
       private router : Router, 
       private location : Location, 
-      private dataService : VitaeEntryService,
+      private dataService : VitaEntryService,
       private baseStateService : BaseStateService) {
-    this.content = router.url.substr(1);
-    console.log("start " +  router.url);
+    this.content = router.url.substr(1).toLowerCase();
+    this.entries = dataService.entries;
+
+    var vitaEntryType = urlToVitaEntryEnum[this.content];
+
+    this.dataService.load(vitaEntryType);
   }
 
   ngOnInit() {
@@ -33,5 +46,10 @@ export class ContentComponent implements OnInit {
   back() {
     this.location.back();
     this.baseStateService.returnToBase();
+  }
+
+  scrollTo(elt : number) {
+    var item = this.contentElt.nativeElement.querySelector("#id_" + elt);
+    item.scrollIntoView();
   }
 }

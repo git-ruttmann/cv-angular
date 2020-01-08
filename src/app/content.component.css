@@ -17,6 +17,14 @@
   padding: 1em;
 }
 
+.entryline {
+  font-size: x-large;
+}
+
+.entryindex {
+  font-size: x-large;
+}
+
 #contentsidebyside {
   display: flex;
   height: 75vh;
@@ -41,4 +49,5 @@
 
 #right {
   flex: 1;
+  overflow-y: auto;
 }

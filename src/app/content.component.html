@@ -9,15 +9,25 @@
     <div id="contentsidebyside">
         <div id="left" class="textbackground">
             <div class="textcontent">
-                left side div
+                <div *ngFor="let entry of entries | async; index as i">
+                    <div class="entryindex" (click)="scrollTo(i)">
+                        <p>{{ entry.title }} {{i}}</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="spacerbackground">
         </div>
         <div id="right" class="textbackground">
-            <div class="textcontent">
-                right side div
+            <div class="textcontent" #textcontent>
+                <div *ngFor="let entry of entries | async; index as i">
+                    <div #id_{{i}} id=id_{{i}} class="entryline">
+                        <div *ngFor="let line of entry.lines">
+                            <p>{{ line }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-</div>
+    </div>
 </div>

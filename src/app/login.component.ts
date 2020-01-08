@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
     private authService : AuthenticateService, 
     private router : Router, 
     private baseStateService : BaseStateService) {
+      authService.activeCode.subscribe(x => this.gotAuthentication())
   }
 
   ngOnInit()
@@ -27,19 +28,21 @@ export class LoginComponent implements OnInit {
   {
     if (isDevMode())
     {
-      this.authService.Authenticate("xx")
-      this.baseStateService.enterBase();
-      this.router.navigate(["/authenticated"]);
+      this.authService.Authenticate("xx");
     }
   }
 
   public checkCode(event: Event)
   {
-    if (this.authService.Authenticate(this.code)) {
+    this.authService.Authenticate(this.code);
+  }
+
+  private gotAuthentication(): void
+  {
+      // changing the input field to readonly will hide the keyboard on screen-only devices
       this.codeReadonly = true;
       this.baseStateService.enterBase();
 
-      setTimeout(() => { this.router.navigate(["/authenticated"]); }, 1);
-    }
+      setTimeout(() => { this.router.navigate(["/"]); }, 1);
   }
 }
