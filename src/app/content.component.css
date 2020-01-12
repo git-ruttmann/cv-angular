@@ -1,3 +1,16 @@
+#backBox {
+  position: relative;
+  height: 100%;
+  width: 10vh;
+  float: left;
+  border: 10%;
+}
+#backBtn {
+  margin: 1.5em 1.5em 1.5em 1.0em;
+  fill: white;
+  opacity: 0.8;
+}
+
 .overlay {
   position: relative;
   opacity: 0.8;
@@ -15,14 +28,19 @@
 
 .textcontent {
   padding: 1em;
+  font-size: large;
 }
 
-.entryline {
-  font-size: x-large;
+.entrycontent {
+  opacity: 1;
+}
+
+.entrycontent + .entrycontent {
+  margin-top: 1em;
 }
 
 .entryindex {
-  font-size: x-large;
+  opacity: 1;
 }
 
 #contentsidebyside {
