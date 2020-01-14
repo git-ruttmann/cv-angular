@@ -1,13 +1,13 @@
 import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
-import { AuthenticateService } from './authenticate.service';
+import { AuthenticateService } from '../services/authenticate.service';
 import { Router } from '@angular/router';
 import { isDevMode } from '@angular/core';
-import { BaseStateService } from './base-state.service';
+import { BaseStateService } from '../services/base-state.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['../app.component.css'],
 })
 export class LoginComponent implements OnInit {
   code: string = "";

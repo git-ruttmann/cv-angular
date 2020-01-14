@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ContentComponent } from './content.component';
-import { LoginComponent } from './login.component';
-import { BaseFlightComponent } from './base-flight.component';
-import { AuthGuardService } from './auth-guard.service';
+import { ContentComponent } from './content/content.component';
+import { LoginComponent } from './base/login.component';
+import { BaseFlightComponent } from './base/base-flight.component';
+import { AuthGuardService } from './services/auth-guard.service';
 
 
 const routes: Routes = [

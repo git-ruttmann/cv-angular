@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
-import { routeAnimations } from './animation';
-import { BaseStateService } from './base-state.service';
+import { routeAnimations } from './base/animation';
+import { BaseStateService } from './services/base-state.service';
 
 @Component({
   selector: 'app-root',

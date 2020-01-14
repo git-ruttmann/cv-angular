@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import {Location} from '@angular/common';
-import { VitaEntryService } from './vita-entry.service';
 import { Observable } from 'rxjs';
-import { VitaEntry, VitaEntryEnum } from './vita-entry';
-import { BaseStateService } from './base-state.service';
+
+import { VitaEntryService } from '../services/vita-entry.service';
+import { VitaEntry, VitaEntryEnum } from '../vita-entry';
+import { BaseStateService } from '../services/base-state.service';
 
 const urlToVitaEntryEnum = {
   "person" : VitaEntryEnum.Person,
@@ -17,7 +18,7 @@ const urlToVitaEntryEnum = {
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
-  styleUrls: ['./content.component.css', './app.component.css']
+  styleUrls: ['./content.component.css', '../app.component.css']
 })
 export class ContentComponent implements OnInit {
 

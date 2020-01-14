@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BaseStateService } from './base-state.service';
 import { trigger, transition, query, animate, style, group, AnimationStyleMetadata, AnimationKeyframesSequenceMetadata, AnimationAnimateMetadata, keyframes, state } from '@angular/animations';
+
+import { BaseStateService } from '../services/base-state.service';
 
 const duration = 4400;
 const strokeDuration = duration - 1000; // roughly factor 1.3
@@ -94,7 +95,7 @@ export const baseStateAnimations = trigger('baseState', [
 @Component({
   selector: 'app-base-flight',
   templateUrl: './base-flight.component.html',
-  styleUrls: [ './app.component.css' ],
+  styleUrls: [ '../app.component.css' ],
   animations : [ baseStateAnimations, flyPathStates ],
 })
 export class BaseFlightComponent implements OnInit {

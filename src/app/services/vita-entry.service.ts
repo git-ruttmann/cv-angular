@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { VitaEntry, VitaEntryEnum } from './vita-entry';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { VitaEntry, VitaEntryEnum } from '../vita-entry';
 import { AuthenticateService } from './authenticate.service';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
