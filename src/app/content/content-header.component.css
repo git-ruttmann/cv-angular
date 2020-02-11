@@ -1,0 +1,28 @@
+#topnav {
+  height: 4em;
+  width: 100%;
+  display: flex;
+}
+
+.headertext {
+  flex-grow: 1;
+}
+
+.backbox {
+  position: relative;
+  height: 100%;
+  width: 4em;
+  justify-content: center;
+  align-items: center;
+  max-height: 4em;
+}
+
+.backbutton {
+  margin-top: 5%;
+  fill: white;
+  height: 90%;
+  width: 100%;
+  opacity: 0.8;
+  cursor: pointer;
+}
+

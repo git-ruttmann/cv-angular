@@ -8,6 +8,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ContentComponent } from './content/content.component';
+import { ContentHeaderComponent } from './content/content-header.component';
 import { LoginComponent } from './base/login.component';
 import { BaseFlightComponent } from './base/base-flight.component';
 import { ReadonlyDirective } from './base/readonly.directive';
@@ -22,14 +23,15 @@ import { BackgroundImageViewportService } from './services/background-image-view
     ContentComponent,
     LoginComponent,
     BaseFlightComponent,
-    ReadonlyDirective
+    ReadonlyDirective,
+    ContentHeaderComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [
     {provide: APP_BASE_HREF, useValue: "/"},
