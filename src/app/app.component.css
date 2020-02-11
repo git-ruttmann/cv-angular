@@ -1,6 +1,9 @@
-.bikebackground {
-    transform: translate(-50%, -50%);
-    position: fixed;
+.backgroundimage {
+  transform: translate(-50%, -50%);
+  position: fixed;
+}
+
+.bikeBackground {
     left: 45%;
     top: 65%;
     min-height: 130%;
@@ -10,25 +13,12 @@
 
 @media (orientation: portrait)
 {
-  .bikebackground {
-    transform: translate(-50%, -50%);
-    position: fixed;
-    left: 30%;
+  .bikeBackground {
+    left: 27.5%;
     top: 55%;
     min-height: 110%;
     min-width: 100%;
     max-width: 270%;
-  }
-}
-
-/* for mobile devices */
-@media screen and (-webkit-min-device-pixel-ratio:0) and (orientation: portrait) and (max-width: 520px) { 
-  .overlaybackground {
-    width: unset;
-    height: 130%;
-    min-height: unset;
-    min-width: unset;
-    max-width: unset;
   }
 }
 

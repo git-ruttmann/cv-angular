@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { trigger, transition, query, animate, style, group, AnimationStyleMetadata, AnimationKeyframesSequenceMetadata, AnimationAnimateMetadata, keyframes, state } from '@angular/animations';
 
 import { BaseStateService } from '../services/base-state.service';
+import { BackgroundImageViewportService, BackgroundViewportReport } from '../services/background-image-viewport.service';
 
 const duration = 4400;
 const strokeDuration = duration - 1000; // roughly factor 1.3
@@ -98,17 +99,33 @@ export const baseStateAnimations = trigger('baseState', [
   styleUrls: [ '../app.component.css' ],
   animations : [ baseStateAnimations, flyPathStates ],
 })
-export class BaseFlightComponent implements OnInit {
-
+export class BaseFlightComponent implements OnInit, AfterViewInit {
   isFlyPathVisible = false;
   isOpen = false;
 
+  @ViewChild('backgroundoverlay', { static : true })
+  backgroundOverlayElt: ElementRef;
+
   constructor(
       private router : Router,
-      private baseStateService : BaseStateService) {
+      private baseStateService : BaseStateService,
+      private backgroundImageViewportService : BackgroundImageViewportService) {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(): void
+  {
+    this.backgroundImageViewportService.viewportReports.subscribe(x => this.ApplyBackgroundViewportToFlyPath(x));
+  }
+
+  ApplyBackgroundViewportToFlyPath(report: BackgroundViewportReport)
+  {
+    this.backgroundOverlayElt.nativeElement.style.top = report.Top;
+    this.backgroundOverlayElt.nativeElement.style.left = report.Left;
+    this.backgroundOverlayElt.nativeElement.style.height = report.Height;
+    this.backgroundOverlayElt.nativeElement.style.width = report.Width;
   }
 
   onClick(event) {

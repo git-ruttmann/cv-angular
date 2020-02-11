@@ -6,7 +6,7 @@ const baseItemsQuerySelector = ".flyPathLine,.flyPathHead,.flyPathPoi,.clickArea
 
 export const routeAnimations = trigger("routeAnimations", [
     transition('login => base', [
-        query(".bikebackground", [style({ left: "*" })]),   // dummy for safari: query any element from the SVG.
+        query(".backgroundimage", [style({ left: "*" })]),   // dummy for safari: query any element from the SVG.
         query('.sizing', animate(700, style({ left : "100%" }))),
     ]),
     transition('base => content', [

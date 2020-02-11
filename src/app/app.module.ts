@@ -14,6 +14,7 @@ import { ReadonlyDirective } from './base/readonly.directive';
 import { VitaEntryService } from './services/vita-entry.service';
 import { AuthenticateService } from './services/authenticate.service';
 import { BaseStateService } from './services/base-state.service';
+import { BackgroundImageViewportService } from './services/background-image-viewport.service';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { BaseStateService } from './services/base-state.service';
     VitaEntryService,
     AuthenticateService,
     BaseStateService,
+    BackgroundImageViewportService,
   ],
   bootstrap: [AppComponent]
 })
