@@ -1,8 +1,6 @@
 <!-- background -->
-<div class="content">
-  <div>
-    <img src="assets/bike.jpg" alt="bike" class="backgroundimage bikeBackground" #globalbackgroundimage>
-  </div>
+<div>
+  <img src="assets/bike.jpg" alt="bike" class="backgroundimage bikeBackground" #globalbackgroundimage>
 </div>
 <div [@routeAnimations]="getAnimatedState(outlet)" 
     (@routeAnimations.done)="onAnimationDone()"

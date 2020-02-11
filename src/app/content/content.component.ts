@@ -49,6 +49,11 @@ export class ContentComponent implements OnInit {
     this.baseStateService.returnToBase();
   }
 
+  catchClickOnContent(event : Event)
+  {
+    event.stopPropagation();
+  }
+
   scrollTo(elt : number) {
     var item = this.contentElt.nativeElement.querySelector("#id_" + elt);
     item.scrollIntoView();
