@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { APP_BASE_HREF } from '@angular/common';
+import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,6 +33,9 @@ import { BackgroundImageViewportService } from './services/background-image-view
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    LocalStorageModule.forRoot({
+      storageType: 'localStorage',
+    }),
   ],
   providers: [
     {provide: APP_BASE_HREF, useValue: "/"},
