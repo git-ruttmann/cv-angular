@@ -7,17 +7,36 @@ import { AuthenticateService } from './authenticate.service';
 })
 export class AuthGuardService implements CanActivate 
 {
-  constructor(private authenticateService : AuthenticateService, private router: Router) 
-  { 
+  lastState: Boolean;
+
+  constructor(
+    private authenticateService : AuthenticateService, 
+    private router: Router) 
+  {
+    this.lastState = false;
+    authenticateService.authenticatedState.subscribe(x => this.UpdateState(x))
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean 
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean 
   {
-    if (this.authenticateService.IsLoggedIn()) {
+    if (this.lastState)
+    {
       return true;
     }
 
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
     return false;
+  }
+
+  private UpdateState(authenticatedState: boolean): void
+  {
+    if (this.lastState != authenticatedState)
+    {
+      this.lastState = authenticatedState;
+      if (!authenticatedState)
+      {
+        this.router.navigate(['/login']);
+      }
+    }
   }
 }

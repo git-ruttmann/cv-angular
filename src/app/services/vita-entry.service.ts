@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -10,41 +10,51 @@ import { AuthenticateService } from './authenticate.service';
   providedIn: 'root'
 })
 export class VitaEntryService {
+  private activeVitaType: VitaEntryEnum;
   private _entries = new BehaviorSubject<VitaEntry[]>([]);
 
-  private dataStore: { entries: VitaEntry[] } = { entries: [
-    { title: 'a', vitaEntryType: VitaEntryEnum.Interest, lines: [
-      'bla',
-    ]},
-    { title: 'b', vitaEntryType: VitaEntryEnum.Interest, lines: [ 
-      'more',
-    ]},
-    { title: 'c', vitaEntryType: VitaEntryEnum.Person, lines: [ 
-      'other' 
-    ]},
-  ] };
+  private dataStore: { entries: VitaEntry[] } = { entries: [] };
 
-  constructor(private auth: AuthenticateService, private http: HttpClient) { 
-    this.auth.activeCode.subscribe((x) => this.preload(x));
+  constructor(private authenticationService: AuthenticateService, private http: HttpClient) { 
+    this.activeVitaType = VitaEntryEnum.Introduction;
+    this.authenticationService.authenticatedState.subscribe((x) => this.preload(x));
   }
 
   get entries() : Observable<VitaEntry[]> {
     return this._entries.asObservable();
   }
 
-  public preload(code : string)
+  public preload(isAuthenticated: boolean)
   {
-    console.log("preload " + code);
-    this.http.get("api/v1/vita").subscribe(
-      response => this.decodeVitaEntries(response),
-      err => console.log(err)
-    );
+    if (isAuthenticated)
+    {
+      this.http.get("api/v1/vita").subscribe(
+        response => this.decodeVitaEntries(response),
+        err => this.handleDataRetrivalError(err as HttpErrorResponse)
+      );
+    }
+    else
+    {
+      this.dataStore = { entries : [] };
+      this._entries.next(VitaEntry[0]);
+    }
   }
 
   public load(vitaEntryType: VitaEntryEnum)
   {
-    var entriesForAoi = Object.assign({}, this.dataStore).entries.filter(x => x.vitaEntryType == vitaEntryType);
-    this._entries.next(entriesForAoi);
+    this.activeVitaType = vitaEntryType;
+    this.loadDataForActiveVitaType();
+  }
+
+  private handleDataRetrivalError(err: HttpErrorResponse)
+  {
+    if (err != null)
+    {
+      if (err.status == 401)
+      {
+        this.authenticationService.UnauthorizedResponseInDataLoad();
+      }
+    }
   }
 
   private decodeVitaEntries(response: any): void
@@ -52,5 +62,12 @@ export class VitaEntryService {
     this.dataStore = {
       entries : response.entries.map(x => VitaEntry.FromJson(x))
     };
+    this.loadDataForActiveVitaType();
+  }
+
+  private loadDataForActiveVitaType()
+  {
+    var entriesForAoi = Object.assign({}, this.dataStore).entries.filter(x => x.vitaEntryType == this.activeVitaType);
+    this._entries.next(entriesForAoi);
   }
 }

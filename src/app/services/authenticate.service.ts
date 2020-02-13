@@ -1,21 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { LocalStorageService } from 'angular-2-local-storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticateService {
-  isAuthenticated = false;
-  private _activeCode = new Subject<string>();
+  private _authenticatedState = new BehaviorSubject<boolean>(this.IsAuthenticatedCookieAvailable());
+  private _authenticateSuccess = new Subject<boolean>();
 
-  constructor(private http: HttpClient)
+  constructor(
+    private http: HttpClient,
+    private localStorageService: LocalStorageService)
   { 
   }
 
-  public get activeCode() : Observable<string> { 
-    return this._activeCode.asObservable();
+  public get authenticatedState() : Observable<boolean> { 
+    return this._authenticatedState.asObservable();
+  }
+
+  public get authenticateSuccess() : Observable<boolean> { 
+    return this._authenticateSuccess.asObservable();
   }
 
   public Authenticate(code: string) {
@@ -24,14 +30,40 @@ export class AuthenticateService {
 
     this.http.post("api/v1/authenticate", body, { headers: headers, observe: "response" })
       .subscribe(
-        (response) => { 
-          this.isAuthenticated = true;
-          this._activeCode.next(code);
+        (response) => {
+          this._authenticateSuccess.next(true);
+          this._authenticatedState.next(true);
         },
         (err) => {});
   }
 
-  public IsLoggedIn() : boolean {
-    return this.isAuthenticated;
+  public SetFirstLogon() : void
+  {
+    this.localStorageService.add("Introduction", "true");
+  }
+
+  public IsFirstLogon() : boolean
+  {
+    return this.localStorageService.get("Introduction") != "true";
+  }
+
+  public UnauthorizedResponseInDataLoad()
+  {
+    this._authenticatedState.next(false);
+  }
+
+  private IsAuthenticatedCookieAvailable() : boolean
+  {
+    if (document == null)
+    {
+      return false;
+    }
+
+    if (document.cookie && document.cookie.split(';').some(x => x.startsWith("VitaApiAuth")))
+    {
+      return true;
+    }
+
+    return false;
   }
 }
