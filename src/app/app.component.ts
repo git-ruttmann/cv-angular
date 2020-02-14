@@ -40,10 +40,6 @@ export class AppComponent implements DoCheck, AfterViewInit {
     var value = outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
     return value;
   }
-
-  onAnimationDone() {
-    this.baseStateService.globalAnimationFinished();
-  }
   
   @HostListener('window:resize', ['$event'])
   onResize(event)
@@ -69,8 +65,7 @@ export class AppComponent implements DoCheck, AfterViewInit {
   
         this.lastViewportReport = viewportReport;
         this.backgroundImageViewportService.PublishViewportReport(viewportReport);
-        }
+      }
     }
-
   }
 }

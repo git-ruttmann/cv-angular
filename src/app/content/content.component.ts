@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import {Location} from '@angular/common';
 import { Observable } from 'rxjs';
 
 import { VitaEntryService } from '../services/vita-entry.service';
@@ -20,7 +19,7 @@ const urlToVitaEntryEnum = {
   templateUrl: './content.component.html',
   styleUrls: ['./content.component.css', '../app.component.css']
 })
-export class ContentComponent implements OnInit {
+export class ContentComponent {
 
   public content = "Hello";
   entries: Observable<VitaEntry[]>;
@@ -30,9 +29,7 @@ export class ContentComponent implements OnInit {
 
   constructor(
       private router : Router, 
-      private location : Location, 
-      private dataService : VitaEntryService,
-      private baseStateService : BaseStateService) {
+      private dataService : VitaEntryService) {
     this.content = router.url.substr(1).toLowerCase();
     this.entries = dataService.entries;
 
@@ -41,12 +38,8 @@ export class ContentComponent implements OnInit {
     this.dataService.load(vitaEntryType);
   }
 
-  ngOnInit() {
-  }
-
   back() {
-    this.location.back();
-    this.baseStateService.returnToBase();
+    this.router.navigate(["/"]);
   }
 
   catchClickOnContent(event : Event)

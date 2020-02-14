@@ -1,69 +1,96 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BaseStateService {
-  private _state : string = "initial";
+  private state : string = "initial";
+  private nextState : string = "initial";
   private timerHandle;
   private flashTimeout = 5000;
   private isFirstActivation = true;
-  private isActive = true;
 
-  constructor() { }
-
-  public getstate() : string {
-    return this._state;
-  }
-
-  public enterBase() {
-    this._state = "initial";
-    this.isFirstActivation = true;
-    this.isActive = true;
-  }
-
-  public globalAnimationFinished()
+  constructor(private router : Router)
   {
-    clearInterval(this.timerHandle);
-    if (this.isActive == false) {
+    this.router.events.subscribe(x => this.RouteStateChanged());
+  }
+
+  public GetState() : string 
+  {
+    return this.state;
+  }
+
+  public FetchState()
+  {
+    if (this.state != this.nextState)
+    {
+      this.state = this.nextState;
+      if (this.state == "flyin")
+      {
+        this.isFirstActivation = false;
+      }
+    }
+  }
+
+  public LoginSuccessfull()
+  {
+    this.state = "initial";
+    this.isFirstActivation = true;
+  }
+
+  private RouteStateChanged(): void
+  {
+    let state = this.router.routerState.snapshot;
+    let section = state.url.split('/', 2).concat("-")[1].toLowerCase();
+    if (section == "-")
+    {
       return;
     }
-
-    if (this.isFirstActivation) {
-      this._state = "flyin";
+    
+    if (section == "login")
+    {
+      this.isFirstActivation = true;
+      this.nextState = "initial";
+    }
+    else if (section != "")
+    {
+      // left to a content view. Set the "old" state before FetchState to inactive
+      this.nextState = "inactive";
+      this.state = this.nextState;
       this.isFirstActivation = false;
     }
-    else {
-      this._state = "returned";
+    else if (this.isFirstActivation)
+    {
+      this.nextState = "flyin";
+    }
+    else
+    {
+      this.nextState = "returned";
     }
 
-    this.timerHandle = setInterval(() => this.timeout(), this.flashTimeout);
+    if (this.nextState != this.state)
+    {
+      clearInterval(this.timerHandle);
+      if (this.nextState != "inactive")
+      {
+        this.timerHandle = setInterval(() => this.timeout(), this.flashTimeout);
+        this.flashTimeout = 7000;
+      }
+    }
   }
-
-  public returnToBase() {
-    this.isActive = true;
-    clearInterval(this.timerHandle);
-    this.flashTimeout = 7000;
-    this.timerHandle = setInterval(() => this.timeout(), this.flashTimeout);
-  }
-
-  public leaveBase() {
-    clearInterval(this.timerHandle);
-    this.isActive = false;
-    this._state = "inactive";
-  }
-
+  
   private timeout()
   {
     if (this.isFirstActivation) {
       return;
     }
 
-    if (this._state === "highlight1") {
-      this._state = "highlight2";
+    if (this.state === "highlight1") {
+      this.state = "highlight2";
     }
     else {
-      this._state = "highlight1";
+      this.state = "highlight1";
     }
 
     this.flashTimeout = this.flashTimeout + 2000;

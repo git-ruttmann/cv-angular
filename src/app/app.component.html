@@ -3,7 +3,6 @@
   <img src="assets/bike.jpg" alt="bike" class="backgroundimage bikeBackground" #globalbackgroundimage>
 </div>
 <div [@routeAnimations]="getAnimatedState(outlet)" 
-    (@routeAnimations.done)="onAnimationDone()"
     style='height:100%' >
   <router-outlet #outlet="outlet"></router-outlet>
 </div>

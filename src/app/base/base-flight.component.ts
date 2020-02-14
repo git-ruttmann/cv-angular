@@ -99,7 +99,7 @@ export const baseStateAnimations = trigger('baseState', [
   styleUrls: [ '../app.component.css' ],
   animations : [ baseStateAnimations, flyPathStates ],
 })
-export class BaseFlightComponent implements OnInit, AfterViewInit {
+export class BaseFlightComponent implements AfterViewInit {
   isFlyPathVisible = false;
   isOpen = false;
 
@@ -112,12 +112,10 @@ export class BaseFlightComponent implements OnInit, AfterViewInit {
       private backgroundImageViewportService : BackgroundImageViewportService) {
   }
 
-  ngOnInit() {
-  }
-
   ngAfterViewInit(): void
   {
     this.backgroundImageViewportService.viewportReports.subscribe(x => this.ApplyBackgroundViewportToFlyPath(x));
+    setTimeout(() => this.baseStateService.FetchState(), 0);
   }
 
   ApplyBackgroundViewportToFlyPath(report: BackgroundViewportReport)
@@ -134,16 +132,15 @@ export class BaseFlightComponent implements OnInit, AfterViewInit {
     var value = idAttr.nodeValue as String;
 
     if (value.startsWith("aoi")) {
-      this.baseStateService.leaveBase();
       this.router.navigate(["/" + value.substr(3).toLowerCase()]);
     }
   }
 
   getAnimationState() : string {
-    return this.baseStateService.getstate();
+    return this.baseStateService.GetState();
   }
 
   getFlyPathState() : string {
-    return this.baseStateService.getstate() == "initial" ? "off" : "on";
+    return this.baseStateService.GetState() == "initial" ? "off" : "on";
   }
 }
