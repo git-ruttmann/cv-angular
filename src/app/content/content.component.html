@@ -15,9 +15,10 @@
             </div>
             <div class="spacerbackground" id="betweenleftandright">
             </div>
-            <div id="right" class="textbackground">
+            <div id="right" class="textbackground" #textbackground>
                 <div class="textcontent" #textcontent>
                     <div *ngFor="let entry of entries | async; index as i" #id_{{i}} id=id_{{i}} class="entrycontent">
+                        <div class = "entry-header">{{ entry.title }}</div>
                         <div>
                             <div *ngFor="let line of entry.lines">
                                 <p>{{ line }}</p>

@@ -17,6 +17,7 @@ import { VitaEntryService } from './services/vita-entry.service';
 import { AuthenticateService } from './services/authenticate.service';
 import { BaseStateService } from './services/base-state.service';
 import { BackgroundImageViewportService } from './services/background-image-viewport.service';
+import { TrackingService } from './services/tracking.service';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { BackgroundImageViewportService } from './services/background-image-view
     AuthenticateService,
     BaseStateService,
     BackgroundImageViewportService,
+    TrackingService,
   ],
   bootstrap: [AppComponent]
 })
