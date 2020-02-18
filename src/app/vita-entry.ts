@@ -58,15 +58,17 @@ export class VitaEntry {
   lines: VitaEntrySentence[];
   vitaEntryType: VitaEntryEnum;
 
-  static FromJson(json: any)
+  static FromJson(json: any) : VitaEntry
   {
     var entry = new VitaEntry();
     let attributes : string[] = json.attributes;
     entry.title = json.title;
     entry.lines = this.buildSentencesAndLists(json.lines);
-    entry.language = attributes.filter(x => x == "English" || x == "German")[0] || "English";
+    entry.language = attributes.filter(x => x == "English" || x == "German").join();
     let aoiString: string = json.vitaEntryType;
     entry.vitaEntryType = VitaEntryEnum[aoiString as keyof typeof VitaEntryEnum];
+    entry.duration = attributes.filter(x => x == "Short" || x == "Medium" || x == "Long").map(x => x.substr(0, 1)).join("");
+
     return entry;
   }
 

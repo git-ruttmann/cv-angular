@@ -84,7 +84,6 @@ export class ContentComponent implements AfterViewInit {
     }
 
     let firstVisibleIndex = topicElements.findIndex(x => x.offsetTop - x.offsetHeight * 2 > scrollingElement.offsetTop + scrollingElement.scrollTop);
-    console.log("firstVisibleIndex " + firstVisibleIndex);
     let activeTopicIndex = firstVisibleIndex <= 0 ? topicElements.length - 1 : firstVisibleIndex - 1;
     let activeElement = topicElements[activeTopicIndex];
     let contentElement = activeElement.nextSibling as HTMLElement;

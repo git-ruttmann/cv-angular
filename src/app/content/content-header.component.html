@@ -32,7 +32,7 @@
             {{content}}
         </div>
     </div>
-    <div class="backbox">
+    <div class="backbox" [hidden]="isDuration('S')" (click)="selectNextDuration($event)">
         <svg class="backbutton headerright" viewBox="0 0 50 50" >
             <use href="#durationSelector"></use>
             <rect y = 1.5 x = 1.5 width="47" height="47" rx="5" class = "Line"/>
@@ -41,7 +41,7 @@
             <text x = 22 y=42 class="MinutesText" >min</text>
         </svg>       
     </div>
-    <div class="backbox">
+    <div class="backbox" [hidden]="isDuration('M')" (click)="selectNextDuration($event)">
         <svg class="backbutton headerright" viewBox="0 0 50 50" >
             <use href="#durationSelector"></use>
             <rect y = 1.5 x = 1.5 width="47" height="47" rx="5" class = "Line"/>
@@ -51,7 +51,7 @@
             <text x = 24 y=42 class="MinutesText" >min</text>
         </svg>       
     </div>
-    <div class="backbox">
+    <div class="backbox" [hidden]="isDuration('L')" (click)="selectNextDuration($event)">
         <svg class="backbutton headerright" viewBox="0 0 50 50" >
             <use href="#durationSelector"></use>
             <rect y = 1.5 x = 1.5 width="47" height="47" rx="5" class = "Line"/>

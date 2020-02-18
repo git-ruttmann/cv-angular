@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { VitaEntry, VitaEntryEnum } from '../vita-entry';
 import { AuthenticateService } from './authenticate.service';
+import { LocalStorageService } from 'angular-2-local-storage';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,27 @@ export class VitaEntryService {
   private _entries = new BehaviorSubject<VitaEntry[]>([]);
 
   private dataStore: { entries: VitaEntry[] } = { entries: [] };
+  private language: string;
+  private _duration: string;
 
-  constructor(private authenticationService: AuthenticateService, private http: HttpClient) { 
+  constructor(
+    private authenticationService: AuthenticateService, 
+    private http: HttpClient,
+    private localStorageService: LocalStorageService)
+  {
     this.activeVitaType = VitaEntryEnum.Introduction;
     this.authenticationService.authenticatedState.subscribe((x) => this.preload(x));
+    this.language = "English";
+    this._duration = this.localStorageService.get("duration") || "S";
   }
 
   get entries() : Observable<VitaEntry[]> {
     return this._entries.asObservable();
+  }
+
+  public get duration()
+  {
+    return this._duration;
   }
 
   public preload(isAuthenticated: boolean)
@@ -46,6 +60,18 @@ export class VitaEntryService {
     this.loadDataForActiveVitaType();
   }
 
+  public setDuration(duration: string)
+  {
+    this._duration = duration.substr(0, 1);
+    if (duration != "S" && duration != "M" && duration != "L")
+    {
+      throw "Unkown duration: " + duration;
+    }
+
+    this.localStorageService.set("duration", this.duration);
+    this.loadDataForActiveVitaType();
+  }
+
   private handleDataRetrivalError(err: HttpErrorResponse)
   {
     if (err != null)
@@ -59,15 +85,24 @@ export class VitaEntryService {
 
   private decodeVitaEntries(response: any): void
   {
+    let entries : VitaEntry[] = response.entries.map(x => VitaEntry.FromJson(x));
+
+    let introduction = entries.find(x => x.vitaEntryType == VitaEntryEnum.Introduction);
+    this.language = introduction.language || "English";
+
     this.dataStore = {
-      entries : response.entries.map(x => VitaEntry.FromJson(x))
+      entries : entries
     };
+
     this.loadDataForActiveVitaType();
   }
 
   private loadDataForActiveVitaType()
   {
-    var entriesForAoi = Object.assign({}, this.dataStore).entries.filter(x => x.vitaEntryType == this.activeVitaType);
+    var entriesForAoi = Object.assign({}, this.dataStore).entries.filter(
+      x => x.vitaEntryType == this.activeVitaType 
+      && x.language.indexOf(this.language) >= 0
+      && x.duration.indexOf(this._duration) >= 0);
     this._entries.next(entriesForAoi);
   }
 }
