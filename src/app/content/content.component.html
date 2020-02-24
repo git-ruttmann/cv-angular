@@ -18,12 +18,7 @@
             <div id="right" class="textbackground" #textbackground>
                 <div class="textcontent" #textcontent>
                     <div *ngFor="let entry of entries | async; index as i" #id_{{i}} id=id_{{i}} class="entrycontent">
-                        <div class = "entry-header">{{ entry.title }}</div>
-                        <div>
-                            <div *ngFor="let line of entry.lines">
-                                <p>{{ line }}</p>
-                            </div>
-                        </div>
+                        <app-vita-entry [entry]="entry"></app-vita-entry>
                     </div>
                 </div>
             </div>

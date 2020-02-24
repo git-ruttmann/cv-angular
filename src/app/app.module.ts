@@ -18,6 +18,8 @@ import { AuthenticateService } from './services/authenticate.service';
 import { BaseStateService } from './services/base-state.service';
 import { BackgroundImageViewportService } from './services/background-image-viewport.service';
 import { TrackingService } from './services/tracking.service';
+import { WelcomeComponent } from './content/welcome.component';
+import { VitaEntryComponent } from './content/vita-entry.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { TrackingService } from './services/tracking.service';
     BaseFlightComponent,
     ReadonlyDirective,
     ContentHeaderComponent,
+    WelcomeComponent,
+    VitaEntryComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,19 @@
+<div class="entry-header">{{ entry.title }}</div>
+<div class="entry-text">
+    <div>
+        <div *ngFor="let line of entry.lines">
+            <div [ngSwitch]="line.sentenceType">
+                <div *ngSwitchCase='vitaSentenceEnum.Paragraph'>
+                    <p class="vitasentence">{{ line.line }}</p>
+                </div>
+                <div *ngSwitchCase='vitaSentenceEnum.List'>
+                    <ul class="vitalist">
+                        <li *ngFor="let sentence of line.items" class="vitalistitem" [ngClass]="{'nobullet':sentence.sentenceType == vitaSentenceEnum.NoBulletListItem}">
+                            {{ sentence.line }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

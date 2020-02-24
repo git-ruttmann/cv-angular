@@ -41,6 +41,11 @@
   font-size: large;
 }
 
+.entry-header {
+  font-size: xx-large;
+  margin-bottom: 0.3em;
+}
+
 .entrycontent {
   opacity: 1;
 }
@@ -55,6 +60,29 @@
 
 .symbol {
   display: none;
+}
+
+.vitalist {
+  margin-block-start: 0em !important;
+  margin-block-end: 0em !important;
+  padding-inline-start: 1em !important;
+}
+
+.vitalistitem {
+  margin-top: 0.2em;
+}
+
+.vitasentence {
+  margin-block-start: 0.2em;
+  margin-block-end: 0.2em;
+}
+
+.nobullet {
+  list-style-type: none;
+}
+
+.vitalistitem + .nobullet {
+  margin-block-start: 0em;
 }
 
 #contentsidebyside {
