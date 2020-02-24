@@ -78,3 +78,14 @@
   flex: 1;
   overflow-y: auto;
 }
+
+@media (orientation: portrait)
+{
+  #left {
+    display: none;
+  }
+  #betweenleftandright {
+    display: none;
+  }
+}
+
