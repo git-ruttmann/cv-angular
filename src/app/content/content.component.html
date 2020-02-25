@@ -1,4 +1,5 @@
 <div class="overlaycontainer"  (click)='back()'>
+    <div class="overlayspacer"></div>
     <div class="overlay">
         <app-content-header [header-content]="content"></app-content-header>
         <div class="spacerbackground">
@@ -6,10 +7,8 @@
         <div id="contentsidebyside" (click)='catchClickOnContent($event)'>
             <div id="left" class="textbackground">
                 <div class="textcontent">
-                    <div *ngFor="let entry of entries | async; index as i">
-                        <div class="entryindex" (click)="scrollTo(i)">
-                            <p>{{ entry.title }}</p>
-                        </div>
+                    <div *ngFor="let entry of entries | async; index as i" class="entryindex" (click)="scrollTo(i)">
+                        <p>{{ entry.title }}</p>
                     </div>
                 </div>
             </div>
