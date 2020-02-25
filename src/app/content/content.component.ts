@@ -15,6 +15,7 @@ const urlToVitaEntryEnum = {
   "technologies" : VitaEntryEnum.Technology,
   "strength" : VitaEntryEnum.Strength,
   "interests" : VitaEntryEnum.Interest,
+  "introduction" : VitaEntryEnum.Introduction,
 };
 
 @Component({

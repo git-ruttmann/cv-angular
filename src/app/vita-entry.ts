@@ -6,6 +6,7 @@ export enum VitaEntryEnum {
   Technology,
   Strength,
   Project,
+  Introduction
 }
 
 export enum VitaSentenceEnum

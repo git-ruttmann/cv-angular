@@ -4,6 +4,7 @@ import { trigger, transition, query, animate, style, group, AnimationStyleMetada
 
 import { BaseStateService } from '../services/base-state.service';
 import { BackgroundImageViewportService, BackgroundViewportReport } from '../services/background-image-viewport.service';
+import { AuthenticateService } from '../services/authenticate.service';
 
 const duration = 4400;
 const strokeDuration = duration - 1000; // roughly factor 1.3
@@ -109,6 +110,7 @@ export class BaseFlightComponent implements AfterViewInit {
   constructor(
       private router : Router,
       private baseStateService : BaseStateService,
+      private authenticateService : AuthenticateService,
       private backgroundImageViewportService : BackgroundImageViewportService) {
   }
 
@@ -132,7 +134,17 @@ export class BaseFlightComponent implements AfterViewInit {
     var value = idAttr.nodeValue as String;
 
     if (value.startsWith("aoi")) {
-      this.router.navigate(["/" + value.substr(3).toLowerCase()]);
+      let targetUrl = value.substr(3).toLowerCase();
+
+      if (this.authenticateService.IsFirstLogon())
+      {
+        this.router.navigate(["/introduction"], { state: [ targetUrl ], queryParams: {"target": targetUrl} });
+        this.authenticateService.SetFirstLogon();
+      }
+      else
+      {
+        this.router.navigate(["/" + targetUrl]);
+      }
     }
   }
 
