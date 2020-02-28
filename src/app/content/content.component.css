@@ -5,6 +5,7 @@
   float: left;
   border: 10%;
 }
+
 #backBtn {
   margin: 1.5em 1.5em 1.5em 1.0em;
   fill: white;
@@ -24,13 +25,14 @@
   height: 5vh;
 }
 
-.overlay, .welcomeoverlay {
+.overlay {
   position: relative;
   opacity: 0.87;
   width: 80%;
   margin: auto;
   max-width: 70em;
   padding: unset;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .textbackground {
@@ -100,8 +102,12 @@ div.entryindex + div.entryindex {
 
 #contentsidebyside {
   display: flex;
-  height: calc(90vh - 4em);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  height: calc(88vh - 4em - 1em);
+}
+
+#welcomecontent {
+  display: flex;
+  height: 88vh;
 }
 
 #left {
@@ -128,11 +134,17 @@ div.entryindex + div.entryindex {
 }
 
 .durationimage {
-  width: 4em;
+  min-width: 4em;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+a {
+  color: white;
 }
 
 .durationtext {
-  padding: 1em;
+  padding: 0em 1em 0em 1em;
   font-size: large;
 }
 
@@ -146,3 +158,51 @@ div.entryindex + div.entryindex {
   }
 }
 
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
+  #contentsidebyside {
+    height: calc(85vh - 4em - 1em);
+  }
+}
+
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+  #contentsidebyside {
+    height: calc(84vh - 4em - 1em);
+  }  
+  #welcomecontent {
+    height: 80vh;
+  }
+}
+
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 568px) 
+and (orientation : portrait),
+only screen 
+and (min-device-width : 414px) 
+and (max-device-width : 736px) 
+and (orientation : portrait),
+only screen 
+and (min-device-width : 375px) 
+and (max-device-width : 812px) 
+and (-webkit-device-pixel-ratio : 3)
+and (orientation : portrait) {
+  .durationtext {
+    font-size: medium;
+  }
+  
+  .textcontent {
+    font-size: medium;
+  }
+  
+  .entry-header {
+    font-size: medium;
+  }
+
+  #contentsidebyside {
+    height: calc(77vh - 4em);
+  }
+
+  #welcomecontent {
+    height: 77vh;
+  }
+}

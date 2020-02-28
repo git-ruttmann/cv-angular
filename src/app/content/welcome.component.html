@@ -11,8 +11,9 @@
     </defs>
   </svg>
   
-  <div class="welcomeoverlay">
-    <div id="contentsidebyside" (click)='catchClickOnContent($event)'>
+  <div class="overlayspacer"></div>
+  <div class="overlay" id="welcomeoverlay">
+    <div id="welcomecontent" (click)='catchClickOnContent($event)'>
       <div id="right" class="textbackground" #textbackground>
         <div class="textcontent" #textcontent>
             <div *ngFor="let entry of entries | async; index as i" #id_{{i}} id=id_{{i}} class="entrycontent">
@@ -30,7 +31,7 @@
             </svg>       
           </div>
           <div class="durationtext">
-            Only the most important topics, in bullet point format.
+            Example mode with few releveant topics. Maybe look specificaly for <a href="/interests">Interests</a>
           </div>
         </div>
         <div class="durationline" (click)="selectDuration('M')">
