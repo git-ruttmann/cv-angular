@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { VitaEntryService } from './vita-entry.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class TrackingService
 
   constructor(
     private http: HttpClient,
+    private dataService: VitaEntryService,
     private router : Router)
   {
     router.events.subscribe(() => this.RouteChanged());
@@ -21,7 +23,7 @@ export class TrackingService
     let headers = new HttpHeaders({'Content-Type': 'application/json'});
     this.http.post(
       "api/v1/track", 
-      { Url: url, Topic: topic, Scroll: scroll }, 
+      { Url: url, Topic: topic, Scroll: scroll, Duration: this.dataService.duration }, 
       { headers: headers })
       .subscribe((response) => {});
   }
