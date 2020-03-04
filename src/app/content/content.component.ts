@@ -1,12 +1,12 @@
-import { Component, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, HostListener, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, fromEvent, asyncScheduler } from 'rxjs';
+import { Observable, fromEvent, asyncScheduler, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
 import { VitaEntryService } from '../services/vita-entry.service';
 import { VitaEntry, VitaEntryEnum } from '../vita-entry';
 import { BaseStateService } from '../services/base-state.service';
-import { TrackingService } from '../services/tracking.service';
+import { TrackingService, TrackingEventService, ITrackedItem } from '../services/tracking.service';
 import { ThrottleConfig } from 'rxjs/internal/operators/throttle';
 
 const urlToVitaEntryEnum = {
@@ -23,40 +23,53 @@ const urlToVitaEntryEnum = {
   templateUrl: './content.component.html',
   styleUrls: ['./content.component.css', '../app.component.css']
 })
-export class ContentComponent implements AfterViewInit {
+export class ContentComponent implements AfterViewInit, OnDestroy {
   public content = "Hello";
   entries: Observable<VitaEntry[]>;
 
   @ViewChild('textcontent', { static : true })
   contentElt: ElementRef;
-
+  
   @ViewChild('textbackground', { static : true })
   backgroundElt: ElementRef;
-
+  
+  scrollSubscription$;
+  touchSubscription$;
+  
   constructor(
-      private router : Router, 
-      private dataService : VitaEntryService,
-      private trackingService: TrackingService) {
+    private router : Router, 
+    private dataService : VitaEntryService,
+    private trackingService: TrackingService,
+    private trackingEventService: TrackingEventService)
+  {
     this.content = router.url.substr(1).toLowerCase();
     this.entries = dataService.entries;
-
+    
+    this.trackingEventService.trackingEvent.subscribe(x => this.trackContent(x));
     var vitaEntryType = urlToVitaEntryEnum[this.content];
-
+    
     this.dataService.load(vitaEntryType);
   }
-
+  
   ngAfterViewInit(): void
   {
     var scrollDebounceOptions : ThrottleConfig;
     scrollDebounceOptions = { leading: false, trailing: true };
-    fromEvent(this.backgroundElt.nativeElement, 'scroll')
+    this.scrollSubscription$ = fromEvent(this.backgroundElt.nativeElement, 'scroll')
       .pipe(throttleTime(250, asyncScheduler, scrollDebounceOptions))
       .subscribe((x) => this.onContentScroll());
-    fromEvent(this.backgroundElt.nativeElement, 'touchmove')
+    this.touchSubscription$ = fromEvent(this.backgroundElt.nativeElement, 'touchmove')
       .pipe(throttleTime(250, asyncScheduler, scrollDebounceOptions))
       .subscribe((x) => this.onContentScroll());
+    this.trackingEventService.Track("init");
   }
 
+  ngOnDestroy(): void
+  {
+    this.scrollSubscription$.unsubscribe();
+    this.touchSubscription$.unsubscribe();
+  }
+  
   back() {
     this.router.navigate(["/"]);
   }
@@ -66,32 +79,70 @@ export class ContentComponent implements AfterViewInit {
     event.stopPropagation();
   }
 
-  scrollTo(elt : number) {
-    var item = this.contentElt.nativeElement.querySelector("#id_" + elt);
+  scrollTo(elt : number)
+  {
+    let item = this.contentElt.nativeElement.querySelector("#id_" + elt);
     item.scrollIntoView();
-    this.trackingService.Track(this.content, "id_" + elt, 0);
+
+    let headerItem = item.querySelector("div.entry-header") as HTMLDivElement;
+    this.trackingService.Track(this.content, headerItem.innerText, 0);
   }
   
-  onContentScroll()
+  private onContentScroll()
+  {
+    this.trackingEventService.Track("scroll");
+  }
+
+  private trackContent(reason: String): void
   {
     let scrollingElement = this.backgroundElt.nativeElement as HTMLElement;
     let topicElements = Array
-      .from(this.contentElt.nativeElement.getElementsByClassName("entry-header"))
+      .from(this.contentElt.nativeElement.getElementsByClassName("entrycontent"))
       .map(x => <HTMLElement>x)
 
-    if (topicElements.length == 0)
+    let scrollTopRef = scrollingElement.scrollTop + scrollingElement.offsetTop;
+    let scrollBottomRef = scrollTopRef + scrollingElement.offsetHeight;
+
+    let filteredElements = topicElements
+      .filter(x => this.IsTopicVisible(x, scrollTopRef, scrollBottomRef))
+      .map(x => this.TrackEntryFromElement(x, scrollTopRef, scrollBottomRef));
+
+    if (filteredElements.length == 0)
     {
+      // no idea, why the unsubscribe is not working.
       return;
     }
 
-    let firstVisibleIndex = topicElements.findIndex(x => x.offsetTop - x.offsetHeight * 2 > scrollingElement.offsetTop + scrollingElement.scrollTop);
-    let activeTopicIndex = firstVisibleIndex <= 0 ? topicElements.length - 1 : firstVisibleIndex - 1;
-    let activeElement = topicElements[activeTopicIndex];
-    let contentElement = activeElement.nextSibling as HTMLElement;
+    this.trackingService.TrackTopics(this.content, filteredElements);
+  }
 
-    let begin = scrollingElement.offsetTop + scrollingElement.scrollTop - activeElement.offsetTop;
-    let percent = 100.0 * begin / (contentElement.offsetHeight + activeElement.offsetHeight);
+  private IsTopicVisible(topic: HTMLElement, scrollTopRef: number, scrollBottomRef: number) : Boolean
+  {
+    if (topic.offsetTop + topic.offsetHeight >= scrollTopRef)
+    {
+      let textEntry = topic.getElementsByClassName("entry-text")[0] as HTMLElement;
+      if (textEntry.offsetTop < scrollBottomRef)
+      {
+        return true;
+      }
+    }
 
-    this.trackingService.Track(this.content, activeElement.innerText, percent);
+    return false;
+  }
+
+  private TrackEntryFromElement(elt: HTMLElement, scrollTop: number, scrollBottom: number) : ITrackedItem
+  {
+    let visibleStart = elt.offsetTop > scrollTop
+      ? 0
+      : (1.0 * scrollTop - elt.offsetTop) / elt.offsetHeight;
+    let visibleEnd = elt.offsetTop + elt.offsetHeight <= scrollBottom
+      ? 1
+      : 1 - (1.0 * elt.offsetTop + elt.offsetHeight - scrollBottom) / elt.offsetHeight;
+
+    return { 
+      Topic: elt.getElementsByClassName("entry-header")[0].innerHTML,
+      Start: visibleStart,
+      End: visibleEnd      
+    };
   }
 }

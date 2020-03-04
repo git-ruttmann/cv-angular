@@ -17,7 +17,7 @@ import { VitaEntryService } from './services/vita-entry.service';
 import { AuthenticateService } from './services/authenticate.service';
 import { BaseStateService } from './services/base-state.service';
 import { BackgroundImageViewportService } from './services/background-image-viewport.service';
-import { TrackingService } from './services/tracking.service';
+import { TrackingService, TrackingEventService } from './services/tracking.service';
 import { WelcomeComponent } from './content/welcome.component';
 import { VitaEntryComponent } from './content/vita-entry.component';
 
@@ -49,6 +49,7 @@ import { VitaEntryComponent } from './content/vita-entry.component';
     BaseStateService,
     BackgroundImageViewportService,
     TrackingService,
+    TrackingEventService,
   ],
   bootstrap: [AppComponent]
 })
