@@ -28,12 +28,12 @@
         </svg>
     </div>
     <div class="headertext">
-        <div class="textcontent">
-            {{content}}
+        <div class="textcontent masterheadertext">
+            {{localizationService.ContentMainHeader}}
         </div>
     </div>
     <div class="backbox" [hidden]="isDuration('S')" (click)="selectNextDuration($event)">
-        <svg class="backbutton headerright" viewBox="0 0 50 50" >
+        <svg class="durationbutton" viewBox="0 0 50 50" >
             <use href="#durationSelector"></use>
             <rect y = 1.5 x = 1.5 width="47" height="47" rx="5" class = "Line"/>
             <line y1 = 10 x1=8 x2 = 42 y2 = 10 class = "Line"/>
@@ -42,7 +42,7 @@
         </svg>       
     </div>
     <div class="backbox" [hidden]="isDuration('M')" (click)="selectNextDuration($event)">
-        <svg class="backbutton headerright" viewBox="0 0 50 50" >
+        <svg class="durationbutton" viewBox="0 0 50 50" >
             <use href="#durationSelector"></use>
             <rect y = 1.5 x = 1.5 width="47" height="47" rx="5" class = "Line"/>
             <line y1 = 10 x1=8 x2 = 42 y2 = 10 class = "Line"/>
@@ -52,7 +52,7 @@
         </svg>       
     </div>
     <div class="backbox" [hidden]="isDuration('L')" (click)="selectNextDuration($event)">
-        <svg class="backbutton headerright" viewBox="0 0 50 50" >
+        <svg class="durationbutton" viewBox="0 0 50 50" >
             <use href="#durationSelector"></use>
             <rect y = 1.5 x = 1.5 width="47" height="47" rx="5" class = "Line"/>
             <line y1 = 10 x1=8 x2 = 42 y2 = 10 class = "Line"/>

@@ -112,6 +112,7 @@ div.entryindex + div.entryindex {
 
 #left {
   flex: 0 0 35%;
+  overflow-y: auto;
 }
 
 .spacerbackground {
@@ -127,14 +128,21 @@ div.entryindex + div.entryindex {
 }
 
 .durationline {
-  margin: 1em 1em 1em 0;
+  margin: 0.5em;
+  padding: 0.5em 0.5em 0.5em 0;
   padding-left: 18px;
   display: flex;
   cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.durationline:hover
+{
+  border: 1px solid #eee;
 }
 
 .durationimage {
-  min-width: 4em;
+  width: 3.2em;
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -144,6 +152,8 @@ a {
 }
 
 .durationtext {
+  margin-top: auto;
+  margin-bottom: auto;
   padding: 0em 1em 0em 1em;
   font-size: large;
 }
@@ -162,6 +172,11 @@ a {
   #contentsidebyside {
     height: calc(85vh - 4em - 1em);
   }
+  
+  .masterheadertext {
+    margin-top: 0.25em !important;
+    margin-left: 0.5rem !important;
+  }
 }
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
@@ -170,6 +185,11 @@ a {
   }  
   #welcomecontent {
     height: 80vh;
+  }
+  
+  .masterheadertext {
+    margin-top: 0.25em !important;
+    margin-left: 0.5rem !important;
   }
 }
 
@@ -186,6 +206,11 @@ and (min-device-width : 375px)
 and (max-device-width : 812px) 
 and (-webkit-device-pixel-ratio : 3)
 and (orientation : portrait) {
+  .durationimage {
+    min-width: 3.2em;
+    width: unset;
+  }
+
   .durationtext {
     font-size: medium;
   }
@@ -195,7 +220,7 @@ and (orientation : portrait) {
   }
   
   .entry-header {
-    font-size: medium;
+    font-size: large;
   }
 
   #contentsidebyside {
@@ -204,5 +229,10 @@ and (orientation : portrait) {
 
   #welcomecontent {
     height: 77vh;
+  }
+  
+  .masterheadertext {
+    margin-top: 0.25em !important;
+    margin-left: 0.5rem !important;
   }
 }

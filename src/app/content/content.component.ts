@@ -15,7 +15,6 @@ const urlToVitaEntryEnum = {
   "technologies" : VitaEntryEnum.Technology,
   "strength" : VitaEntryEnum.Strength,
   "interests" : VitaEntryEnum.Interest,
-  "introduction" : VitaEntryEnum.Introduction,
 };
 
 @Component({
@@ -35,6 +34,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   
   scrollSubscription$;
   touchSubscription$;
+  vitaEntryType: any;
   
   constructor(
     private router : Router, 
@@ -69,7 +69,22 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
     this.scrollSubscription$.unsubscribe();
     this.touchSubscription$.unsubscribe();
   }
-  
+
+  @HostListener('document:keydown.escape', ['$event'])
+  onKeydownHandler(event: KeyboardEvent) {
+    this.back();
+  }
+
+  @HostListener('document:keydown.ArrowLeft', ['$event'])
+  onKeydownHandlerLeft(event: KeyboardEvent) {
+    this.NavigateToNextContent(-1);
+  }
+
+  @HostListener('document:keydown.ArrowRight', ['$event'])
+  onKeydownHandlerRight(event: KeyboardEvent) {
+    this.NavigateToNextContent(1);
+  }
+
   back() {
     this.router.navigate(["/"]);
   }
@@ -114,6 +129,23 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
     }
 
     this.trackingService.TrackTopics(this.content, filteredElements);
+  }
+
+  private NavigateToNextContent(direction: number)
+  {
+    let keys = Object.keys(urlToVitaEntryEnum);
+    let activeIndex = keys.indexOf(this.content);
+    let nextIndex = activeIndex + direction;
+    if (nextIndex < 0)
+    {
+      nextIndex = keys.length - 1;
+    }
+    else if (nextIndex >= keys.length)
+    {
+      nextIndex = 0;
+    }
+    let nextUrl = keys[nextIndex];
+    this.router.navigate(["/" + nextUrl]);
   }
 
   private IsTopicVisible(topic: HTMLElement, scrollTopRef: number, scrollBottomRef: number) : Boolean

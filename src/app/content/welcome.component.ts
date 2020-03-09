@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { VitaEntryService } from '../services/vita-entry.service';
 import { VitaEntry, VitaEntryEnum } from '../vita-entry';
 import { Router } from '@angular/router';
+import { LocalizationTextService } from '../services/localization-text.service';
 
 @Component({
   selector: 'app-welcome',
@@ -17,6 +18,7 @@ export class WelcomeComponent implements OnInit {
 
   constructor(
     private router : Router, 
+    public localizationService: LocalizationTextService,
     private dataService : VitaEntryService)
   {
     this.entries = dataService.entries;

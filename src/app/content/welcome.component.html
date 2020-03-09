@@ -31,7 +31,7 @@
             </svg>       
           </div>
           <div class="durationtext">
-            Example mode with few releveant topics. Maybe look specificaly for <a href="/interests">Interests</a>
+            {{ localizationService.WelcomeShort }}
           </div>
         </div>
         <div class="durationline" (click)="selectDuration('M')">
@@ -46,7 +46,7 @@
             </svg>       
           </div>
           <div class="durationtext">
-            More topics in bullet points.
+            {{ localizationService.WelcomeMedium }}
           </div>
         </div>
         <div class="durationline" (click)="selectDuration('L')">
@@ -62,7 +62,7 @@
             </svg>       
           </div>
           <div class="durationtext">
-            More topics and more details.
+            {{ localizationService.WelcomeLong }}
           </div>
         </div>
       </div>

@@ -15,7 +15,7 @@ export class VitaEntryService {
   private _entries = new BehaviorSubject<VitaEntry[]>([]);
 
   private dataStore: { entries: VitaEntry[] } = { entries: [] };
-  private language: string;
+  private _language: string;
   private _duration: string;
 
   constructor(
@@ -25,7 +25,7 @@ export class VitaEntryService {
   {
     this.activeVitaType = VitaEntryEnum.Introduction;
     this.authenticationService.authenticatedState.subscribe((x) => this.preload(x));
-    this.language = "English";
+    this._language = "English";
     this._duration = this.localStorageService.get("duration") || "S";
   }
 
@@ -36,6 +36,11 @@ export class VitaEntryService {
   public get duration()
   {
     return this._duration;
+  }
+
+  public get language()
+  {
+    return this._language;
   }
 
   public preload(isAuthenticated: boolean)
@@ -88,7 +93,7 @@ export class VitaEntryService {
     let entries : VitaEntry[] = response.entries.map(x => VitaEntry.FromJson(x));
 
     let introduction = entries.find(x => x.vitaEntryType == VitaEntryEnum.Introduction);
-    this.language = introduction.language || "English";
+    this._language = introduction.language || "English";
 
     this.dataStore = {
       entries : entries
@@ -101,7 +106,7 @@ export class VitaEntryService {
   {
     var entriesForAoi = Object.assign({}, this.dataStore).entries.filter(
       x => x.vitaEntryType == this.activeVitaType 
-      && x.language.indexOf(this.language) >= 0
+      && x.language.indexOf(this._language) >= 0
       && x.duration.indexOf(this._duration) >= 0);
     this._entries.next(entriesForAoi);
   }

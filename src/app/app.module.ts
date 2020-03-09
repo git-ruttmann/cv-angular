@@ -20,6 +20,7 @@ import { BackgroundImageViewportService } from './services/background-image-view
 import { TrackingService, TrackingEventService } from './services/tracking.service';
 import { WelcomeComponent } from './content/welcome.component';
 import { VitaEntryComponent } from './content/vita-entry.component';
+import { LocalizationTextService } from './services/localization-text.service';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { VitaEntryComponent } from './content/vita-entry.component';
     BackgroundImageViewportService,
     TrackingService,
     TrackingEventService,
+    LocalizationTextService,
   ],
   bootstrap: [AppComponent]
 })

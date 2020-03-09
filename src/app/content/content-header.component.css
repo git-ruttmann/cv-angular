@@ -6,6 +6,16 @@
 
 .headertext {
   flex-grow: 1;
+  height: 4em;
+}
+
+.masterheadertext {
+  padding: unset;
+  height: 100%;
+  font-size: xx-large;
+  opacity: 0.8;
+  margin-top: 0.15em;
+  margin-left: 1rem;
 }
 
 .backbox {
@@ -18,6 +28,15 @@
 }
 
 .backbutton {
+  margin-top: 13%;
+  height: 74%;
+  fill: white;
+  width: 100%;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.durationbutton {
   margin-top: 5%;
   fill: white;
   height: 90%;
@@ -25,4 +44,3 @@
   opacity: 0.8;
   cursor: pointer;
 }
-

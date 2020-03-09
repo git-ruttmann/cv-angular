@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { VitaEntryService } from '../services/vita-entry.service';
 import { TrackingEventService } from '../services/tracking.service';
+import { LocalizationTextService } from '../services/localization-text.service';
 
 const nextDuration = "SMLS";
 
@@ -14,6 +15,7 @@ export class ContentHeaderComponent {
   content: string;
 
   constructor(private dataService : VitaEntryService,
+    public localizationService: LocalizationTextService,
     private trackingEventService: TrackingEventService)
   {
   }
