@@ -122,10 +122,10 @@ export class BaseFlightComponent implements OnInit, AfterViewInit {
 
   ApplyBackgroundViewportToFlyPath(report: BackgroundViewportReport)
   {
-    this.backgroundOverlayElt.nativeElement.style.top = report.Top;
-    this.backgroundOverlayElt.nativeElement.style.left = report.Left;
-    this.backgroundOverlayElt.nativeElement.style.height = report.Height;
-    this.backgroundOverlayElt.nativeElement.style.width = report.Width;
+    this.backgroundOverlayElt.nativeElement.style.top = report.Top + "px";
+    this.backgroundOverlayElt.nativeElement.style.left = report.Left + "px";
+    this.backgroundOverlayElt.nativeElement.style.height = report.Height + "px";
+    this.backgroundOverlayElt.nativeElement.style.width = report.Width + "px";
   }
 
   onClick(event) {
