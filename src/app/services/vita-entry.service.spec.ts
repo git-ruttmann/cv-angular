@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { VitaEntryService } from './vita-entry.service';
-import { VitaEntry, VitaEntryEnum, VitaSentenceEnum, VitaEntryParagraph, VitaEntryList } from '../vita-entry';
+import { VitaEntry, VitaEntryEnum, VitaSentenceEnum, VitaEntryParagraph, VitaEntryList, VitaEntryLink, VitaEntryListLink } from '../vita-entry';
 
 describe('VitaEntryService', () => {
   let httpMock : HttpTestingController;
@@ -18,9 +18,16 @@ describe('VitaEntryService', () => {
       {"vitaEntryType":"Person","title":"Passion","lines":["Text about Passion",""],"attributes":["German","Short","Medium","Long"]},
       {"vitaEntryType":"Person","title":"Bullets only","lines":["- The first bullet","- The second bullet",""],"attributes":["German","Short"]},
       {"vitaEntryType":"Person","title":"Bullets and text","lines":["Initial text for the expert","- The first bullet","- The second bullet","Trailing text",""],"attributes":["German","Short"]},
-      {"vitaEntryType":"Person","title":"Text and links","lines":["Some initial text","- Bullet one","","- More bullets"],"attributes":["German","Short"]},
+      {"vitaEntryType":"Person","title":"Text and links","lines":[
+        "Some initial text",
+        "- Bullet one",
+        "- [\"bullet link\", \"https://my.mycv.com/bullettarget\"]",
+        "- More bullets",
+        "[\"normal link\", \"https://my.mycv.com/normaltarget\"]",
+      ],"attributes":["German","Short"]},
       {"vitaEntryType":"Person","title":"For all explicitly","lines":[],"attributes":["German","Short"]},
       {"vitaEntryType":"Person","title":"Not for yy","lines":["      "],"attributes":["English","Short"]},
+      {"VitaEntryType":"Person","title":"For all explicitly","lines":[],"attributes":["English","Short"]},
       {"vitaEntryType":"Strength","title":"Strength1","lines":["Text for strength one.",""],"attributes":["German","English","Short"]},
       {"vitaEntryType":"Technology","title":"Tech1","lines":["Text for tech1",""],"attributes":["German","English","Short"]},
       {"vitaEntryType":"Interest","title":"Motivation","lines":["I'm motivated. Yeah.","        "],"attributes":["German","English","Short"]}
@@ -88,5 +95,24 @@ describe('VitaEntryService', () => {
     expect(bulletList.items[0].line).toBe("The first bullet");
     expect(bulletList.items[1].line).toBe("The second bullet");
     expect((bulletsEntry.lines[2] as VitaEntryParagraph).line).toBe("Trailing text");
+  }));
+
+  it('Format links', fakeAsync(() => {
+    const service: VitaEntryService = loadsamplevita();
+
+    service.load(VitaEntryEnum.Person);
+    let bulletsEntry = vitaResult.filter(x => x.title === "Text and links")[0];
+    
+    expect(bulletsEntry.lines[2].sentenceType).toBe(VitaSentenceEnum.Link);
+    const link = bulletsEntry.lines[2] as VitaEntryLink;
+    expect(link.line).toBe("normal link");
+    expect(link.url).toBe("https://my.mycv.com/normaltarget");
+    
+    expect(bulletsEntry.lines[1].sentenceType).toBe(VitaSentenceEnum.List);
+    const list = bulletsEntry.lines[1] as VitaEntryList;
+    expect(list.items[1].sentenceType).toBe(VitaSentenceEnum.ListLink);
+    const listLink = list.items[1] as VitaEntryListLink;
+    expect(listLink.line).toBe("bullet link");
+    expect(listLink.url).toBe("https://my.mycv.com/bullettarget");
   }));
 });

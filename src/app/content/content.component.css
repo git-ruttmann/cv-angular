@@ -92,6 +92,20 @@ div.entryindex + div.entryindex {
   margin-block-end: 0.2em;
 }
 
+.vitalink {
+  margin-block-start: 0.2em;
+  margin-block-end: 0.2em;
+}
+
+.vitalink a {
+  text-decoration: none;
+}
+
+.vitalinksymbol {
+  width: 0.77em;
+  height: 1em;
+}
+
 .nobullet {
   list-style-type: none;
 }

@@ -1,3 +1,12 @@
+<svg class="symbol">
+    <defs>
+        <symbol id="externalLink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12">
+            <path fill="#fff" stroke="#36c" d="M1.5 4.518h5.982V10.5H1.5z"/>
+            <path fill="#36c" d="M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z"/>
+            <path fill="#fff" d="M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z"/>
+        </symbol>
+    </defs>
+</svg>
 <div class="entry-header">{{ entry.title }}</div>
 <div class="entry-text">
     <div>
@@ -6,10 +15,28 @@
                 <div *ngSwitchCase='vitaSentenceEnum.Paragraph'>
                     <p class="vitasentence">{{ line.line }}</p>
                 </div>
+                <div *ngSwitchCase='vitaSentenceEnum.Link'>
+                    <p class="vitalink">
+                        <svg class="vitalinksymbol">
+                            <use href="#externalLink"></use>
+                        </svg>
+                        <a href="{{ line.url }}">
+                            {{ line.line }}
+                        </a>
+                    </p>
+                </div>
                 <div *ngSwitchCase='vitaSentenceEnum.List'>
                     <ul class="vitalist">
-                        <li *ngFor="let sentence of line.items" class="vitalistitem" [ngClass]="{'nobullet':sentence.sentenceType == vitaSentenceEnum.NoBulletListItem}">
-                            {{ sentence.line }}
+                        <li *ngFor="let sentence of line.items" class="vitalistitem" 
+                        [ngClass]="{'nobullet':sentence.sentenceType == vitaSentenceEnum.NoBulletListItem}">
+                            <div [ngSwitch]="sentence.sentenceType">
+                                <div *ngSwitchCase='vitaSentenceEnum.ListLink'>
+                                    <p class="vitalink"><a href="{{ sentence.url }}">{{ sentence.line }}</a></p>
+                                </div>
+                                <div *ngSwitchDefault>
+                                    <p class="vitasentence">{{ sentence.line }}</p>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                 </div>

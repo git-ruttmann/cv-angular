@@ -15,6 +15,14 @@ export enum VitaSentenceEnum
   List,
   ListItem,
   NoBulletListItem,
+  Link,
+  ListLink,
+}
+
+export interface IVitaEntryLink
+{
+  line: string;
+  url: string;
 }
 
 export class VitaEntrySentence
@@ -52,6 +60,22 @@ export class VitaEntryListSentence extends VitaEntrySentence
   }
 }
 
+export class VitaEntryLink extends VitaEntrySentence implements IVitaEntryLink
+{
+  constructor(public line: string, public url: string)
+  {
+    super(VitaSentenceEnum.Link);
+  }
+}
+
+export class VitaEntryListLink extends VitaEntrySentence implements IVitaEntryLink
+{
+  constructor(public line: string, public url: string)
+  {
+    super(VitaSentenceEnum.ListLink);
+  }
+}
+
 export class VitaEntry {
   title: string;
   language: string;
@@ -79,7 +103,7 @@ export class VitaEntry {
     var currentList: VitaEntryList = null;
     for (const line of lines) 
     {
-      if (line.startsWith('-'))
+      if (line.startsWith('-') || line.startsWith('*'))
       {
         if (currentList == null)
         {
@@ -87,17 +111,22 @@ export class VitaEntry {
           sentences.push(currentList);
         }
 
-        currentList.items.push(new VitaEntryListSentence(VitaSentenceEnum.ListItem, line.substr(1).trim()))
-      }
-      else if (line.startsWith('*'))
-      {
-        if (currentList == null)
-        {
-          currentList = new VitaEntryList()
-          sentences.push(currentList);
+        const typeOfSentence = line.startsWith('-') ? VitaSentenceEnum.ListItem : VitaSentenceEnum.NoBulletListItem;
+        const sentenceText = line.substr(1).trim();
+        if (sentenceText.startsWith('[')) {
+          const sentence = this.createLinkEntry(sentenceText, true);
+          currentList.items.push(sentence);
         }
-        
-        currentList.items.push(new VitaEntryListSentence(VitaSentenceEnum.NoBulletListItem, line.substr(1).trim()))
+        else
+        {
+          const sentence = new VitaEntryListSentence(typeOfSentence, sentenceText);
+          currentList.items.push(sentence);
+        }
+      }
+      else if (line.startsWith('['))
+      {
+        currentList = null;
+        sentences.push(this.createLinkEntry(line, false));
       }
       else
       {
@@ -107,5 +136,29 @@ export class VitaEntry {
     }
 
     return sentences;
+  }
+
+  private static createLinkEntry(line: string, inList: boolean) : VitaEntryLink {
+    line = line.trim();
+    if (!line.endsWith(']'))
+    {
+      throw "Link must start with '[' and end with ']'";
+    }
+
+    let url, text: string;
+    url = line.substr(1, line.length - 2);
+    const pos = url.indexOf("\", \"");
+
+    if (pos > 0) {
+      text = url.substr(1, pos - 1).trim();
+      url = url.substr(pos + 4, url.length - pos - 5);
+    }
+
+    if (inList)
+    {
+      return new VitaEntryListLink(text, url);
+    }
+
+    return new VitaEntryLink(text, url);
   }
 }
