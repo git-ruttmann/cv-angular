@@ -19,8 +19,16 @@ steps:
 - script: |
     npm install -g @angular/cli
     npm install
+  displayName: 'npm install'
+
+- script: |
     ng build --prod
-  displayName: 'npm install and build'
+  displayName: 'npm build'
+
+- script: |
+    npm test
+    echo "tests completed"
+  displayName: 'npm test'
 
 - task: PublishBuildArtifacts@1
   inputs:
@@ -28,4 +36,21 @@ steps:
     ArtifactName: 'angular-cv-compiled'
     publishLocation: 'Container'
   displayName: 'Publish Artifacts'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'testresults'
+    ArtifactName: 'testresults'
+    publishLocation: 'Container'
+  displayName: 'Publish test results'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '**/testresults/coverage/*.xml'
+
+- task: PublishTestResults@1
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/testresults/junit/*.xml'
 
