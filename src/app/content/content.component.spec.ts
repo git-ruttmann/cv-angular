@@ -122,7 +122,7 @@ describe('ContentComponent', () => {
     const allLi = ul.queryAll(By.css("li.vitalistitem"));
     expect(allLi.length).toBe(2);
 
-    expect(allLi[0].nativeElement.innerText).toBe("The bad bullet");
+    expect(allLi[0].nativeElement.innerText).toBe("The first bullet");
     expect(allLi[1].nativeElement.innerText).toBe("The second bullet");
   });
 });
