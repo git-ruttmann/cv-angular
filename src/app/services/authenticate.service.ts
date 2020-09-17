@@ -39,7 +39,7 @@ export class AuthenticateService {
 
   public SetFirstLogon() : void
   {
-    this.localStorageService.add("Introduction", "true");
+    this.localStorageService.set("Introduction", "true");
   }
 
   public IsFirstLogon() : boolean
