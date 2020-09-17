@@ -1,92 +1,140 @@
+import { Injectable, Component, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser';
 
 import { LocalStorageModule } from 'angular-2-local-storage';
+import { BehaviorSubject } from 'rxjs';
+
 import { ContentComponent } from './content.component';
 import { ContentHeaderComponent } from './content-header.component';
-import { VitaEntryService } from '../services/vita-entry.service';
+import { IVitaDataService, VitaDataServiceConfig } from '../services/vita-data.service';
 import { VitaEntryComponent } from './vita-entry.component';
-import { By } from '@angular/platform-browser';
 import { routes } from '../app-routing.module';
-import { Router } from '@angular/router';
-import { AuthenticateService } from '../services/authenticate.service';
-import { LocalizationTextService } from '../services/localization-text.service';
+import { VitaEntry, VitaEntryEnum } from '../vita-entry';
+import { AuthGuardService } from '../services/auth-guard.service';
+import { TrackingService, ITrackedItem } from '../services/tracking.service';
+import { APP_BASE_HREF } from '@angular/common';
+
+@Injectable()
+class AuthGuardMock implements Partial<AuthGuardService>
+{
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean 
+  {
+    return true;
+  }
+}
+
+/**
+ * empty tracking
+ */
+@Injectable()
+class NoTrackingMock implements Partial<TrackingService>
+{
+  public TrackTopics(url: string, items: ITrackedItem[])
+  {
+  }
+
+  public Track(url: string, topic: string, scroll: number)
+  {    
+  }
+}
+
+/**
+ * provide mocked data
+ */
+@Injectable()
+class VitaDataMock implements IVitaDataService
+{
+  entries: BehaviorSubject<VitaEntry[]>;
+  duration: string = "S";
+  language: string = "German";
+
+  mockedPersonData: VitaEntry[] = [
+    VitaEntry.FromJson({"vitaEntryType":"Person","title":"Passion","lines":["Text about Passion",""],"attributes":["German","Short","Medium","Long"]}),
+    VitaEntry.FromJson({"vitaEntryType":"Person","title":"Bullets only","lines":["- The first bullet","- The second bullet",""],"attributes":["German","Short"]}),
+    VitaEntry.FromJson({"vitaEntryType":"Person","title":"Bullets and text","lines":["Initial text for the expert","- The first bullet","- The second bullet","Trailing text",""],"attributes":["German","Short"]}),
+    VitaEntry.FromJson({"vitaEntryType":"Person","title":"Text and links","lines":[
+      "Some initial text",
+      "- Bullet one",
+      "- [\"bullet link\", \"https://my.mycv.com/bullettarget\"]",
+      "- More bullets",
+      "[\"Normal link\", \"https://my.mycv.com/normaltarget\"]",
+    ],"attributes":["German","Short"]}),
+    VitaEntry.FromJson({"vitaEntryType":"Person","title":"For all explicitly","lines":[],"attributes":["German","Short"]}),
+  ];
+
+  public constructor()
+  {
+    this.entries = new BehaviorSubject<VitaEntry[]>([]);
+  }
+
+  load(vitaEntryType: VitaEntryEnum)
+  {
+    if (vitaEntryType == VitaEntryEnum.Person) 
+    {
+      this.entries.next(this.mockedPersonData);
+    }
+    else
+    {
+      this.entries.next([]);
+    }
+  }
+
+  setDuration(duration: string)
+  {
+    this.duration = duration;
+  }  
+}
+
+@Component({
+  template: '<router-outlet></router-outlet>',
+})
+class TestRootComponent {
+  @ViewChild(RouterOutlet)
+  routerOutlet: RouterOutlet;
+}
 
 describe('ContentComponent', () => {
   let component: ContentComponent;
-  let fixture: ComponentFixture<ContentComponent>;
-  let httpMock: HttpTestingController;
-  let service: VitaEntryService;
-
-  function loadsamplevita() {
-    service = TestBed.inject(VitaEntryService);
-
-    let fakeVita = [
-      {"vitaEntryType":"Introduction","title":"Herzlich willkommen.","lines":["Hello, you're from the group dotnet.",""],"attributes":["German","Short","Medium","Long"]},
-      {"vitaEntryType":"Person","title":"Passion","lines":["Text about Passion",""],"attributes":["German","Short","Medium","Long"]},
-      {"vitaEntryType":"Person","title":"Bullets only","lines":["- The first bullet","- The second bullet",""],"attributes":["German","Short"]},
-      {"vitaEntryType":"Person","title":"Bullets and text","lines":["Initial text for the expert","- The first bullet","- The second bullet","Trailing text",""],"attributes":["German","Short"]},
-      {"vitaEntryType":"Person","title":"Text and links","lines":[
-        "Some initial text",
-        "- Bullet one",
-        "- [\"bullet link\", \"https://my.mycv.com/bullettarget\"]",
-        "- More bullets",
-        "[\"Normal link\", \"https://my.mycv.com/normaltarget\"]",
-      ],"attributes":["German","Short"]},
-      {"vitaEntryType":"Person","title":"For all explicitly","lines":[],"attributes":["German","Short"]},
-      {"vitaEntryType":"Person","title":"Not for yy","lines":["      "],"attributes":["English","Short"]},
-      {"VitaEntryType":"Person","title":"For all explicitly","lines":[],"attributes":["English","Short"]},
-      {"vitaEntryType":"Strength","title":"Strength1","lines":["Text for strength one.",""],"attributes":["German","English","Short"]},
-      {"vitaEntryType":"Technology","title":"Tech1","lines":["Text for tech1",""],"attributes":["German","English","Short"]},
-      {"vitaEntryType":"Interest","title":"Motivation","lines":["I'm motivated. Yeah.","        "],"attributes":["German","English","Short"]}
-      ];
-  
-    service.preload(true);
-    const interceptedRequest = httpMock.expectOne("api/v1/vita");
-    interceptedRequest.flush( { entries : fakeVita } );
-  }
-
-  function fakeAuthenticate() {
-    const authService = TestBed.inject(AuthenticateService);
-    authService.Authenticate("abc");
-    authService.SetFirstLogon();
-    const interceptedRequest = httpMock.expectOne("api/v1/authenticate");
-    interceptedRequest.flush("Ok");
-  }
+  let fixture: ComponentFixture<TestRootComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ 
+      declarations: [
+        TestRootComponent,
         ContentHeaderComponent, 
         ContentComponent,
-        VitaEntryComponent
+        VitaEntryComponent,
+      ],
+      providers: [
+        { provide: APP_BASE_HREF, useValue: "/" },
+        { provide: AuthGuardService, useValue : new AuthGuardMock() },
+        { provide: TrackingService, useValue : new NoTrackingMock() },
+        { provide: VitaDataServiceConfig, useValue : new VitaDataMock() }
       ],
       imports: [
         RouterTestingModule.withRoutes(routes),
-        HttpClientTestingModule,
         LocalStorageModule.forRoot({
           storageType: 'localStorage',
         }),
       ],
     })
     .compileComponents();
-
-    httpMock = TestBed.inject(HttpTestingController);
   }));
 
   beforeEach(fakeAsync(() => {
-    loadsamplevita();
-    fakeAuthenticate();
-
+    
     const router = TestBed.inject(Router);
-    router.navigateByUrl("/person");
+    fixture = TestBed.createComponent(TestRootComponent);
+    fixture.ngZone.run(() => {
+      router.navigateByUrl("/person");
+    });
     tick();
-
-    fixture = TestBed.createComponent(ContentComponent);
-    component = fixture.componentInstance;
-
+    
     fixture.detectChanges();
+    component = fixture.debugElement.query(By.directive(ContentComponent)).componentInstance;    
   }));
 
   it('should create', () => {

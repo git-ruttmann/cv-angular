@@ -10,7 +10,7 @@ export class AuthGuardService implements CanActivate
   lastState: Boolean;
 
   constructor(
-    private authenticateService : AuthenticateService, 
+    authenticateService : AuthenticateService, 
     private router: Router) 
   {
     this.lastState = false;

@@ -1,8 +1,8 @@
-import { TestBed, tick, async, fakeAsync } from '@angular/core/testing';
+import { TestBed, fakeAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { LocalStorageModule } from 'angular-2-local-storage';
 
-import { VitaEntryService } from './vita-entry.service';
+import { VitaDataService, IVitaDataService } from './vita-data.service';
 import { VitaEntry, VitaEntryEnum, VitaSentenceEnum, VitaEntryParagraph, VitaEntryList, VitaEntryLink, VitaEntryListLink } from '../vita-entry';
 
 describe('VitaEntryService', () => {
@@ -10,7 +10,7 @@ describe('VitaEntryService', () => {
   let vitaResult: VitaEntry[];
 
   function loadsamplevita() {
-    const service: VitaEntryService = TestBed.get(VitaEntryService);
+    const service: VitaDataService = TestBed.inject(VitaDataService);
     service.entries.subscribe(x => vitaResult = x);
 
     let fakeVita = [
@@ -55,18 +55,18 @@ describe('VitaEntryService', () => {
   );
 
   it('should be created', () => {
-    const service: VitaEntryService = TestBed.get(VitaEntryService);
+    const service: IVitaDataService = TestBed.inject(VitaDataService);
     expect(service).toBeTruthy();
   });
 
   it('should query sample data', fakeAsync(() => {
-    const service: VitaEntryService = loadsamplevita();
+    const service: IVitaDataService = loadsamplevita();
 
     expect(vitaResult).toBeTruthy();
   }));
 
   it('Introduction should have the correct language', fakeAsync(() => {
-    const service: VitaEntryService = loadsamplevita();
+    const service: IVitaDataService = loadsamplevita();
 
     expect(vitaResult).toBeTruthy();
 
@@ -82,7 +82,7 @@ describe('VitaEntryService', () => {
   }));
 
   it('Format bullets', fakeAsync(() => {
-    const service: VitaEntryService = loadsamplevita();
+    const service: IVitaDataService = loadsamplevita();
 
     service.load(VitaEntryEnum.Person);
     let bulletsEntry = vitaResult.filter(x => x.title === "Bullets and text")[0];
@@ -98,7 +98,7 @@ describe('VitaEntryService', () => {
   }));
 
   it('Format links', fakeAsync(() => {
-    const service: VitaEntryService = loadsamplevita();
+    const service: IVitaDataService = loadsamplevita();
 
     service.load(VitaEntryEnum.Person);
     let bulletsEntry = vitaResult.filter(x => x.title === "Text and links")[0];

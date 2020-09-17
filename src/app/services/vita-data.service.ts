@@ -1,16 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { VitaEntry, VitaEntryEnum } from '../vita-entry';
 import { AuthenticateService } from './authenticate.service';
 import { LocalStorageService } from 'angular-2-local-storage';
 
+export interface IVitaDataService {
+  entries : Observable<VitaEntry[]>;
+  duration : string;
+  language : string;
+  load(vitaEntryType: VitaEntryEnum);
+  setDuration(duration: string);
+}
+
+export let VitaDataServiceConfig = new InjectionToken<IVitaDataService>('vitaDataService');
+
 @Injectable({
   providedIn: 'root'
 })
-export class VitaEntryService {
+export class VitaDataService implements IVitaDataService {
   private activeVitaType: VitaEntryEnum;
   private _entries = new BehaviorSubject<VitaEntry[]>([]);
 

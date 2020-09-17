@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { VitaEntryService } from '../services/vita-entry.service';
+import { Component, Input, Inject } from '@angular/core';
+import { IVitaDataService, VitaDataServiceConfig } from '../services/vita-data.service';
 import { TrackingEventService } from '../services/tracking.service';
 import { LocalizationTextService } from '../services/localization-text.service';
 
@@ -14,7 +14,8 @@ export class ContentHeaderComponent {
   @Input('header-content')
   content: string;
 
-  constructor(private dataService : VitaEntryService,
+  constructor(
+    @Inject(VitaDataServiceConfig) private dataService : IVitaDataService,
     public localizationService: LocalizationTextService,
     private trackingEventService: TrackingEventService)
   {

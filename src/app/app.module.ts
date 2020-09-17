@@ -13,7 +13,7 @@ import { ContentHeaderComponent } from './content/content-header.component';
 import { LoginComponent } from './base/login.component';
 import { BaseFlightComponent } from './base/base-flight.component';
 import { ReadonlyDirective } from './base/readonly.directive';
-import { VitaEntryService } from './services/vita-entry.service';
+import { VitaDataService, VitaDataServiceConfig } from './services/vita-data.service';
 import { AuthenticateService } from './services/authenticate.service';
 import { BaseStateService } from './services/base-state.service';
 import { BackgroundImageViewportService } from './services/background-image-viewport.service';
@@ -45,7 +45,8 @@ import { LocalizationTextService } from './services/localization-text.service';
   ],
   providers: [
     {provide: APP_BASE_HREF, useValue: "/"},
-    VitaEntryService,
+    VitaDataService,
+    { provide: VitaDataServiceConfig, useExisting : VitaDataService },
     AuthenticateService,
     BaseStateService,
     BackgroundImageViewportService,
@@ -56,6 +57,6 @@ import { LocalizationTextService } from './services/localization-text.service';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(auth: VitaEntryService) {
+  constructor(auth: VitaDataService) {
   }
 }

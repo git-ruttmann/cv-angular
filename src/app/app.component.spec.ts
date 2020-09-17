@@ -57,7 +57,6 @@ describe('AppComponent', () => {
   it('login should display consent text', fakeAsync(() => {
     fixture.ngZone.run(() => router.initialNavigation());
     tick();
-    
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('.consenttext')?.textContent)
       .toContain('By entering the code, you accept the use of cookies and tracking.');

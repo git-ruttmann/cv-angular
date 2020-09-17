@@ -1,11 +1,10 @@
-import { Component, ViewChild, ElementRef, HostListener, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, HostListener, AfterViewInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, fromEvent, asyncScheduler, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
-import { VitaEntryService } from '../services/vita-entry.service';
+import { IVitaDataService, VitaDataServiceConfig } from '../services/vita-data.service';
 import { VitaEntry, VitaEntryEnum } from '../vita-entry';
-import { BaseStateService } from '../services/base-state.service';
 import { TrackingService, TrackingEventService, ITrackedItem } from '../services/tracking.service';
 import { ThrottleConfig } from 'rxjs/internal/operators/throttle';
 
@@ -37,8 +36,8 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   vitaEntryType: any;
   
   constructor(
+    @Inject(VitaDataServiceConfig) private dataService : IVitaDataService,
     private router : Router, 
-    private dataService : VitaEntryService,
     private trackingService: TrackingService,
     private trackingEventService: TrackingEventService)
   {

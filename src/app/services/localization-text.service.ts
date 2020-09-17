@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { VitaEntryService } from './vita-entry.service';
-import { ThrowStmt } from '@angular/compiler';
+import { IVitaDataService, VitaDataServiceConfig } from './vita-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,7 @@ export class LocalizationTextService {
   contentSubHeader: String;
 
   constructor(
-    private dataService : VitaEntryService,
+    @Inject(VitaDataServiceConfig) private dataService : IVitaDataService,
     private router : Router)
   {
     this.contentMainHeader = "";

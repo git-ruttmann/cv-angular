@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { VitaEntryService } from './vita-entry.service';
+
 import { Subject, Observable } from 'rxjs';
+
+import { IVitaDataService, VitaDataServiceConfig } from './vita-data.service';
 
 export interface ITrackedItem
 {
@@ -11,6 +13,10 @@ export interface ITrackedItem
   End: number;
 }
 
+/**
+ * Inform the content component about a global event.
+ * Allows to track the content at time of the event.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -28,6 +34,9 @@ export class TrackingEventService
   }
 }
 
+/**
+ * track global event
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -37,7 +46,7 @@ export class TrackingService
 
   constructor(
     private http: HttpClient,
-    private dataService: VitaEntryService,
+    @Inject(VitaDataServiceConfig) private dataService : IVitaDataService,
     private router : Router)
   {
     router.events.subscribe(() => this.RouteChanged());
@@ -63,7 +72,7 @@ export class TrackingService
       .subscribe((response) => {});
   }
 
-  public RouteChanged(): void
+  private RouteChanged(): void
   {
     let state = this.router.routerState.snapshot;
     if (this.lastUrl != state.url)

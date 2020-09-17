@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
-import { VitaEntryService } from '../services/vita-entry.service';
+import { IVitaDataService, VitaDataServiceConfig } from '../services/vita-data.service';
 import { VitaEntry, VitaEntryEnum } from '../vita-entry';
-import { Router } from '@angular/router';
 import { LocalizationTextService } from '../services/localization-text.service';
 
 @Component({
@@ -19,7 +19,7 @@ export class WelcomeComponent implements OnInit {
   constructor(
     private router : Router, 
     public localizationService: LocalizationTextService,
-    private dataService : VitaEntryService)
+    @Inject(VitaDataServiceConfig) private dataService : IVitaDataService)
   {
     this.entries = dataService.entries;
     this.dataService.load(VitaEntryEnum.Introduction);
