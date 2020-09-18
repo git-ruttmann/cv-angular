@@ -17,7 +17,7 @@ export const routeAnimations = trigger("routeAnimations", [
             query('#contentoverlay',  [ animate(80, style({ opacity: 0.01 })), animate(250) ]),
         ]),
     ]),
-    transition('content => base', [
+    transition('content => base, content2 => base', [
         query('#contentoverlay',  [ animate(150, style({ opacity : 0, position: 'relative', transform: 'translateX(-10%)' })) ]),
     ]),
     transition('base => introduction', [
@@ -39,7 +39,12 @@ export const routeAnimations = trigger("routeAnimations", [
             animate(250),
         ]),
     ]),
-    transition('content => content', [
-        style({ position: 'relative' }),
+    transition('content => content2, content2 => content', [
+        query(':enter #contentoverlay',  [ style({ opacity : 0.0, position: 'relative', transform: 'translateX(10%)' }) ]),
+        query(':leave #contentoverlay',  [ animate(150, style({ opacity : 0.0, position: 'relative', transform: 'translateX(-10%)' })) ]),
+        query(':enter #contentoverlay',  [
+            style({ opacity : 0.0, position: 'relative', transform: 'translateX(10%)' }),
+            animate(250),
+        ]),
     ]),
 ]);

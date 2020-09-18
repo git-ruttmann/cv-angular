@@ -31,7 +31,14 @@
                         [ngClass]="{'nobullet':sentence.sentenceType == vitaSentenceEnum.NoBulletListItem}">
                             <div [ngSwitch]="sentence.sentenceType">
                                 <div *ngSwitchCase='vitaSentenceEnum.ListLink'>
-                                    <p class="vitalink"><a href="{{ sentence.url }}">{{ sentence.line }}</a></p>
+                                    <p class="vitalink">
+                                        <svg class="vitalinksymbol">
+                                            <use href="#externalLink"></use>
+                                        </svg>
+                                        <a href="{{ sentence.url }}">
+                                            {{ sentence.line }}
+                                        </a>
+                                    </p>
                                 </div>
                                 <div *ngSwitchDefault>
                                     <p class="vitasentence">{{ sentence.line }}</p>

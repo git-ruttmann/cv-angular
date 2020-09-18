@@ -15,7 +15,7 @@
             <div class="spacerbackground" id="betweenleftandright">
             </div>
             <div id="right" class="textbackground" #textbackground>
-                <div class="textcontent" #textcontent>
+                <div class="textcontent" #textcontent tabindex="-1" autofocus>
                     <div *ngFor="let entry of entries | async; index as i" #id_{{i}} id=id_{{i}} class="entrycontent">
                         <app-vita-entry [entry]="entry"></app-vita-entry>
                     </div>

@@ -1,5 +1,5 @@
 import { Component, HostListener, ViewChild, ElementRef, DoCheck, AfterViewInit } from '@angular/core';
-import { RouterOutlet} from '@angular/router';
+import { Router, RouterOutlet} from '@angular/router';
 import { routeAnimations } from './base/animation';
 import { BaseStateService } from './services/base-state.service';
 import { BackgroundViewportReport, BackgroundImageViewportService } from './services/background-image-viewport.service';
@@ -12,6 +12,9 @@ import { BackgroundViewportReport, BackgroundImageViewportService } from './serv
 })
 export class AppComponent implements DoCheck, AfterViewInit {
   title = 'karriere';
+  activeUrl = '';
+  animationState: string;
+
   isFlyPathVisible = false;
   isOpen = false;
   private lastViewportReport: BackgroundViewportReport;
@@ -19,9 +22,12 @@ export class AppComponent implements DoCheck, AfterViewInit {
   @ViewChild('globalbackgroundimage', { static : true })
   backgroundImageElt: ElementRef;
 
-  constructor(private baseStateService : BaseStateService, 
+  constructor(
+    private baseStateService : BaseStateService,
+    private router : Router,
     private backgroundImageViewportService : BackgroundImageViewportService)
   {
+    router.events.subscribe(x => this.RouteStateChanged());
   }
 
   ngAfterViewInit(): void
@@ -37,8 +43,22 @@ export class AppComponent implements DoCheck, AfterViewInit {
   }
 
   getAnimatedState(outlet: RouterOutlet) {
-    var value = outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
-    return value;
+    // var value = outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+    return this.animationState;
+  }
+
+  private RouteStateChanged(): void
+  {
+    const snapshot = this.router.routerState.snapshot;
+    var newAnimationState = snapshot.root.children[0]?.data['animation'] ?? 'none';
+    if (this.activeUrl != snapshot.url) {
+      this.activeUrl = snapshot.url;
+      if (this.animationState == "content" && newAnimationState == "content") {
+        newAnimationState = "content2";
+      }
+
+      this.animationState = newAnimationState;
+    }
   }
   
   @HostListener('window:resize', ['$event'])

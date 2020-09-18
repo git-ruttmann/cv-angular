@@ -61,6 +61,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
       .pipe(throttleTime(250, asyncScheduler, scrollDebounceOptions))
       .subscribe((x) => this.onContentScroll());
     this.trackingEventService.Track("init");
+    this.contentElt.nativeElement.focus();
   }
 
   ngOnDestroy(): void
