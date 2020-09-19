@@ -85,6 +85,14 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
     this.NavigateToNextContent(1);
   }
 
+  onSwipeRight(event, data) {
+    this.NavigateToNextContent(-1);
+  }
+
+  onSwipeLeft(event, data) {
+    this.NavigateToNextContent(1);
+  }
+  
   back() {
     this.router.navigate(["/"]);
   }
@@ -144,8 +152,9 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
     {
       nextIndex = 0;
     }
+
     let nextUrl = keys[nextIndex];
-    this.router.navigate(["/" + nextUrl]);
+    this.router.navigate(["/" + nextUrl], { state: { direction: direction } });
   }
 
   private IsTopicVisible(topic: HTMLElement, scrollTopRef: number, scrollBottomRef: number) : Boolean

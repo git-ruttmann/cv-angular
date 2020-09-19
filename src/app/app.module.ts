@@ -1,10 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { APP_BASE_HREF } from '@angular/common';
 import { LocalStorageModule } from 'angular-2-local-storage';
+import * as Hammer from 'hammerjs';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +23,13 @@ import { WelcomeComponent } from './content/welcome.component';
 import { VitaEntryComponent } from './content/vita-entry.component';
 import { LocalizationTextService } from './services/localization-text.service';
 
+@Injectable()
+export class MyHammerConfig extends HammerGestureConfig {
+  overrides = <any>{
+    swipe: { direction: Hammer.DIRECTION_ALL },
+  };
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,6 +43,7 @@ import { LocalizationTextService } from './services/localization-text.service';
   ],
   imports: [
     BrowserModule,
+    HammerModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
@@ -47,6 +56,7 @@ import { LocalizationTextService } from './services/localization-text.service';
     {provide: APP_BASE_HREF, useValue: "/"},
     VitaDataService,
     { provide: VitaDataServiceConfig, useExisting : VitaDataService },
+    { provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig },
     AuthenticateService,
     BaseStateService,
     BackgroundImageViewportService,

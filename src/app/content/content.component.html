@@ -1,11 +1,13 @@
 <div class="overlaycontainer"  (click)='back()'>
     <div class="overlayspacer"></div>
     <div class="overlay" id="contentoverlay">
-        <app-content-header [header-content]="content"></app-content-header>
-        <div class="spacerbackground">
+        <div (swipeleft)="onSwipeLeft($event,-5)" (swiperight)="onSwipeRight($event,5)">
+            <app-content-header [header-content]="content"></app-content-header>
+            <div class="spacerbackground">
+            </div>
         </div>
         <div id="contentsidebyside" (click)='catchClickOnContent($event)'>
-            <div id="left" class="textbackground">
+            <div id="left" class="textbackground" (swipeleft)="onSwipeLeft($event,-3)" (swiperight)="onSwipeRight($event,3)">
                 <div class="textcontent">
                     <div *ngFor="let entry of entries | async; index as i" class="entryindex" (click)="scrollTo(i)">
                         <p>{{ entry.title }}</p>
@@ -14,8 +16,8 @@
             </div>
             <div class="spacerbackground" id="betweenleftandright">
             </div>
-            <div id="right" class="textbackground" #textbackground>
-                <div class="textcontent" #textcontent tabindex="-1" autofocus>
+            <div id="right" class="textbackground style-7" #textbackground (swipeleft)="onSwipeLeft($event,-2)" (swiperight)="onSwipeRight($event,2)">
+                <div class="textcontent" #textcontent tabindex="-1">
                     <div *ngFor="let entry of entries | async; index as i" #id_{{i}} id=id_{{i}} class="entrycontent">
                         <app-vita-entry [entry]="entry"></app-vita-entry>
                     </div>

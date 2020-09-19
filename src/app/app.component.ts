@@ -14,6 +14,7 @@ export class AppComponent implements DoCheck, AfterViewInit {
   title = 'karriere';
   activeUrl = '';
   animationState: string;
+  animationDirection: number;
 
   isFlyPathVisible = false;
   isOpen = false;
@@ -28,6 +29,7 @@ export class AppComponent implements DoCheck, AfterViewInit {
     private backgroundImageViewportService : BackgroundImageViewportService)
   {
     router.events.subscribe(x => this.RouteStateChanged());
+    this.animationDirection = 1;
   }
 
   ngAfterViewInit(): void
@@ -53,6 +55,9 @@ export class AppComponent implements DoCheck, AfterViewInit {
     var newAnimationState = snapshot.root.children[0]?.data['animation'] ?? 'none';
     if (this.activeUrl != snapshot.url) {
       this.activeUrl = snapshot.url;
+      const state = this.router.getCurrentNavigation()?.extras.state;
+      this.animationDirection = state?.direction ?? 1;
+
       if (this.animationState == "content" && newAnimationState == "content") {
         newAnimationState = "content2";
       }
