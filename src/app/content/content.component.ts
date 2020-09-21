@@ -77,11 +77,21 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
 
   @HostListener('document:keydown.ArrowLeft', ['$event'])
   onKeydownHandlerLeft(event: KeyboardEvent) {
+    if (event.repeat == true)
+    {
+      return;
+    }
+
     this.NavigateToNextContent(-1);
   }
 
   @HostListener('document:keydown.ArrowRight', ['$event'])
   onKeydownHandlerRight(event: KeyboardEvent) {
+    if (event.repeat == true)
+    {
+      return;
+    }
+    
     this.NavigateToNextContent(1);
   }
 
