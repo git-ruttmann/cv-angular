@@ -117,6 +117,17 @@ export class VitaDataService implements IVitaDataService {
       x => x.vitaEntryType == this.activeVitaType 
       && x.language.indexOf(this._language) >= 0
       && x.duration.indexOf(this._duration) >= 0);
+
+    if (this.authenticationService.IsFirstLogon())
+    {
+      let introduction = Object.assign({}, this.dataStore.entries.filter(x => x.vitaEntryType == VitaEntryEnum.Introduction));
+      if (introduction[0])
+      {
+        entriesForAoi.unshift(introduction[0]);
+        this.authenticationService.SetFirstLogon();
+      }
+    }
+
     this._entries.next(entriesForAoi);
   }
 }
