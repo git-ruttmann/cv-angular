@@ -136,6 +136,28 @@ div.entryindex + div.entryindex {
   background: darkblue;
 }
 
+#slideindicator {
+  display: flex;
+  width: 80%;
+  max-width: 12em;
+  margin: auto;
+  background-color: rgba(40, 40, 40, 0.5);
+}
+
+.slideitem {
+  height: 10px;
+  width: 150px;
+  background-color: white;
+  opacity: 0.35;
+  margin: 0.7em;
+}
+
+.slideitem.active {
+  opacity: 1;
+  background-color: white;
+  transition: all 200ms;
+}
+
 #right {
   flex: 1;
   overflow-y: auto;
@@ -220,6 +242,10 @@ a {
     margin-top: 0.25em !important;
     margin-left: 0.5rem !important;
   }
+
+  #slideindicator {
+    display: none;
+  }
 }
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
@@ -233,6 +259,10 @@ a {
   .masterheadertext {
     margin-top: 0.25em !important;
     margin-left: 0.5rem !important;
+  }
+
+  #slideindicator {
+    display: none;
   }
 }
 
@@ -277,5 +307,9 @@ and (orientation : portrait) {
   .masterheadertext {
     margin-top: 0.25em !important;
     margin-left: 0.5rem !important;
+  }
+
+  #slideindicator {
+    display: none;
   }
 }

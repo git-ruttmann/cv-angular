@@ -24,6 +24,7 @@ const urlToVitaEntryEnum = {
 export class ContentComponent implements AfterViewInit, OnDestroy {
   public content = "Hello";
   entries: Observable<VitaEntry[]>;
+  public directLinks = Object.keys(urlToVitaEntryEnum);
 
   @ViewChild('textcontent', { static : true })
   contentElt: ElementRef;
@@ -105,6 +106,12 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   
   back() {
     this.router.navigate(["/"]);
+  }
+
+  public navigateToLink(event: Event, link: string)
+  {
+    this.router.navigate(["/" + link], { state: { direction: 1 } });
+    event.stopPropagation();
   }
 
   catchClickOnContent(event : Event)
