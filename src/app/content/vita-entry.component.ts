@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { TrackingService } from '../services/tracking.service';
 import { VitaEntry, VitaSentenceEnum } from '../vita-entry';
 
 @Component({
@@ -12,6 +13,11 @@ export class VitaEntryComponent {
   @Input()
   entry: VitaEntry;
 
-  constructor() {
+  constructor(private trackingService : TrackingService) {
+  }
+
+  public urlClicked(url: string)
+  {
+    this.trackingService.TrackLink(url);
   }
 }

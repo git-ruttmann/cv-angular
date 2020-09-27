@@ -20,7 +20,7 @@
                         <svg class="vitalinksymbol">
                             <use href="#externalLink"></use>
                         </svg>
-                        <a href="{{ line.url }}">
+                        <a (click)="urlClicked(line.url)" href="{{ line.url }}">
                             {{ line.line }}
                         </a>
                     </p>

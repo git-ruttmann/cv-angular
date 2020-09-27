@@ -72,6 +72,16 @@ export class TrackingService
       .subscribe((response) => {});
   }
 
+  public TrackLink(url: string)
+  {
+    let headers = new HttpHeaders({'Content-Type': 'application/json'});
+    this.http.post(
+      "api/v1/track/link", 
+      { Url: url },
+      { headers: headers })
+      .subscribe((response) => {});
+  }
+
   private RouteChanged(): void
   {
     let state = this.router.routerState.snapshot;
