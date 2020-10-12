@@ -102,7 +102,7 @@ export class VitaDataService implements IVitaDataService {
     let entries : VitaEntry[] = response.entries.map(x => VitaEntry.FromJson(x));
 
     let introduction = entries.find(x => x.vitaEntryType == VitaEntryEnum.Introduction);
-    this._language = introduction.language || "English";
+    this._language = introduction?.language || "English";
 
     this.dataStore = {
       entries : entries
