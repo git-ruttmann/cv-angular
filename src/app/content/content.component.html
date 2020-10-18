@@ -7,7 +7,7 @@
             </div>
         </div>
         <div id="contentsidebyside" (click)='catchClickOnContent($event)'>
-            <div id="left" class="textbackground" (swipeleft)="onSwipeLeft($event,-3)" (swiperight)="onSwipeRight($event,3)">
+            <div id="left" class="textbackground style-7" (swipeleft)="onSwipeLeft($event,-3)" (swiperight)="onSwipeRight($event,3)">
                 <div class="textcontent">
                     <div *ngFor="let entry of entries | async; index as i" class="entryindex" (click)="scrollTo(i)">
                         <p>{{ entry.title }}</p>

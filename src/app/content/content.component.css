@@ -125,6 +125,7 @@ div.entryindex + div.entryindex {
 #left {
   flex: 0 0 35%;
   overflow-y: auto;
+  touch-action: pan-y !important;
 }
 
 .spacerbackground {
@@ -197,6 +198,14 @@ a {
                                        color-stop(0.44, rgb(94, 97, 103)),
                                        color-stop(0.72, rgb(134, 130, 132)),
                                        color-stop(0.86, rgb(94, 97, 103)));
+}
+
+@media not -webkit-device-pixel-ratio
+{
+  .style-7
+  {
+    scrollbar-width: thin;
+  }
 }
 
 @media (orientation: portrait)
