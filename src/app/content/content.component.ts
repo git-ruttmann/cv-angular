@@ -7,6 +7,7 @@ import { IVitaDataService, VitaDataServiceConfig } from '../services/vita-data.s
 import { VitaEntry, VitaEntryEnum } from '../vita-entry';
 import { TrackingService, TrackingEventService, ITrackedItem } from '../services/tracking.service';
 import { ThrottleConfig } from 'rxjs/internal/operators/throttle';
+import { LocalizationTextService } from '../services/localization-text.service';
 
 const urlToVitaEntryEnum = {
   "person" : VitaEntryEnum.Person,
@@ -24,6 +25,7 @@ const urlToVitaEntryEnum = {
 export class ContentComponent implements AfterViewInit, OnDestroy {
   public content = "Hello";
   entries: Observable<VitaEntry[]>;
+  detailLevel: string;
 
   @ViewChild('textcontent', { static : true })
   contentElt: ElementRef;
@@ -37,12 +39,14 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   
   constructor(
     @Inject(VitaDataServiceConfig) private dataService : IVitaDataService,
-    private router : Router, 
+    private router : Router,
+    public localizationService: LocalizationTextService,
     private trackingService: TrackingService,
     private trackingEventService: TrackingEventService)
   {
     this.content = router.url.substr(1).toLowerCase();
     this.entries = dataService.entries;
+    this.updateDetailLevelText();
     
     this.trackingEventService.trackingEvent.subscribe(x => this.trackContent(x));
     var vitaEntryType = urlToVitaEntryEnum[this.content];
@@ -107,6 +111,29 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
     this.router.navigate(["/"]);
   }
 
+  detailSwitch() {
+    this.detailLevel 
+    if (this.dataService.duration == "S") {
+      this.dataService.setDuration("L");
+    }
+    else {
+      this.dataService.setDuration("S");
+    }
+
+    this.updateDetailLevelText();
+    this.contentElt.nativeElement.focus();
+  }
+
+  updateDetailLevelText()
+  {
+    if (this.dataService.duration == "L") {
+      this.detailLevel = this.localizationService.LessTopicsText;
+    }
+    else {
+      this.detailLevel = this.localizationService.MoreTopicsText;
+    }
+  }
+
   catchClickOnContent(event : Event)
   {
     event.stopPropagation();
@@ -115,7 +142,9 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   scrollTo(elt : number)
   {
     let item = this.contentElt.nativeElement.querySelector("#id_" + elt);
-    item.scrollIntoView();
+    item.scrollIntoView({
+      behavior: "smooth"
+      });
 
     let headerItem = item.querySelector("div.entry-header") as HTMLDivElement;
     this.trackingService.Track(this.content, headerItem.innerText, 0);
@@ -172,7 +201,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
     if (topic.offsetTop + topic.offsetHeight >= scrollTopRef)
     {
       let textEntry = topic.getElementsByClassName("entry-text")[0] as HTMLElement;
-      if (textEntry.offsetTop < scrollBottomRef)
+      if (textEntry && textEntry.offsetTop < scrollBottomRef)
       {
         return true;
       }

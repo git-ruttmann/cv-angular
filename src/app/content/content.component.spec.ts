@@ -8,7 +8,6 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { BehaviorSubject } from 'rxjs';
 
 import { ContentComponent } from './content.component';
-import { ContentHeaderComponent } from './content-header.component';
 import { IVitaDataService, VitaDataServiceConfig } from '../services/vita-data.service';
 import { VitaEntryComponent } from './vita-entry.component';
 import { routes } from '../app-routing.module';
@@ -104,7 +103,6 @@ describe('ContentComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         TestRootComponent,
-        ContentHeaderComponent, 
         ContentComponent,
         VitaEntryComponent,
       ],

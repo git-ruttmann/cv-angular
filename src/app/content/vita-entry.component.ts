@@ -5,7 +5,7 @@ import { VitaEntry, VitaSentenceEnum } from '../vita-entry';
 @Component({
   selector: 'app-vita-entry',
   templateUrl: './vita-entry.component.html',
-  styleUrls: ['./content.component.css']
+  styleUrls: ['./content.component.css', './vita-entry.component.css']
 })
 export class VitaEntryComponent {
   vitaSentenceEnum = VitaSentenceEnum;

@@ -27,6 +27,28 @@ export class LocalizationTextService {
     return this.contentSubHeader;
   }
   
+  public get MoreTopicsText() : string {
+    if (this.dataService.language == "English")
+    {
+      return "More Details";
+    }
+    else
+    {
+      return "Mehr Details";
+    }
+  }
+  
+  public get LessTopicsText() : string {
+    if (this.dataService.language == "English")
+    {
+      return "Reduce Details";
+    }
+    else
+    {
+      return "Weniger Details";
+    }
+  }
+
   private RouteChanged(): void
   {
     let state = this.router.routerState.snapshot;
@@ -36,7 +58,7 @@ export class LocalizationTextService {
     {
       if (this.dataService.language == "English")
       {
-        this.contentMainHeader = "Person";
+        this.contentMainHeader = "Me as Person";
         this.contentSubHeader = "subtext";
       }
       else
@@ -81,7 +103,7 @@ export class LocalizationTextService {
     {
       if (this.dataService.language == "English")
       {
-        this.contentMainHeader = "Interests"
+        this.contentMainHeader = "Uncharted"
       }
       else
       {

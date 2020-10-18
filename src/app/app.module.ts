@@ -10,7 +10,6 @@ import * as Hammer from 'hammerjs';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ContentComponent } from './content/content.component';
-import { ContentHeaderComponent } from './content/content-header.component';
 import { LoginComponent } from './base/login.component';
 import { BaseFlightComponent } from './base/base-flight.component';
 import { ReadonlyDirective } from './base/readonly.directive';
@@ -36,7 +35,6 @@ export class MyHammerConfig extends HammerGestureConfig {
     LoginComponent,
     BaseFlightComponent,
     ReadonlyDirective,
-    ContentHeaderComponent,
     VitaEntryComponent,
   ],
   imports: [

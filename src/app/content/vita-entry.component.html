@@ -10,7 +10,7 @@
 <div class="entry-header">{{ entry.title }}</div>
 <div class="entry-text">
     <div>
-        <div *ngFor="let line of entry.lines">
+        <div *ngFor="let line of entry.lines" class="{{'ve_' + vitaSentenceEnum[line.sentenceType].toLowerCase()}}">
             <div [ngSwitch]="line.sentenceType">
                 <div *ngSwitchCase='vitaSentenceEnum.Paragraph'>
                     <p class="vitasentence">{{ line.line }}</p>
