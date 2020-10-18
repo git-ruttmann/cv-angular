@@ -41,7 +41,6 @@ export const routeAnimations = trigger("routeAnimations", [
     ]),
     transition('content => content2, content2 => content', [
         query(':enter #contentoverlay',  [ style({ opacity : 0.0, position: 'relative', transform: 'translateX({{ newContentTranslate }}%)' }) ]),
-        query(':leave #slideindicator',  [ style({ opacity : 0.0 }) ]),
         query(':leave #contentoverlay',  [ animate(150, style({ opacity : 0.0, position: 'relative', transform: 'translateX({{ oldContentTranslate }}%)' })) ]),
         query(':enter #contentoverlay',  [
             style({ opacity : 0.0, position: 'relative', transform: 'translateX({{ newContentTranslate }}%)' }),

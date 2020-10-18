@@ -25,12 +25,4 @@
             </div>
         </div>
     </div>
-    <div id="slideindicator">
-        <div *ngFor="let link of directLinks"
-            (click)="navigateToLink($event, link)"
-            id=id_{{link}}
-            [class.active]="link == content"
-            class="slideitem">
-        </div>
-    </div>
 </div>
