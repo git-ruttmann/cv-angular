@@ -19,7 +19,6 @@ import { AuthenticateService } from './services/authenticate.service';
 import { BaseStateService } from './services/base-state.service';
 import { BackgroundImageViewportService } from './services/background-image-viewport.service';
 import { TrackingService, TrackingEventService } from './services/tracking.service';
-import { WelcomeComponent } from './content/welcome.component';
 import { VitaEntryComponent } from './content/vita-entry.component';
 import { LocalizationTextService } from './services/localization-text.service';
 
@@ -38,7 +37,6 @@ export class MyHammerConfig extends HammerGestureConfig {
     BaseFlightComponent,
     ReadonlyDirective,
     ContentHeaderComponent,
-    WelcomeComponent,
     VitaEntryComponent,
   ],
   imports: [

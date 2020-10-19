@@ -136,9 +136,9 @@ export class BaseFlightComponent implements AfterViewInit {
     if (value.startsWith("aoi")) {
       let targetUrl = value.substr(3).toLowerCase();
 
-      if (false && this.authenticateService.IsFirstLogon())
+      if (this.authenticateService.IsFirstLogon())
       {
-        this.router.navigate(["/introduction"], { state: [ targetUrl ], queryParams: {"target": targetUrl} });
+        this.router.navigate(["/" + targetUrl]);
         this.authenticateService.SetFirstLogon();
       }
       else

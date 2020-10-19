@@ -27,39 +27,6 @@ export class LocalizationTextService {
     return this.contentSubHeader;
   }
   
-  public get WelcomeShort() : String {
-    if (this.dataService.language == "English")
-    {
-      return "Let's get to the point. Details are negligible.";
-    }
-    else
-    {
-      return "Bring es auf den Punkt, Details sehen wir später.";
-    }
-  }
-  
-  public get WelcomeMedium() : String {
-    if (this.dataService.language == "English")
-    {
-      return "Show me the bullet points, I'll connect them myself.";
-    }
-    else
-    {
-      return "Zeige alle Stickpunkte, ich sortiere sie selbst.";
-    }
-  }
-  
-  public get WelcomeLong() : String {
-    if (this.dataService.language == "English")
-    {
-      return "Give me a glance how you think. Incomplete.";
-    }
-    else
-    {
-      return "Erzähl mir, wie du denkst. Unvollständig.";
-    }
-  }
-
   private RouteChanged(): void
   {
     let state = this.router.routerState.snapshot;

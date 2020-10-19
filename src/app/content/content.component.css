@@ -117,11 +117,6 @@ div.entryindex + div.entryindex {
   height: calc(88vh - 4em - 1em);
 }
 
-#welcomecontent {
-  display: flex;
-  height: 88vh;
-}
-
 #left {
   flex: 0 0 35%;
   overflow-y: auto;
@@ -141,35 +136,8 @@ div.entryindex + div.entryindex {
   touch-action: pan-y !important;
 }
 
-.durationline {
-  margin: 0.5em;
-  padding: 0.5em 0.5em 0.5em 0;
-  padding-left: 18px;
-  display: flex;
-  cursor: pointer;
-  border: 1px solid transparent;
-}
-
-.durationline:hover
-{
-  border: 1px solid #eee;
-}
-
-.durationimage {
-  width: 3.2em;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
 a {
   color: #eef1f3;
-}
-
-.durationtext {
-  margin-top: auto;
-  margin-bottom: auto;
-  padding: 0em 1em 0em 1em;
-  font-size: large;
 }
 
 *:focus {
@@ -233,9 +201,6 @@ a {
   #contentsidebyside {
     height: calc(84vh - 4em - 1em);
   }  
-  #welcomecontent {
-    height: 80vh;
-  }
   
   .masterheadertext {
     margin-top: 0.25em !important;
@@ -256,14 +221,6 @@ and (min-device-width : 375px)
 and (max-device-width : 812px) 
 and (-webkit-device-pixel-ratio : 3)
 and (orientation : portrait) {
-  .durationimage {
-    min-width: 3.2em;
-    width: unset;
-  }
-
-  .durationtext {
-    font-size: medium;
-  }
   
   .textcontent {
     font-size: medium;
@@ -277,10 +234,6 @@ and (orientation : portrait) {
     height: calc(77vh - 4em);
   }
 
-  #welcomecontent {
-    height: 77vh;
-  }
-  
   .masterheadertext {
     margin-top: 0.25em !important;
     margin-left: 0.5rem !important;
