@@ -51,7 +51,7 @@
 }
 
 .entrycontent + .entrycontent {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #999999;
   margin-top: 1.2em;
   padding-top: 1.0em;
 }
@@ -59,7 +59,7 @@
 div.entryindex + div.entryindex {
   margin-top: 0.5em;
   padding-top: 0.5em;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #999999;
 }
 
 .entryindex {
@@ -134,7 +134,7 @@ a {
   width: 2.5em;
   justify-content: right;
   max-height: 1.7em;
-  fill: #9e9e9e;
+  fill: #999999;
   opacity: 0.8;
   order: 2;
 }
@@ -148,7 +148,7 @@ a {
 
 .topicmore {
   padding: 0.5em 1em 0.25em 1em;
-  background: #24343b;
+  background: #ffffff10;
   font-size: large;
   cursor: pointer;
   display: flex;
@@ -157,7 +157,7 @@ a {
 .topicmoretext {
   flex: 1;
   order: 1;
-  color: #9e9e9e;
+  color: #999999;
 }
 
 .contentmore {
@@ -167,13 +167,13 @@ a {
 
 .contentmoretext {
   flex: 1;
-  color: #9e9e9e;
+  color: #999999;
 }
 
 .backbutton {
   margin-top: 13%;
   height: 74%;
-  fill: white;
+  fill: #bbbbbb;
   width: 100%;
   opacity: 0.8;
   cursor: pointer;
@@ -239,8 +239,9 @@ a {
   
   .masterheadertext {
     margin-top: 0.25em !important;
-    margin-left: 0.5rem !important;
-    margin-right: 0.5rem !important;
+    margin-left: 0rem !important;
+    margin-right: 0rem !important;
+    font-size: xx-large;
   }
 }
 
@@ -251,8 +252,9 @@ a {
   
   .masterheadertext {
     margin-top: 0.25em !important;
-    margin-left: 0.5rem !important;
-    margin-right: 0.5rem !important;
+    margin-left: 0rem !important;
+    margin-right: 0rem !important;
+    font-size: xx-large;
   }
 }
 
@@ -283,8 +285,9 @@ and (orientation : portrait) {
   }
 
   .masterheadertext {
-    margin-top: 0.25em !important;
-    margin-left: 0.5rem !important;
-    margin-right: 0.5rem !important;
+    margin-top: 0.5em !important;
+    margin-left: 0rem !important;
+    margin-right: 0rem !important;
+    font-size: x-large;
   }
 }
