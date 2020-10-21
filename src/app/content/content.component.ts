@@ -141,10 +141,17 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
 
   scrollTo(elt : number)
   {
+    this.contentElt.nativeElement.focus();
+    
     let item = this.contentElt.nativeElement.querySelector("#id_" + elt);
-    item.scrollIntoView({
-      behavior: "smooth"
-      });
+    if (elt == 0) {
+      this.backgroundElt.nativeElement.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    else {
+      item.scrollIntoView({
+        behavior: "smooth"
+        });
+    }
 
     let headerItem = item.querySelector("div.entry-header") as HTMLDivElement;
     this.trackingService.Track(this.content, headerItem.innerText, 0);
