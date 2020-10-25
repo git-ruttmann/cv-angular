@@ -61,8 +61,11 @@
             <div id="left" class="textbackground" (swipeleft)="onSwipeLeft($event,-3)" (swiperight)="onSwipeRight($event,3)">
                 <div class="topicview style-7">
                     <div class="textcontent">
-                        <div *ngFor="let entry of entries | async; index as i" class="entryindex" (click)="scrollTo(i)">
-                            <p>{{ entry.title }}</p>
+                        <div *ngFor="let entry of entries | async; index as i; first as isFirst" class="entryindex" (click)="scrollTo(i)">
+                            <div class="entryseparator" *ngIf="!isFirst"></div>
+                            <div class="entryinner">
+                                <p>{{ entry.title }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

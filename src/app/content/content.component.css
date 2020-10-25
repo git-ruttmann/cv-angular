@@ -35,7 +35,7 @@
 }
 
 .textcontent {
-  padding: 1em;
+  padding: 0.5em;
   font-size: large;
 }
 
@@ -47,19 +47,27 @@
 .entrycontent {
   opacity: 1;
   user-select: text;
+  padding-top: 0.5em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
   cursor: default;
 }
 
 .entrycontent + .entrycontent {
-  border-top: 1px solid #999999;
+  border-top: 1px solid #ffffff80;
   margin-top: 1.2em;
-  padding-top: 1.0em;
 }
 
-div.entryindex + div.entryindex {
-  margin-top: 0.5em;
-  padding-top: 0.5em;
-  border-top: 1px solid #999999;
+.entryseparator {
+  height: 1px;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  background: #ffffff80;
+}
+
+.entryinner {
+  margin: 0.1em;
+  padding: 0.4em;
 }
 
 .entryindex {
@@ -128,13 +136,13 @@ a {
   justify-content: center;
   align-items: center;
   max-height: 4em;
+  fill: #bbbbbb;
 }
 
 .morebutton {
   width: 2.5em;
   justify-content: right;
   max-height: 1.7em;
-  fill: #999999;
   opacity: 0.8;
   order: 2;
 }
@@ -148,32 +156,39 @@ a {
 
 .topicmore {
   padding: 0.5em 1em 0.25em 1em;
-  background: #ffffff10;
   font-size: large;
   cursor: pointer;
   display: flex;
+  background: #ffffff10;
+  fill: #bbbbbb;
+  color: #bbbbbb;
+}
+
+.topicmore:hover {
+  background: #ffffff20;
+  fill: #eef1f3;
+  color: #eef1f3;
 }
 
 .topicmoretext {
   flex: 1;
   order: 1;
-  color: #999999;
 }
 
 .contentmore {
   display: flex;
   cursor: pointer;
+  fill: #bbbbbb;
+  color: #bbbbbb;
 }
 
 .contentmoretext {
   flex: 1;
-  color: #999999;
 }
 
 .backbutton {
   margin-top: 13%;
   height: 74%;
-  fill: #bbbbbb;
   width: 100%;
   opacity: 0.8;
   cursor: pointer;
@@ -205,6 +220,20 @@ a {
                                        color-stop(0.44, rgb(94, 97, 103)),
                                        color-stop(0.72, rgb(134, 130, 132)),
                                        color-stop(0.86, rgb(94, 97, 103)));
+}
+
+@media (pointer:fine)
+{
+  .backbox:hover {
+    background: #ffffff20;
+    fill: #eef1f3;
+    color: #eef1f3;
+  }
+
+  .entryinner:hover {
+    background-color: #ffffff20;
+    border-top: none;
+  }
 }
 
 @media not -webkit-device-pixel-ratio
