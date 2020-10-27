@@ -26,7 +26,15 @@ export class LocalizationTextService {
   public get ContentSubHeader() : String {
     return this.contentSubHeader;
   }
-  
+
+  public get DeveloperNameText() : String {
+    return "Matthias Ruttmann";
+  }
+
+  public get DeveloperProfileText() : String {
+    return "Developer Profile";
+  }
+
   public get MoreTopicsText() : string {
     if (this.dataService.language == "English")
     {

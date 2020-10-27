@@ -2,10 +2,13 @@ import {
     trigger, transition, style, query, state, animate, group
 } from '@angular/animations';
 
-const baseItemsQuerySelector = ".flyPathLine,.flyPathHead,.flyPathPoi,.clickArea";
+const baseItemsQuerySelector = ".flyPathLine,.flyPathHead,.flyPathPoi,.clickArea,.poitext";
 
 export const routeAnimations = trigger("routeAnimations", [
     transition('login => base', [
+        query('.whoami', style({ opacity : 0 })),
+        query('.poitext', style({ opacity : 0 })),
+        query('.flyPathPoi', style({ opacity : 0 })),
         query(".backgroundimage", [style({ left: "*" })]),   // dummy for safari: query any element from the SVG.
         query('.sizing', animate(700, style({ left : "100%" }))),
     ]),
