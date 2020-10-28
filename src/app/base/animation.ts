@@ -23,24 +23,29 @@ export const routeAnimations = trigger("routeAnimations", [
             query('#contentoverlay',  [ animate(80, style({ opacity: 0.01 })), animate(250) ]),
         ]),
     ]),
-    transition('content => base, content2 => base, alltopicsflip => base', [
+    transition('content => base, content2 => base, alltopicsloop => base', [
         query('.whoami, .flyPathPoi, .poitext', style({ opacity: 0 })),
         query('#contentoverlay',  [ animate(150, style({ opacity : 0, position: 'relative', transform: 'translateX(-10%)' })) ]),
         query('.whoami', animate(150, style({ opacity : "*" }))),
     ]),
-    transition('alltopicsflip => alltopicsflip, content => alltopicsflip, content2 => alltopicsflip', [
-        query(':enter #contentoverlay',  [ style({ opacity : 0.0, position: 'relative', transform: 'translateX({{ newContentTranslate }}%)' }) ]),
-        query(':leave #contentoverlay',  [ animate(150, style({ opacity : 0.0, position: 'relative', transform: 'translateX({{ oldContentTranslate }}%)' })) ]),
+    transition('alltopicsloop => alltopicsloop, content => alltopicsloop, content2 => alltopicsloop', [
+        query(':enter #contentoverlay',  [ style({ opacity : 0.0 }) ]),
+        query(':leave #loopoverlay',  [ style({ opacity : 0.9 }) ]),
+        query(':leave #contentoverlay',  [ animate(250, style({ 
+            opacity : 0, 
+            position: 'relative', 
+            transform: 'translateX(calc({{ animationDirection }} * -10%)) scaleZ(0.5)' })) ]),
+        query(':leave #contentoverlay',  [ animate(400, style({ }))]),
         query(':enter #contentoverlay',  [
-            style({ opacity : 0.0, position: 'relative', transform: 'translateX({{ newContentTranslate }}%)' }),
+            style({ opacity : 0, position: 'relative', transform: 'translateX(calc({{ animationDirection }} * 10%))' }),
             animate(250),
         ]),
     ]),
-    transition('content => content2, content2 => content, alltopicsflip => content, alltopicsflip => content2', [
-        query(':enter #contentoverlay',  [ style({ opacity : 0.0, position: 'relative', transform: 'translateX({{ newContentTranslate }}%)' }) ]),
-        query(':leave #contentoverlay',  [ animate(150, style({ opacity : 0.0, position: 'relative', transform: 'translateX({{ oldContentTranslate }}%)' })) ]),
+    transition('content => content2, content2 => content, alltopicsloop => content, alltopicsloop => content2', [
+        query(':enter #contentoverlay',  [ style({ opacity : 0.0 }) ]),
+        query(':leave #contentoverlay',  [ animate(150, style({ opacity : 0.0, position: 'relative', transform: 'translateX(calc({{ animationDirection }} * -10%)' })) ]),
         query(':enter #contentoverlay',  [
-            style({ opacity : 0.0, position: 'relative', transform: 'translateX({{ newContentTranslate }}%)' }),
+            style({ opacity : 0.0, position: 'relative', transform: 'translateX(calc({{ animationDirection }} * 10%)' }),
             animate(250),
         ]),
     ]),

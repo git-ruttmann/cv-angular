@@ -58,7 +58,17 @@ export class AppComponent implements DoCheck, AfterViewInit {
       const state = this.router.getCurrentNavigation()?.extras.state;
       this.animationDirection = state?.direction ?? 1;
 
-      if (this.animationState == "content" && newAnimationState == "content") {
+      if (newAnimationState == "content")
+      {
+        if (this.baseStateService.AllSectionsLoop)
+        {
+          newAnimationState = "alltopicsloop";
+          this.baseStateService.AllSectionsLoop = false;
+        }
+      }
+
+      if (this.animationState == "content" && newAnimationState == "content")
+      {
         newAnimationState = "content2";
       }
 

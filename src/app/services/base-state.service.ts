@@ -11,6 +11,10 @@ export class BaseStateService {
   private flashTimeout = 5000;
   private isFirstActivation = true;
 
+  private visitedPages : Set<string> = new Set<string>();
+  private firstVisitedSection : string = "";
+  private allSectionsLoop: boolean = false;
+
   constructor(private router : Router)
   {
     this.router.events.subscribe(x => this.RouteStateChanged());
@@ -39,10 +43,22 @@ export class BaseStateService {
     this.isFirstActivation = true;
   }
 
+  public get AllSectionsLoop() : boolean
+  {
+    return this.allSectionsLoop;
+  }
+
+  public set AllSectionsLoop(value: boolean)
+  {
+    this.allSectionsLoop = value;
+  }
+
   private RouteStateChanged(): void
   {
     let state = this.router.routerState.snapshot;
     let section = state.url.split('/', 2).concat("-")[1].toLowerCase();
+
+    this.handleSectionVisit(section);
     if (section == "-")
     {
       return;
@@ -53,6 +69,31 @@ export class BaseStateService {
     if (this.nextState != this.state)
     {
       this.updateTimerOnStateChange();
+    }
+  }
+
+  private handleSectionVisit(section: string)
+  {
+    if (section == "-" || section == "")
+    {
+      this.firstVisitedSection = "";
+      this.visitedPages.clear();
+      this.allSectionsLoop = false;
+    }
+    else
+    {
+      if (!this.firstVisitedSection)
+      {
+        this.firstVisitedSection = section;
+      }
+
+      if (section == this.firstVisitedSection && this.visitedPages.size == 5)
+      {
+        this.allSectionsLoop = true;
+        this.visitedPages.clear();
+      }
+
+      this.visitedPages.add(section);
     }
   }
 

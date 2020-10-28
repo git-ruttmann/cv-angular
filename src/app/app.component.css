@@ -11,6 +11,10 @@
     max-height: 180%;
 }
 
+.toplevelcontainer {
+  height: 100%;
+}
+
 @media (orientation: portrait)
 {
   .bikeBackground {

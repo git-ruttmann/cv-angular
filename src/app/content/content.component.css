@@ -8,6 +8,7 @@
 
 .overlaycontainer {
   position: fixed;
+  perspective: 200rem;
   overflow: hidden;
   height: 100vh;
   width: 100%;
@@ -21,7 +22,7 @@
 
 .overlay {
   position: relative;
-  opacity: 0.92;
+  opacity: 0.97;
   width: 80%;
   margin: auto;
   max-width: 70em;
@@ -218,6 +219,33 @@ a {
                                        color-stop(0.44, rgb(94, 97, 103)),
                                        color-stop(0.72, rgb(134, 130, 132)),
                                        color-stop(0.86, rgb(94, 97, 103)));
+}
+
+#loopoverlay {
+  position: absolute;
+  opacity: 0.97;
+  width: 80%;
+  height: 88vh;
+  opacity: 0;
+  margin: auto;
+  max-width: 70em;
+  padding: unset;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+#loopoverlay .loopicon {
+  position: relative;
+  fill: #bbbbbb;
+  top: 35%;
+  width: 100%;
+  max-height: 15%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (pointer:fine)

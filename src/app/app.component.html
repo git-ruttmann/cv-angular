@@ -2,6 +2,6 @@
 <div>
   <img src="assets/bike.jpg" alt="bike" class="backgroundimage bikeBackground" #globalbackgroundimage>
 </div>
-<div [@routeAnimations]="{ value: getAnimatedState(outlet), params: { newContentTranslate : animationDirection >= 0 ? 10 : -10, oldContentTranslate : animationDirection >= 0 ? -10 : 10 } }" style='height:100%' >
+<div [@routeAnimations]="{ value: getAnimatedState(outlet), params: { animationDirection : animationDirection } }" class="toplevelcontainer" >
   <router-outlet #outlet="outlet"></router-outlet>
 </div>

@@ -9,6 +9,7 @@ import { VitaEntry, VitaEntryEnum } from '../vita-entry';
 import { TrackingService, TrackingEventService, ITrackedItem } from '../services/tracking.service';
 import { ThrottleConfig } from 'rxjs/internal/operators/throttle';
 import { LocalizationTextService } from '../services/localization-text.service';
+import { BaseStateService } from '../services/base-state.service';
 
 const urlToVitaEntryEnum = {
   "person" : VitaEntryEnum.Person,
@@ -72,6 +73,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
     @Inject(VitaDataServiceConfig) private dataService : IVitaDataService,
     private router : Router,
     public localizationService: LocalizationTextService,
+    public baseStateService: BaseStateService,
     private trackingService: TrackingService,
     private trackingEventService: TrackingEventService)
   {
@@ -164,7 +166,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   scrollTo(elt : number)
   {
     this.contentElt.nativeElement.focus();
-    
+
     let item = this.contentElt.nativeElement.querySelector("#id_" + elt);
     if (elt == 0) {
       this.backgroundElt.nativeElement.scrollTo({ top: 0, behavior: 'smooth' });
