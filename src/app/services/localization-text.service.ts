@@ -7,14 +7,12 @@ import { IVitaDataService, VitaDataServiceConfig } from './vita-data.service';
 })
 export class LocalizationTextService {
   contentMainHeader: String;
-  contentSubHeader: String;
 
   constructor(
     @Inject(VitaDataServiceConfig) private dataService : IVitaDataService,
     private router : Router)
   {
     this.contentMainHeader = "";
-    this.contentSubHeader = "";
     this.RouteChanged();
     router.events.subscribe(() => this.RouteChanged());
   }
@@ -23,16 +21,72 @@ export class LocalizationTextService {
     return this.contentMainHeader;
   }
 
-  public get ContentSubHeader() : String {
-    return this.contentSubHeader;
-  }
-
   public get DeveloperNameText() : String {
     return "Matthias Ruttmann";
   }
 
   public get DeveloperProfileText() : String {
     return "Developer Profile";
+  }
+
+  public get PersonText() : String
+  {
+    if (this.dataService.language == "English")
+    {
+      return "Me as Person";
+    }
+    else
+    {
+      return "Persönlichkeit";
+    }
+  }
+
+  public get ProjectsText() : String
+  {
+    if (this.dataService.language == "English")
+    {
+      return "Projects";
+    }
+    else
+    {
+      return "Projekte";
+    }
+  }
+
+  public get TechnologiesText() : String
+  {
+    if (this.dataService.language == "English")
+    {
+      return "Technologies";
+    }
+    else
+    {
+      return "Technologien";
+    }
+  }
+
+  public get StrengthText() : String
+  {
+    if (this.dataService.language == "English")
+    {
+      return "Strength";
+    }
+    else
+    {
+      return "Stärken";
+    }
+  }
+
+  public get InterestsText() : String
+  {
+    if (this.dataService.language == "English")
+    {
+      return "Uncharted";
+    }
+    else
+    {
+      return "Interessen";
+    }
   }
 
   public get MoreTopicsText() : string {
@@ -45,7 +99,7 @@ export class LocalizationTextService {
       return "Mehr Details";
     }
   }
-  
+
   public get LessTopicsText() : string {
     if (this.dataService.language == "English")
     {
@@ -64,64 +118,27 @@ export class LocalizationTextService {
 
     if (url == "/person")
     {
-      if (this.dataService.language == "English")
-      {
-        this.contentMainHeader = "Me as Person";
-        this.contentSubHeader = "subtext";
-      }
-      else
-      {
-        this.contentMainHeader = "Person";
-      }
+      this.contentMainHeader = this.PersonText;
     }
     else if (url == "/projects")
     {
-      if (this.dataService.language == "English")
-      {
-        this.contentMainHeader = "Projects"
-      }
-      else
-      {
-        this.contentMainHeader = "Projekte"
-      }
+      this.contentMainHeader = this.ProjectsText;
     }
     else if (url == "/technologies")
     {
-      if (this.dataService.language == "English")
-      {
-        this.contentMainHeader = "Technologies"
-      }
-      else
-      {
-        this.contentMainHeader = "Technologien"
-      }
+      this.contentMainHeader = this.TechnologiesText;
     }
     else if (url == "/strength")
     {
-      if (this.dataService.language == "English")
-      {
-        this.contentMainHeader = "Strength"
-      }
-      else
-      {
-        this.contentMainHeader = "Stärken"
-      }
+      this.contentMainHeader = this.StrengthText;
     }
     else if (url == "/interests")
     {
-      if (this.dataService.language == "English")
-      {
-        this.contentMainHeader = "Uncharted"
-      }
-      else
-      {
-        this.contentMainHeader = "Interessen"
-      }
+      this.contentMainHeader = this.InterestsText;
     }
     else
     {
       this.contentMainHeader = url;
-      this.contentSubHeader = "";
     }
   }
 }

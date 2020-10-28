@@ -1,4 +1,19 @@
 <div [@baseState]='getAnimationState()'>
+  <div id="toi1" class="poitext poi1" (click)='onClick($event)'>
+    <p>{{ localizationService.PersonText }}</p>
+  </div>
+  <div id="toi2" class="poitext poi2" (click)='onClick($event)'>
+    <p>{{ localizationService.ProjectsText }}</p>
+  </div>
+  <div id="toi3" class="poitext poi3" (click)='onClick($event)'>
+    <p>{{ localizationService.TechnologiesText }}</p>
+  </div>
+  <div id="toi4" class="poitext poi4" (click)='onClick($event)'>
+    <p>{{ localizationService.StrengthText }}</p>
+  </div>
+  <div id="toi5" class="poitext poi5" (click)='onClick($event)'>
+    <p>{{ localizationService.InterestsText }}</p>
+  </div>
 <svg
 xmlns="http://www.w3.org/2000/svg" 
 height="1333px"
@@ -25,7 +40,7 @@ class="backgroundimage"
     }
     
     .flyPathPoi {
-      opacity: 0.6;
+      opacity: 1;
     }
 
     .clickArea {
@@ -83,20 +98,5 @@ class="backgroundimage"
 <div class="whoami">
   <p>{{ localizationService.DeveloperNameText }}</p>
   <p class="whoamisub">{{ localizationService.DeveloperProfileText }}</p>
-</div>
-<div id="toiPerson" class="poitext poi1" (click)='onClick($event)'>
-  <p>Me as Person</p>
-</div>
-<div id="toiProjects" class="poitext poi2" (click)='onClick($event)'>
-  <p>Projects</p>
-</div>
-<div id="toiTechnologies" class="poitext poi3" (click)='onClick($event)'>
-  <p>Technologies</p>
-</div>
-<div id="toiStrength" class="poitext poi4" (click)='onClick($event)'>
-  <p>Strength</p>
-</div>
-<div id="toiInterests" class="poitext poi5" (click)='onClick($event)'>
-  <p>Uncharted</p>
 </div>
 </div>

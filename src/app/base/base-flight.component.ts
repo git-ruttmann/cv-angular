@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { trigger, transition, query, animate, style, group, AnimationStyleMetadata, AnimationKeyframesSequenceMetadata, AnimationAnimateMetadata, keyframes, state } from '@angular/animations';
+import { trigger, transition, query, animate, style, group, AnimationStyleMetadata, AnimationKeyframesSequenceMetadata, AnimationAnimateMetadata, keyframes, state, sequence, stagger } from '@angular/animations';
 
 import { BaseStateService } from '../services/base-state.service';
 import { BackgroundImageViewportService, BackgroundViewportReport } from '../services/background-image-viewport.service';
 import { AuthenticateService } from '../services/authenticate.service';
-import { async } from '@angular/core/testing';
+import { LocalizationTextService } from '../services/localization-text.service';
 
 const duration = 4400;
+const toiDuration = 2000;
+const hideDuration = 6000;
 const strokeDuration = duration - 1000; // roughly factor 1.3
 const strokeLength = 1600;
 
@@ -26,33 +28,41 @@ export class AnimationStuff {
         ]);
   }
 
-  public static animatePoi(delay: number, fadeout: number = 0.35) : AnimationAnimateMetadata[] {
+  public static animateFlyinPoi(delay: number, fadeout: number = 0.35) : AnimationAnimateMetadata[] {
     return  [ animate(duration, keyframes([
       style({ opacity: 0, offset : delay }),
-      style({ opacity: 1, r: 25, offset : delay + 0.08 }),
-      style({ opacity: 1, r: 25, offset : delay + 0.12 }),
+      style({ opacity: 1, r: "25px", offset : delay + 0.08 }),
+      style({ opacity: 1, r: "25px", offset : delay + 0.12 }),
       style({ opacity: 1, r: "*", offset : delay + fadeout * 2 / 3 }),
-      style({ opacity: "*", offset : delay + fadeout })]))
+      style({ opacity: 0.2, offset : delay + fadeout })]))
     ];
   }
 
-  public static animateToi(delay: number, fadeout: number = 0.35) : AnimationAnimateMetadata[] {
-    return  [ animate(duration, keyframes([
-      style({ opacity: 0, offset : delay }),
-      style({ opacity: 0.3, offset : delay + 0.05 }),
-      style({ opacity: 1, offset : delay + fadeout * 2 / 3 }),
-      style({ opacity: "*", offset : delay + fadeout })]))
+  public static animateSinglePoi() : AnimationAnimateMetadata[] {
+    return  [ animate(toiDuration, keyframes([
+      style({ opacity: 1, r: "25px", offset : 0.10 }),
+      style({ opacity: 0.8, r: "*", offset : 5 / 6 }),
+      style({ opacity: "*", offset : 1 })]))
     ];
   }
 
-  public static animatePoiTogether() : AnimationAnimateMetadata[] {
-    return [
-        animate(duration, keyframes([
-          style({ opacity: 0, offset : 0 }),
-          style({ opacity: 1, offset : 0.2 }),
-          style({ opacity: 1, offset : 0.4 }),
-          style({ opacity: "*", offset : 1 })]))
-      ];
+  public static animateToi(delay: number, dx: number, dy: number) : AnimationAnimateMetadata[] {
+    return  [ 
+      animate(delay, style({ opacity: "*" })),
+      animate(toiDuration, keyframes([
+        style({ transform: 'translate(' + dx * 0 + 'px, ' + dy * 0 + 'px)', offset : 0 }),
+        style({ transform: 'translate(' + dx * 20 + 'px, ' + dy * 20 + 'px)', offset : 0.10 }),
+        style({ transform: 'translate(' + dx * 0 + 'px, ' + dy * 0 + 'px)', offset : 5 / 6 }),
+    ]))];
+  }
+
+  public static hideTemporary() : AnimationAnimateMetadata[] {
+    return  [ animate(hideDuration, keyframes([
+      style({ opacity: "*", offset : 0 }),
+      style({ opacity: 0, offset : 0.08 }),
+      style({ opacity: 0, offset : 0.90 }),
+      style({ opacity: "*", offset : 1 })]))
+    ];
   }
 }
 
@@ -63,15 +73,18 @@ export const flyPathStates = trigger('flyPathState', [
 
 export const baseStateAnimations = trigger('baseState', [
   transition('initial => flyin', [
-    query('.poitext', style({ opacity: 0})),
-    query('.flyPathPoi', style({ opacity: 0})),
-    query('.whoamisub', style({ opacity : 0, position: 'relative', transform: 'translate(-20%, 0%)' })),
+    group([
+      query('.poitext', style({ opacity: 0})),
+      query('.flyPathPoi', style({ opacity: 0})),
+      query('.whoamisub', style({ opacity : 0, position: 'relative', transform: 'translate(-20%, 0%)' })),
+      query('.whoami', style({ opacity : 0.2, position: 'relative', transform: 'translateX(-30%)' })),
+    ]),
+
     query('.whoami',  [ 
-      style({ opacity : 0.2, position: 'relative', transform: 'translateX(-30%)' }),
-      animate(400, style({ opacity : 1, position: 'relative', transform: 'translate(-0.5rem, -0.5rem)' }))
+      animate(450, style({ opacity : 1, position: 'relative', transform: 'translate(-0.5rem, -0.5rem)' }))
     ]),
     query('.whoamisub',  [ 
-      animate(400, style({ opacity : 1, position: 'relative', transform: 'translate(0%, 0%)' }))
+      animate(450, style({ opacity : 1, position: 'relative', transform: 'translate(0%, 0%)' }))
     ]),
     group([
       query('.flyPathLine',  [ 
@@ -83,39 +96,34 @@ export const baseStateAnimations = trigger('baseState', [
         style({ strokeDashoffset: strokeLength, opacity: 1.0 }),
         animate(strokeDuration, AnimationStuff.flyPathKeyFrames(style({ strokeWidth : 11, offset:0.4 }))) 
       ]),
-      query('#poi1', AnimationStuff.animatePoi(0.385)),
-      query('#poi2', AnimationStuff.animatePoi(0.52)),
-      query('#poi3', AnimationStuff.animatePoi(0.58)),
-      query('#poi4', AnimationStuff.animatePoi(0.685, 0.3)),
-      query('#poi5', AnimationStuff.animatePoi(0.715, 0.285)),
-      query(".poitext", [
-        style({ opacity: 0 }),
-        animate(duration - 300, style({ opacity: 0 })),
-      ]),
+      query('#poi1', AnimationStuff.animateFlyinPoi(0.385)),
+      query('#poi2', AnimationStuff.animateFlyinPoi(0.52)),
+      query('#poi3', AnimationStuff.animateFlyinPoi(0.58)),
+      query('#poi4', AnimationStuff.animateFlyinPoi(0.685, 0.3)),
+      query('#poi5', AnimationStuff.animateFlyinPoi(0.715, 0.285)),
     ]),
+    sequence([
+      query('.poitext', animate(800, style({ opacity: 0 }))),
+      query('.flyPathPoi', animate(500, style({ opacity: 1 }))),
+      query('.poitext', animate(500, style({ opacity: 1 }))),
+    ])
   ]),
-  transition('inactive => returned', group([
-    query('.poi5', AnimationStuff.animatePoi(0.20, 0.5)),
-    query('.poi4', AnimationStuff.animatePoi(0.30, 0.5)),
-    query('.poi3', AnimationStuff.animatePoi(0.40, 0.5)),
-    query('.poi2', AnimationStuff.animatePoi(0.50, 0.45)),
-    query('.poi1', AnimationStuff.animatePoi(0.60, 0.4)),
+  transition('inactive => returned', sequence([
+    query('.flyPathPoi, .poitext', style({ opacity: 0 })),
+    query('.flyPathPoi, .poitext', animate(700, style({ opacity: 0 }))),
+    query('.flyPathPoi, .poitext', animate(900, style({ opacity: 1 }))),
   ])),
   transition('* => highlight1', group([
-    query('.flyPathPoi', AnimationStuff.animatePoiTogether()),
-    query('.poitext', AnimationStuff.animatePoiTogether()),
+    query('#toi1', AnimationStuff.animateToi(0 * 1500, 1, -1)),
+    query('#toi2', AnimationStuff.animateToi(1 * 1500, 0.15, -1.1)),
+    query('#toi3', AnimationStuff.animateToi(2 * 1500, 0.5, 1)),
+    query('#toi4', AnimationStuff.animateToi(3 * 1500, 0.15, 1.1)),
+    query('#toi5', AnimationStuff.animateToi(4 * 1500, -1, -1)),
+    query('.flyPathPoi', stagger(1500, AnimationStuff.animateSinglePoi()))
   ])),
   transition('* => highlight2', group([
-    query('.flyPathLine',  [ 
-      animate(duration / 6, style({ opacity : 0.8 })),
-      animate(duration / 2, style({ opacity : 0.8 })),
-      animate(duration / 3, style({ opacity : '*' })),
-    ]),
-    query('.poi1', AnimationStuff.animatePoi(0.00, 0.6)),
-    query('.poi2', AnimationStuff.animatePoi(0.10, 0.6)),
-    query('.poi3', AnimationStuff.animatePoi(0.20, 0.6)),
-    query('.poi4', AnimationStuff.animatePoi(0.30, 0.6)),
-    query('.poi5', AnimationStuff.animatePoi(0.40, 0.6)),
+    query('.flyPathPoi', stagger(200, AnimationStuff.hideTemporary())),
+    query('.poitext', stagger(200, AnimationStuff.hideTemporary())),
   ])),
 ]);
 
@@ -135,6 +143,7 @@ export class BaseFlightComponent implements AfterViewInit {
   constructor(
       private router : Router,
       private baseStateService : BaseStateService,
+      public localizationService : LocalizationTextService,
       private authenticateService : AuthenticateService,
       private backgroundImageViewportService : BackgroundImageViewportService) {
   }
@@ -152,31 +161,53 @@ export class BaseFlightComponent implements AfterViewInit {
     this.backgroundOverlayElt.nativeElement.style.height = report.Height + "px";
     this.backgroundOverlayElt.nativeElement.style.width = report.Width + "px";
 
-    this.RePositionText("#toiPerson", 1, 20, 0, false);
-    this.RePositionText("#toiProjects", 2, 10, 10, false);
-    this.RePositionText("#toiTechnologies", 3, -120, -60, false);
-    this.RePositionText("#toiStrength", 4, -110, 80, false);
-    this.RePositionText("#toiInterests", 5, -150, -10, true);
+    setTimeout(() => {
+      this.RePositionText(1, 90, -90, report);
+      this.RePositionText(2, 10, -100, report);
+      this.RePositionText(3, 30, 102, report);
+      this.RePositionText(4, 20, 102, report);
+      this.RePositionText(5, -90, -90, report);
+      }, 10);
   }
 
-  RePositionText(textElementId: string, poiElementId: number, dx: number, dy: number, bottomRef: boolean)
+  RePositionText(poiElementId: number, dx: number, dy: number, availableSize: BackgroundViewportReport)
   {
-    let textElement = this.backgroundOverlayElt.nativeElement.parentElement.querySelector(textElementId);
-    let refElement = this.backgroundOverlayElt.nativeElement.parentElement.querySelector(".poi" + poiElementId);
+    let textElement = this.backgroundOverlayElt.nativeElement.parentElement.querySelector("#toi" + poiElementId);
+    let refElement = this.backgroundOverlayElt.nativeElement.parentElement.querySelector("#poi" + poiElementId);
     let refRect : DOMRect = refElement.getBoundingClientRect();
+    let contentRect : DOMRect = textElement.getBoundingClientRect();
+    let screenRect : DOMRect = this.backgroundOverlayElt.nativeElement.parentElement.getBoundingClientRect();
 
-    if (bottomRef) 
-    {
-      dy = dy - textElement.getBoundingClientRect().height;
+    let availableWidth = screenRect.right;
+
+    var xpos = 0;
+    xpos = refRect.left 
+      - (contentRect.width - refRect.width) / 2 
+      + (contentRect.width + refRect.width) * (dx / 200);
+
+    if (xpos + contentRect.width >= availableWidth - 5 && availableWidth > 0) {
+      xpos = availableWidth - contentRect.width - 5;
     }
 
-    var y = refRect.top + dy;
-    if (y < 10) {
-      y = 10;
+    if (xpos < 10) {
+      xpos = 10;
     }
 
-    textElement.style.left = (refRect.left + refRect.width + dx) + "px";
-    textElement.style.top = y + "px";
+    var ypos = 0;
+    ypos = refRect.top 
+      - (contentRect.height - refRect.height) / 2 
+      + (contentRect.height + refRect.height) * (dy / 200);
+
+    if (ypos + contentRect.height > availableSize.Height) {
+      ypos = availableSize.Height - contentRect.height;
+    }
+
+    if (ypos < 0) {
+      ypos = 0;
+    }
+
+    textElement.style.left = xpos + "px";
+    textElement.style.top = ypos + "px";
   }
 
   onClick(event) {

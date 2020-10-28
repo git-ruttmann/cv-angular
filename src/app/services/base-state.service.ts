@@ -48,6 +48,16 @@ export class BaseStateService {
       return;
     }
     
+    this.determineNextState(section);
+
+    if (this.nextState != this.state)
+    {
+      this.updateTimerOnStateChange();
+    }
+  }
+
+  private determineNextState(section: string)
+  {
     if (section == "login")
     {
       this.isFirstActivation = true;
@@ -68,18 +78,25 @@ export class BaseStateService {
     {
       this.nextState = "returned";
     }
-
-    if (this.nextState != this.state)
+  }
+  
+  private updateTimerOnStateChange()
+  {
+    clearInterval(this.timerHandle);
+    if (this.nextState != "inactive")
     {
-      clearInterval(this.timerHandle);
-      if (this.nextState != "inactive")
+      this.timerHandle = setInterval(() => this.timeout(), this.flashTimeout);
+      if (this.nextState == "flyin")
       {
-        this.timerHandle = setInterval(() => this.timeout(), this.flashTimeout);
         this.flashTimeout = 7000;
+      }
+      else
+      {
+        this.flashTimeout = 10000;
       }
     }
   }
-  
+
   private timeout()
   {
     if (this.isFirstActivation) {
@@ -94,6 +111,15 @@ export class BaseStateService {
     }
 
     this.flashTimeout = this.flashTimeout + 2000;
+    if (this.flashTimeout < 10000)
+    {
+      this.flashTimeout = 10000;
+    }
+    else if (this.flashTimeout > 20000)
+    {
+      this.flashTimeout = 20000;
+    }
+
     clearInterval(this.timerHandle);
     this.timerHandle = setInterval(() => this.timeout(), this.flashTimeout);
   }
