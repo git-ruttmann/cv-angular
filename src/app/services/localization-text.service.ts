@@ -88,26 +88,15 @@ export class LocalizationTextService {
       return "Interessen";
     }
   }
-
-  public get MoreTopicsText() : string {
+  
+  public get FullDetailsText() : String {
     if (this.dataService.language == "English")
     {
-      return "More Details";
+      return "Extended\u00A0Vita";
     }
     else
     {
       return "Mehr Details";
-    }
-  }
-
-  public get LessTopicsText() : string {
-    if (this.dataService.language == "English")
-    {
-      return "Reduce Details";
-    }
-    else
-    {
-      return "Weniger Details";
     }
   }
 

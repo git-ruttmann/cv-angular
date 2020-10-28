@@ -60,8 +60,8 @@
         <div id="contentsidebyside" (click)='catchClickOnContent($event)'>
             <div id="left" class="textbackground" (swipeleft)="onSwipeLeft($event,-3)" (swiperight)="onSwipeRight($event,3)">
                 <div class="topicview style-7">
-                    <div class="textcontent">
-                        <div *ngFor="let entry of entries | async; index as i; first as isFirst" class="entryindex" (click)="scrollTo(i)">
+                    <div [@topicAnimation]='ExtendedTopics' class="textcontent">
+                        <div *ngFor="let entry of entries | async; trackBy: trackTopic; index as i; first as isFirst" class="entryindex" (click)="scrollTo(i)">
                             <div class="entryseparator" *ngIf="!isFirst"></div>
                             <div class="entryinner">
                                 <p>{{ entry.title }}</p>
@@ -69,12 +69,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="topicmore" (click)="detailSwitch()">
-                    <p class="topicmoretext">{{detailLevel}}</p>
-                    <svg class="morebutton">
-                        <use href="#more"></use>
-                    </svg>
-                </div>
+                <label class="topicmore form-switch moreswitch">
+                    <p>{{localizationService.FullDetailsText}}</p>
+                    <input type="checkbox" [(ngModel)]="ExtendedTopics">
+                    <i></i>
+                </label>
             </div>
             <div class="spacerbackground" id="betweenleftandright">
             </div>
@@ -83,12 +82,11 @@
                     <div *ngFor="let entry of entries | async; index as i" #id_{{i}} id=id_{{i}} class="entrycontent">
                         <app-vita-entry [entry]="entry"></app-vita-entry>
                     </div>
-                    <div class="entrycontent contentmore" (click)="detailSwitch()">
-                        <div class="entry-header contentmoretext">{{ detailLevel }}</div>
-                        <svg class="morebutton">
-                            <use href="#more"></use>
-                        </svg>
-                    </div>
+                    <label class="entrycontent contentmore form-switch moreswitch">
+                        <p>{{localizationService.FullDetailsText}}</p>
+                        <input type="checkbox" [(ngModel)]="ExtendedTopics">
+                        <i></i>
+                    </label>
                 </div>
             </div>
         </div>

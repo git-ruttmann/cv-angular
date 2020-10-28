@@ -1,0 +1,58 @@
+.form-switch {
+  display: inline-block;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.form-switch i {
+  position: relative;
+  display: inline-block;
+  margin-top: .1rem;
+  margin-left: .5rem;
+  width: 2.2em;
+  height: 1.2em;
+  background-color: #bbbbbb;
+  border-radius: calc(1.2em / 2);
+  vertical-align: text-bottom;
+  transition: all 0.3s linear;
+}
+
+.form-switch i::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: calc(2.2em - 4px);
+  height: calc(1.2em - 4px);
+  background-color: #04141b;
+  border-radius: calc(1.2em / 2 - 2px);
+  transform: translate3d(2px, 2px, 0) scale3d(1, 1, 1);
+  transition: all 0.25s linear;
+}
+
+.form-switch i::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: calc(1.2em - 4px);
+  height: calc(1.2em - 4px);
+  background-color: #eef1f3;
+  border-radius: calc(1.2em / 2 - 2px);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24);
+  transform: translate3d(2px, 2px, 0);
+  transition: all 0.2s ease-in-out;
+}
+
+.form-switch:active i::after {
+  width: calc(2.2em - 4px);
+  transform: translate3d(2px, 2px, 0);
+}
+
+.form-switch:active input:checked + i::after { transform: translate3d(2px, 2px, 0); }
+
+.form-switch input { display: none; }
+
+.form-switch input:checked + i {background-color: #aaaaaa;}
+
+.form-switch input:checked + i::before { transform: translate3d(calc(2.2em - 1.2em - 2px), 2px, 0) scale3d(0, 0, 0); }
+
+.form-switch input:checked + i::after { transform: translate3d(calc(2.2em - 1.2em + 2px), 2px, 0); }

@@ -103,7 +103,7 @@ export const baseStateAnimations = trigger('baseState', [
       query('#poi5', AnimationStuff.animateFlyinPoi(0.715, 0.285)),
     ]),
     sequence([
-      query('.poitext', animate(800, style({ opacity: 0 }))),
+      query('.flyPathHead', animate(800, style({ opacity: 0 }))),
       query('.flyPathPoi', animate(500, style({ opacity: 1 }))),
       query('.poitext', animate(500, style({ opacity: 1 }))),
     ])
@@ -130,7 +130,7 @@ export const baseStateAnimations = trigger('baseState', [
 @Component({
   selector: 'app-base-flight',
   templateUrl: './base-flight.component.html',
-  styleUrls: [ '../app.component.css' ],
+  styleUrls: [ '../app.component.css', './base-flight.component.css' ],
   animations : [ baseStateAnimations, flyPathStates ],
 })
 export class BaseFlightComponent implements AfterViewInit {

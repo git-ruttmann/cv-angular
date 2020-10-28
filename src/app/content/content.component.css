@@ -55,7 +55,8 @@
 
 .entrycontent + .entrycontent {
   border-top: 1px solid #ffffff80;
-  margin-top: 1.2em;
+  margin-top: 1.7em;
+  padding-top: 0.7em;
 }
 
 .entryseparator {
@@ -155,7 +156,7 @@ a {
 }
 
 .topicmore {
-  padding: 0.5em 1em 0.25em 1em;
+  padding: 0.5em 1em 0.7em 1em;
   font-size: large;
   cursor: pointer;
   display: flex;
@@ -164,15 +165,12 @@ a {
   color: #bbbbbb;
 }
 
-.topicmore:hover {
-  background: #ffffff20;
-  fill: #eef1f3;
-  color: #eef1f3;
+.moreswitch {
+  display: flex !important;
 }
 
-.topicmoretext {
+.moreswitch p {
   flex: 1;
-  order: 1;
 }
 
 .contentmore {

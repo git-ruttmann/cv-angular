@@ -1,4 +1,5 @@
 import { Injectable, Component, ViewChild } from '@angular/core';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -113,6 +114,7 @@ describe('ContentComponent', () => {
         { provide: VitaDataServiceConfig, useValue : new VitaDataMock() }
       ],
       imports: [
+        NoopAnimationsModule,
         RouterTestingModule.withRoutes(routes),
         LocalStorageModule.forRoot({
           storageType: 'localStorage',

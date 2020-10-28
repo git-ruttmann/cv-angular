@@ -1,4 +1,8 @@
 <div [@baseState]='getAnimationState()'>
+  <div class="whoami">
+    <p>{{ localizationService.DeveloperNameText }}</p>
+    <p class="whoamisub">{{ localizationService.DeveloperProfileText }}</p>
+  </div>
   <div id="toi1" class="poitext poi1" (click)='onClick($event)'>
     <p>{{ localizationService.PersonText }}</p>
   </div>
@@ -22,40 +26,6 @@ viewBox= "-388 0 705 470" style
 class="backgroundimage"
 #backgroundoverlay>
   <style>
-    .flyPathHead {
-      fill: none;
-      stroke-width: 3;
-      stroke: #FFA71BFF; 
-      stroke-linecap: round;
-      stroke-dasharray: 6 1500; 
-    }
-    
-    .flyPathLine {
-      fill: none;
-      stroke-width: 1.2;
-      stroke: #B8870B; 
-      stroke-linecap: round;
-      stroke-dasharray: 1510; 
-      opacity: 0;
-    }
-    
-    .flyPathPoi {
-      opacity: 1;
-    }
-
-    .clickArea {
-      fill: transparent;
-      stroke-width : 1;
-      transition: 0.3s;
-    }
-    .clickArea:hover {
-      fill:#FFFFFF3F;
-      stroke : #FFFFFF3F;
-    }
-    #aoiTechnologies:hover {
-      fill:#FFFFFF7F;
-      stroke : #FFFFFF7F;
-    }
   </style>
   <g>
     <circle id="poi1" class="flyPathPoi poi1" cy="88" r="15" cx="55" fill="url(#poiGradient)"/>
@@ -95,8 +65,4 @@ class="backgroundimage"
     </path>
   </g>
 </svg>
-<div class="whoami">
-  <p>{{ localizationService.DeveloperNameText }}</p>
-  <p class="whoamisub">{{ localizationService.DeveloperProfileText }}</p>
-</div>
 </div>

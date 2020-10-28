@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, HostListener, AfterViewInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { animate, query, sequence, stagger, style, transition, trigger, group } from '@angular/animations';
 import { Observable, fromEvent, asyncScheduler, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
@@ -17,15 +18,45 @@ const urlToVitaEntryEnum = {
   "interests" : VitaEntryEnum.Interest,
 };
 
+const topicAnimations = trigger('topicAnimation', [
+  transition('* <=> *', [
+    // step 1: change the color of the removed items, new items stay at 0 height
+    group([
+      query(':enter', [
+        style({ height: '0px', opacity: 0, color: "#505050", overflow: 'hidden' }),
+      ], { optional: true }),
+      query(':leave', [
+        style({ overflow: 'hidden' }),
+        animate(100, style({ color: '#505050' })),
+        animate(200, style({ color: '#505050' })),
+      ], { optional: true }),
+    ]),
+    // step 2: new items expand and old items shrink in parallel
+    group([
+      query(':enter', [
+        stagger(80, animate(250, style({ height: "*", opacity: 1, overflow: 'hidden', color: "#505050", 'margin-bottom': '0.115rem' }))),
+        ], { optional: true }),
+      query(':leave', [
+        stagger(80, animate(250, style({ height: '0px', overflow: 'hidden', color: '#505050', opacity: 0 }))),
+        ], { optional: true }),
+      ]),
+    // step 3: new items loose the temporary color
+    query(':enter', [
+      animate(200, style({ color: "*", background: '*' })),
+    ], { optional: true }),
+  ]) 
+]);
+
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
-  styleUrls: ['./content.component.css', '../app.component.css']
+  styleUrls: ['./content.component.css', '../app.component.css', './blackswitch.css'],
+  animations: [ topicAnimations ]
 })
 export class ContentComponent implements AfterViewInit, OnDestroy {
   public content = "Hello";
   entries: Observable<VitaEntry[]>;
-  detailLevel: string;
+  private extendedTopics: boolean;
 
   @ViewChild('textcontent', { static : true })
   contentElt: ElementRef;
@@ -46,7 +77,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   {
     this.content = router.url.substr(1).toLowerCase();
     this.entries = dataService.entries;
-    this.updateDetailLevelText();
+    this.extendedTopics = dataService.duration != "S";
     
     this.trackingEventService.trackingEvent.subscribe(x => this.trackContent(x));
     var vitaEntryType = urlToVitaEntryEnum[this.content];
@@ -99,6 +130,20 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
     this.NavigateToNextContent(1);
   }
 
+  public get ExtendedTopics() : boolean {
+    return this.extendedTopics;
+  }
+
+  public set ExtendedTopics(value: boolean) {
+    this.extendedTopics = value;
+    this.dataService.setDuration(this.extendedTopics ? "L" : "S");
+    this.contentElt.nativeElement.focus();
+  }
+
+  trackTopic(index: number, item: VitaEntry) : string{
+    return item.title;
+  }
+
   onSwipeRight(event, data) {
     this.NavigateToNextContent(-1);
   }
@@ -109,29 +154,6 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   
   back() {
     this.router.navigate(["/"]);
-  }
-
-  detailSwitch() {
-    this.detailLevel 
-    if (this.dataService.duration == "S") {
-      this.dataService.setDuration("L");
-    }
-    else {
-      this.dataService.setDuration("S");
-    }
-
-    this.updateDetailLevelText();
-    this.contentElt.nativeElement.focus();
-  }
-
-  updateDetailLevelText()
-  {
-    if (this.dataService.duration == "L") {
-      this.detailLevel = this.localizationService.LessTopicsText;
-    }
-    else {
-      this.detailLevel = this.localizationService.MoreTopicsText;
-    }
   }
 
   catchClickOnContent(event : Event)
