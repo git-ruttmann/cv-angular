@@ -8,7 +8,7 @@ import { AuthenticateService } from '../services/authenticate.service';
 import { LocalizationTextService } from '../services/localization-text.service';
 
 const duration = 4400;
-const toiDuration = 2000;
+const toiDuration = 800;
 const hideDuration = 6000;
 const strokeDuration = duration - 1000; // roughly factor 1.3
 const strokeLength = 1600;
@@ -40,8 +40,8 @@ export class AnimationStuff {
 
   public static animateSinglePoi() : AnimationAnimateMetadata[] {
     return  [ animate(toiDuration, keyframes([
-      style({ opacity: 1, r: "25px", offset : 0.10 }),
-      style({ opacity: 0.8, r: "*", offset : 5 / 6 }),
+      style({ opacity: 1, r: "25px", offset : 0.20 }),
+      style({ opacity: 1, r: "*", offset : 5 / 6 }),
       style({ opacity: "*", offset : 1 })]))
     ];
   }
@@ -51,7 +51,7 @@ export class AnimationStuff {
       animate(delay, style({ opacity: "*" })),
       animate(toiDuration, keyframes([
         style({ transform: 'translate(' + dx * 0 + 'px, ' + dy * 0 + 'px)', offset : 0 }),
-        style({ transform: 'translate(' + dx * 20 + 'px, ' + dy * 20 + 'px)', offset : 0.10 }),
+        style({ transform: 'translate(' + dx * 20 + 'px, ' + dy * 20 + 'px)', offset : 0.20 }),
         style({ transform: 'translate(' + dx * 0 + 'px, ' + dy * 0 + 'px)', offset : 5 / 6 }),
     ]))];
   }
@@ -114,12 +114,12 @@ export const baseStateAnimations = trigger('baseState', [
     query('.flyPathPoi, .poitext', animate(900, style({ opacity: 1 }))),
   ])),
   transition('* => highlight1', group([
-    query('#toi1', AnimationStuff.animateToi(0 * 1500, 1, -1)),
-    query('#toi2', AnimationStuff.animateToi(1 * 1500, 0.15, -1.1)),
-    query('#toi3', AnimationStuff.animateToi(2 * 1500, 0.5, 1)),
-    query('#toi4', AnimationStuff.animateToi(3 * 1500, 0.15, 1.1)),
-    query('#toi5', AnimationStuff.animateToi(4 * 1500, -1, -1)),
-    query('.flyPathPoi', stagger(1500, AnimationStuff.animateSinglePoi()))
+    query('#toi1', AnimationStuff.animateToi(0 * (toiDuration + 400), 1, -1)),
+    query('#toi2', AnimationStuff.animateToi(1 * (toiDuration + 400), 0.15, -1.1)),
+    query('#toi3', AnimationStuff.animateToi(2 * (toiDuration + 400), 0.5, 1)),
+    query('#toi4', AnimationStuff.animateToi(3 * (toiDuration + 400), 0.15, 1.1)),
+    query('#toi5', AnimationStuff.animateToi(4 * (toiDuration + 400), -1, -1)),
+    query('.flyPathPoi', stagger((toiDuration + 400), AnimationStuff.animateSinglePoi()))
   ])),
   transition('* => highlight2', group([
     query('.flyPathPoi', stagger(200, AnimationStuff.hideTemporary())),
