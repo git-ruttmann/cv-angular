@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+const flyinStateName : string = "flyin";
+const flyinGoogleStateName : string = "flyinGoogle";
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,7 +33,7 @@ export class BaseStateService {
     if (this.state != this.nextState)
     {
       this.state = this.nextState;
-      if (this.state == "flyin")
+      if (this.state.startsWith(flyinStateName))
       {
         this.isFirstActivation = false;
       }
@@ -113,7 +116,7 @@ export class BaseStateService {
     }
     else if (this.isFirstActivation)
     {
-      this.nextState = "flyin";
+      this.nextState = flyinStateName;
     }
     else
     {
@@ -127,9 +130,12 @@ export class BaseStateService {
     if (this.nextState != "inactive")
     {
       this.timerHandle = setInterval(() => this.timeout(), this.flashTimeout);
-      if (this.nextState == "flyin")
+      if (this.nextState == flyinStateName)
       {
         this.flashTimeout = 7000;
+      }
+      else if (this.nextState == flyinGoogleStateName) {
+        this.flashTimeout = 13000;
       }
       else
       {

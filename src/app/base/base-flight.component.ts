@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { trigger, transition, query, animate, style, group, AnimationStyleMetadata, AnimationKeyframesSequenceMetadata, AnimationAnimateMetadata, keyframes, state, sequence, stagger } from '@angular/animations';
+import { trigger, transition, query, animate, style, group, AnimationStyleMetadata, AnimationKeyframesSequenceMetadata, AnimationAnimateMetadata, keyframes, state, sequence, stagger, AnimationMetadata } from '@angular/animations';
 
 import { BaseStateService } from '../services/base-state.service';
 import { BackgroundImageViewportService, BackgroundViewportReport } from '../services/background-image-viewport.service';
 import { AuthenticateService } from '../services/authenticate.service';
 import { LocalizationTextService } from '../services/localization-text.service';
+import { GooglePathStrings } from './GooglePathStrings';
 
 const duration = 4400;
 const toiDuration = 800;
@@ -64,6 +65,33 @@ export class AnimationStuff {
       style({ opacity: "*", offset : 1 })]))
     ];
   }
+
+  public static googleTextTransform() : AnimationMetadata[] {
+    return  [ 
+      // run the SVG animation
+      query('#googleletter-1', animate(5000, style({ }))),
+
+      query('#googleletter-1', animate(200, style({ fill: '#B8870B' }))),
+      query('#googleletter-2', animate(200, style({ fill: '#B8870B' }))),
+      query('#googleletter-3', animate(200, style({ fill: '#B8870B' }))),
+      query('#googleletter-4', animate(200, style({ fill: '#B8870B' }))),
+      query('#googleletter-5', animate(200, style({ }))),
+      query('#googleletter-6', animate(200, style({ fill: '#B8870B' }))),
+
+      query('#googleletter-1', animate(220, style({ }))),
+      group ([
+        query('#googletextcontainer .googlewelcome', animate(300, style({ opacity: 0 }))),
+
+        query('#googleletter-5', animate(200, style({ opacity: 0 }))),
+      ]),
+
+      query('#googleletter-1', animate(200, style({ }))),
+  
+      group([
+        query('.googleletter', stagger(90, animate(400, style({ transform: "*" })))),
+      ])
+    ];
+  }
 }
 
 export const flyPathStates = trigger('flyPathState', [
@@ -102,8 +130,32 @@ export const baseStateAnimations = trigger('baseState', [
       query('#poi4', AnimationStuff.animateFlyinPoi(0.685, 0.3)),
       query('#poi5', AnimationStuff.animateFlyinPoi(0.715, 0.285)),
     ]),
+
     sequence([
       query('.flyPathHead', animate(800, style({ opacity: 0 }))),
+      query('.flyPathPoi', animate(500, style({ opacity: 1 }))),
+      query('.poitext', animate(500, style({ opacity: 1 }))),
+    ])
+  ]),
+  transition('initial => flyinGoogle', [
+    group([
+      query('.poitext', style({ opacity: 0})),
+      query('.flyPathPoi', style({ opacity: 0})),
+      query('.whoamisub', style({ opacity : 0, position: 'relative', transform: 'translate(-10%, 0%)' })),
+      query('.whoami', style({ opacity : 0, position: 'relative', transform: 'translateX(-10%)' })),
+      query('#googletextcontainer', style({ transform: "translateX(-10%)", opacity: 0 })),
+      query('.googleletter', style({ transform: "translate(0px, 0px)", opacity: 1 })),
+    ]),
+
+    query('.whoami', animate(450, style({ opacity : 1, position: 'relative', transform: 'translate(-0.5rem, -0.5rem)' }))),
+    query('.whoamisub', animate(450, style({ opacity : 1, position: 'relative', transform: '*' }))),
+    query('#googletextcontainer', animate(450, style({ transform: "*", opacity: "*" }))),
+
+    sequence(AnimationStuff.googleTextTransform()),
+
+    sequence([
+      query('.flyPathHead', animate(800, style({ opacity: 0 }))),
+      query('.googleletter', animate(300, style({ opacity: 0 }))),
       query('.flyPathPoi', animate(500, style({ opacity: 1 }))),
       query('.poitext', animate(500, style({ opacity: 1 }))),
     ])
@@ -136,6 +188,13 @@ export const baseStateAnimations = trigger('baseState', [
 export class BaseFlightComponent implements AfterViewInit {
   isFlyPathVisible = false;
   isOpen = false;
+  public GP : GooglePathStrings = new GooglePathStrings();
+  public googleTextAnimation = {
+    duration : '1000ms',
+    keytimes : '0;0.1;0.15;0.2;1',
+    delay: '3000ms'
+  };
+  public googleTextAnimationDuration : string = '4000ms';
 
   @ViewChild('backgroundoverlay', { static : true })
   backgroundOverlayElt: ElementRef;

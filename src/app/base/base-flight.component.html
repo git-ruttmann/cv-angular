@@ -26,7 +26,94 @@ viewBox= "-388 0 705 470" style
 class="backgroundimage"
 #backgroundoverlay>
   <style>
+    .googleletter  {
+      line-height: 1.15;
+      stroke: none;
+      opacity: 0;
+      animation-play-state: paused;
+    }
+    #googleletter-1 {
+      fill: #4285F4;
+      transform: translate(-34px, 69px);
+    }
+    #googleletter-2 {
+      fill: #EA4335;
+      transform: translate(-24px, +119px);
+    }
+    #googleletter-3 {
+      fill: #FBBC05;
+      transform: translate(30px, -72px);
+    }
+    #googleletter-4 {
+      fill: #4285F4;
+      transform: translate(25px, +42px);
+    }
+    #googleletter-5 {
+      opacity: 0;
+      fill: #34A853;
+    }
+    #googleletter-6 {
+      fill: #EA4335;
+      transform: translate(15px, +127px);
+    }
+    .googlewelcome {
+      font-size: 33;
+      font-weight: 800;
+      stroke-width: 0.1;
+      stroke: none;
+      fill: #FBBC05;
+      font-family: "Ubuntu";
+    }
   </style>
+  <g id="googletextcontainer">
+    <g transform="translate(-100 110) scale(0.9)" >
+      <text class="googlewelcome googleletter" filter="url(#welcomeshadow)" x=70 y=10 font-size="33">
+        Welcome
+      </text>
+      <path [attr.d]="GP.G1_0" class="googleletter" id="googleletter-1">
+        <animate attributeName = "d" [attr.dur] = "GP.Duration" [attr.keyTimes] = "GP.KeyTimesFor('G1')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "GP.ValuesFor('G1')">
+        </animate>
+      </path>
+      <path [attr.d]="GP.O1_0" class="googleletter" id="googleletter-2">
+        <animate attributeName = "d" [attr.dur] = "GP.Duration" [attr.keyTimes] = "GP.KeyTimesFor('O1')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "GP.ValuesFor('O1')">
+        </animate>
+      </path>
+      <path [attr.d]="GP.O2_0" class="googleletter" id="googleletter-3">
+        <animate attributeName = "d" [attr.dur] = "GP.Duration" [attr.keyTimes] = "GP.KeyTimesFor('O2')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "GP.ValuesFor('O2')">
+        </animate>
+      </path>
+      <path [attr.d]="GP.E1_0" class="googleletter" id="googleletter-6">
+        <animate attributeName = "d" [attr.dur] = "GP.Duration" [attr.keyTimes] = "GP.KeyTimesFor('E1')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "GP.ValuesFor('E1')">
+        </animate>
+      </path>
+      <path [attr.d]="GP.G2_0" class="googleletter" id="googleletter-4">
+        <animate attributeName = "d" [attr.dur] = "GP.Duration" [attr.keyTimes] = "GP.KeyTimesFor('G2')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "GP.ValuesFor('G2')">
+        </animate>
+      </path>
+      <path [attr.d]="GP.L_0" class="googleletter" id="googleletter-5">
+        <animate attributeName = "d" [attr.dur] = "GP.Duration" [attr.keyTimes] = "GP.KeyTimesFor('L')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "GP.ValuesFor('L')">
+        </animate>
+      </path>
+    </g>
+  </g>
   <g>
     <circle id="poi1" class="flyPathPoi poi1" cy="88" r="15" cx="55" fill="url(#poiGradient)"/>
     <circle id="poi2" class="flyPathPoi poi2" cy="190" r="15" cx="93" fill="url(#poiGradient)"/>
@@ -40,6 +127,11 @@ class="backgroundimage"
       <stop offset="70%" style="stop-color:#B8870B; stop-opacity:0.95" />
       <stop offset="100%" style="stop-color:#B8870B; stop-opacity:0.1" />
     </radialGradient>
+    <filter id="welcomeshadow" x="0" y="0" width="200%" height="200%">
+      <feOffset result="offOut" in="SourceAlpha" dx="3" dy="3" />
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
   </defs>
   <path class="flyPathLine" [@flyPathState]='getFlyPathState()'
     d="m -390.72074,150.28016 c 51.17981,9.57752 119.35613,1.76298 157.42294,-8.99337 68.93787,-19.47942 91.19743,-43.566105 157.900542,-51.393365 27.98312,-3.192738 104.9428,-6.24862 133.60863,-2.994023 32.68603,3.711034 44.602138,26.867038 41.818348,63.498228 -1.634198,15.85935 -6.849448,36.72667 -9.198128,53.40499 -3.48258,14.50496 2.99861,26.7824 32.659418,38.71081 14.71732,5.91872 19.36471,16.46785 19.12286,28.22616 -0.43159,20.98288 -44.150163,23.67944 -53.580361,42.79715 -8.38737,17.00354 5.000754,29.02437 -26.31883,29.47615 -26.80341,0.38662 -60.685835,8.25017 -77.823317,-13.94391 -11.764917,-15.23629 -20.337782,-45.55562 -22.159276,-68.12294 -1.821493,-22.56732 -10.390484,-29.91092 -23.482994,-39.22808 -24.93916,-17.74773 -48.636622,-2.80776 -74.712532,7.79327 -52.94746,25.14148 -105.87422,23.47037 -158.70284,15.76336 -32.29892,-5.25269 -50.2196,-13.75146 -96.50378,-28.74171" >
