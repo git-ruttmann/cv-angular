@@ -13,6 +13,7 @@ export class BaseStateService {
   private timerHandle;
   private flashTimeout = 5000;
   private isFirstActivation = true;
+  private animationStateName : string = flyinStateName;
 
   private visitedPages : Set<string> = new Set<string>();
   private firstVisitedSection : string = "";
@@ -40,10 +41,11 @@ export class BaseStateService {
     }
   }
 
-  public LoginSuccessfull()
+  public LoginSuccessfull(initialAnimation : string)
   {
     this.state = "initial";
     this.isFirstActivation = true;
+    this.animationStateName = initialAnimation.length > 0 ? initialAnimation : flyinStateName;
   }
 
   public get AllSectionsLoop() : boolean
@@ -116,7 +118,7 @@ export class BaseStateService {
     }
     else if (this.isFirstActivation)
     {
-      this.nextState = flyinStateName;
+      this.nextState = this.animationStateName;
     }
     else
     {

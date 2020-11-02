@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
       if (isAuthenticated)
       {
         this.codeReadonly = true;
-        this.baseStateService.LoginSuccessfull();
+        this.baseStateService.LoginSuccessfull(this.authService.customAnimation);
 
         setTimeout(() => { this.router.navigate(["/"]); }, 1);
       }

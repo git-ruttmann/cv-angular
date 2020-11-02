@@ -16,6 +16,11 @@ export interface IVitaDataService {
 
 export let VitaDataServiceConfig = new InjectionToken<IVitaDataService>('vitaDataService');
 
+interface VitaDataResponse
+{
+  entries : VitaEntry[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,7 +28,7 @@ export class VitaDataService implements IVitaDataService {
   private activeVitaType: VitaEntryEnum;
   private _entries = new BehaviorSubject<VitaEntry[]>([]);
 
-  private dataStore: { entries: VitaEntry[] } = { entries: [] };
+  private dataStore: VitaDataResponse = { entries: [] };
   private _language: string;
   private _duration: string;
 
@@ -56,7 +61,7 @@ export class VitaDataService implements IVitaDataService {
   {
     if (isAuthenticated)
     {
-      this.http.get("api/v1/vita").subscribe(
+      this.http.get<VitaDataResponse>("api/v1/vita").subscribe(
         response => this.decodeVitaEntries(response),
         err => this.handleDataRetrivalError(err as HttpErrorResponse)
       );
@@ -97,7 +102,7 @@ export class VitaDataService implements IVitaDataService {
     }
   }
 
-  private decodeVitaEntries(response: any): void
+  private decodeVitaEntries(response: VitaDataResponse): void
   {
     let entries : VitaEntry[] = response.entries.map(x => VitaEntry.FromJson(x));
 
