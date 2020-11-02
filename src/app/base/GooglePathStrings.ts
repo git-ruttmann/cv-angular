@@ -2,27 +2,25 @@ export class GooglePathStrings
 {
   private totalDuration = 10000;
   private sequence : [string, number][] = [
-    [ "G1_1", 300 ],
-    [ "G1_2", 300 ],
-    [ "O1_1", 200 ],
-    [ "O1_2", 300 ],
-    [ "O2_1", 200 ],
-    [ "O2_2", 300 ],
+    [ "G1_1", 200 ],
+    [ "G1_2", 250 ],
+    [ "G1_3", 200 ],
+    [ "O1_2", 500 ],
+    [ "O2_2", 500 ],
     [ "G2_1", 200 ],
     [ "G2_2", 250 ],
     [ "G2_3", 200 ],
-    [ "E1_1", 200 ],
+    [ "E1_1", 250 ],
     [ "E1_2", 200 ],
     [ "E1_3", 200 ],
-    [ "G1_3", 500 ],
-    [ "L_0", 1650 ],
-    [ "L_1", 250 ],
+    [ "L_1", 500 ],
   ];
 
   public KeyTimesFor(letter: string) : string
   {
     var result : string = "0";
     var timeIndex = 0;
+    var timeOffset = -1;
 
     var lastActive : boolean = true;
 
@@ -32,6 +30,11 @@ export class GooglePathStrings
       {
         if (!lastActive)
         {
+          if (timeOffset < 0)
+          {
+            timeIndex = 0;
+          }
+
           result = result + ";" + timeIndex / this.totalDuration;
         }
 
@@ -39,6 +42,7 @@ export class GooglePathStrings
 
         result = result + ";" + timeIndex / this.totalDuration;
         lastActive = true;
+        timeOffset = 0;
       }
       else
       {

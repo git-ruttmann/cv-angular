@@ -137,7 +137,7 @@ export class BaseStateService {
         this.flashTimeout = 7000;
       }
       else if (this.nextState == flyinGoogleStateName) {
-        this.flashTimeout = 13000;
+        this.flashTimeout = 7000;
       }
       else
       {

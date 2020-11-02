@@ -69,23 +69,18 @@ export class AnimationStuff {
   public static googleTextTransform() : AnimationMetadata[] {
     return  [ 
       // run the SVG animation
-      query('#googleletter-1', animate(5000, style({ }))),
-
-      query('#googleletter-1', animate(200, style({ fill: '#B8870B' }))),
-      query('#googleletter-2', animate(200, style({ fill: '#B8870B' }))),
-      query('#googleletter-3', animate(200, style({ fill: '#B8870B' }))),
-      query('#googleletter-4', animate(200, style({ fill: '#B8870B' }))),
-      query('#googleletter-5', animate(200, style({ }))),
-      query('#googleletter-6', animate(200, style({ fill: '#B8870B' }))),
-
-      query('#googleletter-1', animate(220, style({ }))),
-      group ([
-        query('#googletextcontainer .googlewelcome', animate(300, style({ opacity: 0 }))),
-
-        query('#googleletter-5', animate(200, style({ opacity: 0 }))),
+      query('#googletextcontainer', animate(2000, style({ }))),
+      
+      group([
+        query('#googletextcontainer', animate(100, style({ }))),
+        sequence([
+          query('#googletextcontainer .googlewelcome, #googleletter-5', animate(200, style({ opacity: 0 }))),
+        ]),
+        query('#googleletter-1, #googleletter-2, #googleletter-3, #googleletter-4, #googleletter-6',
+          stagger(80, animate(200, style({ fill: '#B8870B' })))),
       ]),
 
-      query('#googleletter-1', animate(200, style({ }))),
+      query('#googletextcontainer', animate(150, style({ }))),
   
       group([
         query('.googleletter', stagger(90, animate(400, style({ transform: "*" })))),
@@ -154,8 +149,8 @@ export const baseStateAnimations = trigger('baseState', [
     sequence(AnimationStuff.googleTextTransform()),
 
     sequence([
-      query('.flyPathHead', animate(800, style({ opacity: 0 }))),
-      query('.googleletter', animate(300, style({ opacity: 0 }))),
+      query('#googletextcontainer', animate(150, style({ }))),
+      query('.googleletter', animate(150, style({ opacity: 0 }))),
       query('.flyPathPoi', animate(500, style({ opacity: 1 }))),
       query('.poitext', animate(500, style({ opacity: 1 }))),
     ])
