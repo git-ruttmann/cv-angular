@@ -2,6 +2,21 @@ import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { IVitaDataService, VitaDataServiceConfig } from './vita-data.service';
 
+export interface IActionItem
+{
+  Title: string;
+  Description: string;
+  ExpectedDuration: string;
+  Duration: string;
+}
+
+const englishDurationActions : IActionItem[] =
+[
+  { Title: "Overview", Description: "Show only selected projects for a quick overview.", ExpectedDuration: "~5min", Duration: "S" },
+  { Title: "Show all Projects", Description: "Show bullet points of all topics.", ExpectedDuration: "~10min", Duration: "M" },
+  { Title: "Expand Everything", Description: "Show the expanded content of all topics in all sections.", ExpectedDuration: "~20min", Duration: "L" },
+];
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +32,11 @@ export class LocalizationTextService {
     router.events.subscribe(() => this.RouteChanged());
   }
 
+  public get DurationActions(): IActionItem[]
+  {
+    return englishDurationActions;
+  }
+
   public get ContentMainHeader() : String {
     return this.contentMainHeader;
   }
@@ -27,6 +47,21 @@ export class LocalizationTextService {
 
   public get DeveloperProfileText() : String {
     return "Developer Profile";
+  }
+
+  public get FilterTitle() : String {
+    return "Content Filter";
+  }
+
+  public get MoreText() : String[] {
+    if (this.dataService.duration == "S")
+    {
+      return [ "There is more about me.", "Expand this topic to find out." ];
+    }
+    else
+    {
+      return [ "Collapse this topic to return to the remove additional details." ];
+    }
   }
 
   public get PersonText() : String
@@ -81,7 +116,7 @@ export class LocalizationTextService {
   {
     if (this.dataService.language == "English")
     {
-      return "Uncharted";
+      return "One more thing";
     }
     else
     {
@@ -98,6 +133,26 @@ export class LocalizationTextService {
     {
       return "Mehr Details";
     }
+  }
+
+  public DetailStateText(detailLevel: string)
+  {
+    if (detailLevel == "S")
+    {
+      return "Overview";
+    }
+
+    if (detailLevel == "M")
+    {
+      return "All Projects";
+    }
+
+    if (detailLevel == "L")
+    {
+      return "Full Details";
+    }
+
+    return "";
   }
 
   private RouteChanged(): void

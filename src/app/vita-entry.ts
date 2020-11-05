@@ -76,6 +76,56 @@ export class VitaEntryListLink extends VitaEntrySentence implements IVitaEntryLi
   }
 }
 
+export class VitaEntryViewModel
+{
+  private _expanded : boolean = false;
+  private entry : VitaEntry;
+
+  public constructor(private shortEntry: VitaEntry, private longEntry : VitaEntry)
+  {
+    this.entry = shortEntry ?? longEntry;
+    if (!this.entry)
+    {
+      throw "either the short or the long entry must be set";
+    }
+  }
+
+  get title() : string
+  {
+    return this.entry.title;
+  }
+
+  get language() : string
+  {
+    return this.entry.language;
+  }
+
+  get lines() : VitaEntrySentence[] 
+  {
+    return this.entry.lines;
+  }
+
+  get canExpand() : boolean 
+  { 
+    return (this.longEntry ? true : false) && (this.shortEntry ? true : false);
+  }
+  
+  get expanded() : boolean { return this._expanded; }
+  set expanded(value: boolean)
+  {
+    if (this.longEntry)
+    {
+      this._expanded = value;
+      this.entry = value ? this.longEntry : this.shortEntry;
+    }
+    else
+    {
+      this._expanded = false;
+      this.entry = this.shortEntry;
+    }
+  }
+}
+
 export class VitaEntry {
   title: string;
   language: string;

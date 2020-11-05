@@ -5,10 +5,10 @@ import { Observable, fromEvent, asyncScheduler, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
 import { IVitaDataService, VitaDataServiceConfig } from '../services/vita-data.service';
-import { VitaEntry, VitaEntryEnum } from '../vita-entry';
+import { VitaEntryViewModel, VitaEntryEnum } from '../vita-entry';
 import { TrackingService, TrackingEventService, ITrackedItem } from '../services/tracking.service';
 import { ThrottleConfig } from 'rxjs/internal/operators/throttle';
-import { LocalizationTextService } from '../services/localization-text.service';
+import { IActionItem, LocalizationTextService } from '../services/localization-text.service';
 import { BaseStateService } from '../services/base-state.service';
 
 const urlToVitaEntryEnum = {
@@ -27,37 +27,52 @@ const topicAnimations = trigger('topicAnimation', [
         style({ height: '0px', opacity: 0, color: "#505050", overflow: 'hidden' }),
       ], { optional: true }),
       query(':leave', [
-        style({ overflow: 'hidden' }),
         animate(100, style({ color: '#505050' })),
-        animate(200, style({ color: '#505050' })),
       ], { optional: true }),
     ]),
     // step 2: new items expand and old items shrink in parallel
     group([
       query(':enter', [
-        stagger(80, animate(250, style({ height: "*", opacity: 1, overflow: 'hidden', color: "#505050", 'margin-bottom': '0.115rem' }))),
+        stagger(50, animate(100, style({ height: "*", opacity: 1, color: "#505050", 'margin-bottom': '0.115rem' }))),
         ], { optional: true }),
       query(':leave', [
-        stagger(80, animate(250, style({ height: '0px', overflow: 'hidden', color: '#505050', opacity: 0 }))),
+        stagger(50, animate(100, style({ height: '0px', color: '#505050', opacity: 0 }))),
         ], { optional: true }),
       ]),
     // step 3: new items loose the temporary color
     query(':enter', [
-      animate(200, style({ color: "*", background: '*' })),
+      animate(50, style({ color: "*", background: '*' })),
     ], { optional: true }),
   ]) 
+]);
+
+const expandedStateAnimation = trigger('changeHeight', [
+  transition('void <=> *', []),
+  transition('* <=> *', [
+    style({ height: '{{startHeight}}px', opacity: 1 }), 
+    query(":enter", style({ color: "transparent" }), { optional: true }),
+    group([
+      sequence([
+        animate(80, style({ background: "#ffffff10" })),
+        group([
+          query(":enter", animate(100, style({ color: "*" })), { optional: true }),
+          animate(80, style({ background: "*" })),
+          ]),
+      ]),
+      animate('0.2s ease', style({ height: "*" })),
+    ])
+  ], { params: { startHeight: 0 } })
 ]);
 
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
-  styleUrls: ['./content.component.css', '../app.component.css', './blackswitch.css'],
-  animations: [ topicAnimations ]
+  styleUrls: ['./content.component.css', '../app.component.css', './filter-button.css'],
+  animations: [ topicAnimations, expandedStateAnimation ]
 })
 export class ContentComponent implements AfterViewInit, OnDestroy {
   public content = "Hello";
-  entries: Observable<VitaEntry[]>;
-  private extendedTopics: boolean;
+  entries: Observable<VitaEntryViewModel[]>;
 
   @ViewChild('textcontent', { static : true })
   contentElt: ElementRef;
@@ -67,7 +82,8 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   
   scrollSubscription$;
   touchSubscription$;
-  vitaEntryType: any;
+  vitaEntryType: VitaEntryEnum;
+  public readonly actions: IActionItem[];
   
   constructor(
     @Inject(VitaDataServiceConfig) private dataService : IVitaDataService,
@@ -79,7 +95,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   {
     this.content = router.url.substr(1).toLowerCase();
     this.entries = dataService.entries;
-    this.extendedTopics = dataService.duration != "S";
+    this.actions = localizationService.DurationActions;
     
     this.trackingEventService.trackingEvent.subscribe(x => this.trackContent(x));
     var vitaEntryType = urlToVitaEntryEnum[this.content];
@@ -132,18 +148,27 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
     this.NavigateToNextContent(1);
   }
 
-  public get ExtendedTopics() : boolean {
-    return this.extendedTopics;
+  public get TopicAnimationState() : string {
+    return this.dataService.duration;
   }
 
-  public set ExtendedTopics(value: boolean) {
-    this.extendedTopics = value;
-    this.dataService.setDuration(this.extendedTopics ? "L" : "S");
-    this.contentElt.nativeElement.focus();
-  }
-
-  trackTopic(index: number, item: VitaEntry) : string{
+  trackTopic(index: number, item: VitaEntryViewModel) : string{
     return item.title;
+  }
+
+  public get CurrentDetailLevel() : string 
+  {
+    return this.localizationService.DetailStateText(this.dataService.duration);
+  }
+
+  public isActiveFilter(action: IActionItem)
+  {
+    return this.dataService.duration == action.Duration;
+  }
+
+  public activateFilter(action: IActionItem)
+  {
+    return this.dataService.setDuration(action.Duration);
   }
 
   onSwipeRight(event, data) {
@@ -177,8 +202,13 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
         });
     }
 
-    let headerItem = item.querySelector("div.entry-header") as HTMLDivElement;
+    let headerItem = item.querySelector("div.entry-header-text") as HTMLDivElement;
     this.trackingService.Track(this.content, headerItem.innerText, 0);
+  }
+
+  public expandItem(item: VitaEntryViewModel)
+  {
+    item.expanded = !item.expanded;
   }
   
   private onContentScroll()
@@ -190,7 +220,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   {
     let scrollingElement = this.backgroundElt.nativeElement as HTMLElement;
     let topicElements = Array
-      .from(this.contentElt.nativeElement.getElementsByClassName("entrycontent"))
+      .from(this.contentElt.nativeElement.getElementsByClassName("entry-full"))
       .map(x => <HTMLElement>x)
 
     let scrollTopRef = scrollingElement.scrollTop + scrollingElement.offsetTop;
@@ -251,7 +281,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
       : 1 - (1.0 * elt.offsetTop + elt.offsetHeight - scrollBottom) / elt.offsetHeight;
 
     return { 
-      Topic: elt.getElementsByClassName("entry-header")[0].innerHTML,
+      Topic: elt.getElementsByClassName("entry-header-text")[0].innerHTML,
       Start: visibleStart,
       End: visibleEnd      
     };

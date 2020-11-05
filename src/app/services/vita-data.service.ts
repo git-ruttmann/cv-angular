@@ -2,14 +2,15 @@ import { Injectable, InjectionToken } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { VitaEntry, VitaEntryEnum } from '../vita-entry';
+import { VitaEntry, VitaEntryEnum, VitaEntryViewModel } from '../vita-entry';
 import { AuthenticateService } from './authenticate.service';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 export interface IVitaDataService {
-  entries : Observable<VitaEntry[]>;
+  entries : Observable<VitaEntryViewModel[]>;
   duration : string;
   language : string;
+  detailsExpanded : boolean;
   load(vitaEntryType: VitaEntryEnum);
   setDuration(duration: string);
 }
@@ -26,7 +27,7 @@ interface VitaDataResponse
 })
 export class VitaDataService implements IVitaDataService {
   private activeVitaType: VitaEntryEnum;
-  private _entries = new BehaviorSubject<VitaEntry[]>([]);
+  private _entries = new BehaviorSubject<VitaEntryViewModel[]>([]);
 
   private dataStore: VitaDataResponse = { entries: [] };
   private _language: string;
@@ -43,7 +44,7 @@ export class VitaDataService implements IVitaDataService {
     this._duration = this.localStorageService.get("duration") || "S";
   }
 
-  get entries() : Observable<VitaEntry[]> {
+  get entries() : Observable<VitaEntryViewModel[]> {
     return this._entries.asObservable();
   }
 
@@ -55,6 +56,11 @@ export class VitaDataService implements IVitaDataService {
   public get language()
   {
     return this._language;
+  }
+
+  public get detailsExpanded()
+  {
+    return this.duration != "S";
   }
 
   public preload(isAuthenticated: boolean)
@@ -118,21 +124,108 @@ export class VitaDataService implements IVitaDataService {
 
   private loadDataForActiveVitaType()
   {
-    var entriesForAoi = Object.assign({}, this.dataStore).entries.filter(
+    var entriesForAoi = this.dataStore.entries.filter(
       x => x.vitaEntryType == this.activeVitaType 
-      && x.language.indexOf(this._language) >= 0
-      && x.duration.indexOf(this._duration) >= 0);
+      && x.language.indexOf(this._language) >= 0);
 
-    if (this.authenticationService.IsFirstLogon())
+    var generator = new VitaDataService.ViewModelGenerator(entriesForAoi, this.duration)
+    var models = generator.generate();
+    this._entries.next(models);
+  }
+
+  private static ViewModelGenerator = class 
+  {
+    readonly reducedItems = new Map<string, VitaEntry>();
+    readonly expandedItems = new Map<string, VitaEntry>();
+
+    constructor(private entries: VitaEntry[], private duration: string)
     {
-      let introduction = Object.assign({}, this.dataStore.entries.filter(x => x.vitaEntryType == VitaEntryEnum.Introduction));
-      if (introduction[0])
+    }
+
+    public generate() : VitaEntryViewModel[]
+    {
+      this.initReducedEntries();
+      this.initExpandedEntries();
+      this.distributeMediumEntries();
+
+      let distinctOrderedTitles = [...new Set(this.entries.map(x => x.title))];
+
+      return distinctOrderedTitles
+        .filter(x => this.shouldGenerateModel(x))
+        .map(x => this.generateModel(x));
+    }
+
+    private shouldGenerateModel(title: string): boolean
+    {
+      if (this.reducedItems.has(title))
       {
-        entriesForAoi.unshift(introduction[0]);
-        this.authenticationService.SetFirstLogon();
+        return true;
+      }
+
+      if (this.duration == "L" && this.expandedItems.has(title))
+      {
+        return true;
+      }
+
+      return false;
+    }
+
+    private generateModel(title: string): VitaEntryViewModel
+    {
+      let reducedItem = this.reducedItems.get(title);
+      let expandedItem = this.expandedItems.get(title);
+
+      if (reducedItem == expandedItem)
+      {
+        expandedItem = undefined;
+      }
+
+      let model = new VitaEntryViewModel(reducedItem, expandedItem);
+      if (model.canExpand && this.duration == "L")
+      {
+        model.expanded = true;
+      }
+      
+      return model;
+    }
+
+    private distributeMediumEntries()
+    {
+      if (this.duration == "S")
+      {
+        return;
+      }
+
+      for (const entry of this.entries.filter(x => x.duration.indexOf("M") >= 0)) 
+      {
+        if (entry.duration.indexOf("S") >= 0)
+        {
+          // do nothing, if the same entry is short and medium
+        }
+        else if (entry.duration.indexOf("L") < 0)
+        {
+          this.reducedItems.set(entry.title, entry);
+        }
+        else if (this.duration == "M" && !this.reducedItems.has(entry.title))
+        {
+          this.reducedItems.set(entry.title, entry);
+          this.expandedItems.delete(entry.title);
+        }
       }
     }
 
-    this._entries.next(entriesForAoi);
+    private initReducedEntries()
+    {
+      this.entries
+        .filter(x => x.duration.indexOf("S") >= 0)
+        .forEach(x => this.reducedItems.set(x.title, x));
+    }
+
+    private initExpandedEntries()
+    {
+      this.entries
+        .filter(x => x.duration.indexOf("L") >= 0)
+        .forEach(x => this.expandedItems.set(x.title, x));
+    }
   }
 }

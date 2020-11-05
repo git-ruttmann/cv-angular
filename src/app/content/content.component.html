@@ -1,5 +1,15 @@
 <div class="overlaycontainer"  (click)='back()'>
     <svg class="symbol">
+        <style>
+            .repeat
+            {
+                fill: #555555;
+            }
+            .activerepeat
+            {
+                fill: #DDDDDD;
+            }
+        </style>
         <defs>
             <symbol id="leftChevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 -4 40.075 40.275">
                 <g>
@@ -8,40 +18,26 @@
                     C25.58,33.883,25.075,34.075,24.57,34.075z"/>
                 </g>
             </symbol>
-            <symbol id="rightChevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 -4 40.075 40.275">
+            <symbol perserveAspectRatio="MidXMidY" id="rightChevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 -4 40.075 40.275">
                 <g transform="rotate(-180 20.04,17.04)">
                     <path d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79
                     L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792
                     C25.58,33.883,25.075,34.075,24.57,34.075z"/>
                 </g>
             </symbol>
-            <symbol id="repeat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M512,44.5v148.4c0,5.6-1.9,11.1-6.5,14.8c-4.6,4.6-9.3,6.5-14.8,6.5H342.3
-                c-9.3,0-15.8-4.6-19.5-13c-3.7-8.3-1.9-16.7,4.6-23.2l45.4-45.4c-32.5-30.6-71.4-45.4-115.9-45.4c-23.2,0-45.4,4.6-65.9,13.9
-                c-21.3,9.3-39,21.3-54.7,36.2c-14.8,14.8-27.8,33.4-36.2,54.7c-9.3,21.3-13.9,42.7-13.9,65.9c0,23.2,4.6,45.4,13.9,65.9
-                c9.3,21.3,21.3,39,36.2,54.7c14.8,14.8,33.4,27.8,54.7,36.2c21.3,9.3,42.7,13.9,65.9,13.9c26,0,51-5.6,75.1-17.6
-                c23.2-11.1,43.6-27.8,59.4-49.2c1.9-1.9,3.7-3.7,7.4-3.7c2.8,0,5.6,0.9,8.3,2.8l45.4,45.4c1.9,1.9,2.8,3.7,2.8,6.5
-                c0,2.8-0.9,5.6-2.8,7.4c-24.1,29.7-53.8,51.9-88.1,67.7C330.2,503.7,294,512,256,512c-34.3,0-67.7-6.5-99.2-20.4
-                c-31.5-13.9-58.4-31.5-81.6-54.7c-23.2-23.2-40.8-50.1-54.7-81.6C6.5,323.7,0,291.2,0,256s6.5-67.7,20.4-99.2s31.5-58.4,54.7-81.6
-                s50.1-40.8,81.6-54.7S220.8,0,256,0c32.5,0,64,6.5,94.6,18.6s57.5,29.7,81.6,51.9l43.6-42.7c6.5-6.5,13.9-8.3,23.2-4.6
-                C507.4,28.8,512,35.2,512,44.5z"/>
+            <symbol id="openSingle" perserveAspectRatio="xMinYMin" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <path d="m 99.95,52 c -0.44,10.29 -4.29,21.18 -11.25,29.39 -6.79,8.08 -15.15,13.54 -25.28,16.49 -2.19,0.67 -5.22,1.23 -8.90,1.64 -1.46,0.15 -7.73,0.15 -9.11,0 -5.32,-0.75 -9.63,-1.68 -13.79,-3.31 -13.17,-5.51 -23.02,-15.11 -28.16,-28.18 -1.93,-4.62 -2.86,-10.08 -3.31,-13.81 -0.15,-1.37 -0.16,-7.64 0,-9.12 0.39,-3.36 0.99,-6.68 1.87,-9.73 2.39,-7.75 7.62,-17.13 15.16,-23.58 8.78,-7.50 16.83,-9.81 23.36,-11.37 6.02,-0.89 12.48,-0.98 17.64,-0.22 9.52,1.91 16.47,4.66 23.58,10.68 4.62,4.05 7.90,7.46 11.18,12.97 3.07,5.06 5.34,11.20 6.44,17.59 0.53,3.17 0.71,6.44 0.56,10.57 z m -10.59,-7.13 c -1.36,-10.50 -7.34,-19.85 -13.54,-25.34 -5.07,-4.82 -13.62,-8.16 -21.14,-9.32 -3.69,-0.18 -7.38,-0.29 -11.03,0.26 -8.80,1.22 -18.44,6.91 -24.68,14.47 -4.83,6.81 -7.22,12.69 -8.33,19.99 -0.20,1.36 -0.19,7.99 0,9.34 2.39,16.86 14.60,29.91 29.63,33.77 1.84,0.45 3.70,0.74 5.07,0.95 1.33,0.20 7.97,0.20 9.33,0 7.37,-0.86 19.72,-6.21 25.22,-13.33 8.24,-10.68 10.10,-18.73 9.47,-30.81 z m -20.42,3.41 c -1.11,1.20 -3.38,3.51 -7.48,7.62 -8.54,8.58 -8.44,8.48 -9.92,8.95 -0.51,0.16 -1.92,0.14 -2.57,-0.01 -1.40,-0.39 -1.28,-0.28 -9.72,-8.70 -3.57,-3.57 -6.72,-6.76 -7.86,-7.99 -1.94,-2.39 -1.44,-5.11 0.10,-6.83 2.05,-2.19 5.23,-2.44 7.10,-0.42 0.79,0.70 2.23,2.15 5.47,5.43 3.17,3.20 5.85,5.84 5.93,5.84 0.18,0 0.50,-0.29 5.72,-5.37 3.94,-3.84 5.50,-5.27 6.26,-5.98 2.20,-1.98 4.91,-1.54 6.82,0.36 1.80,1.80 2.10,5.13 0.10,7.14 z"/>
             </symbol>
-            <symbol id="more" xmlns="http://www.w3.org/2000/svg" viewBox="0 30 295 477.867">
-                <g>
-                    <path d="M68.267,170.667C30.564,170.667,0,201.231,0,238.933S30.564,307.2,68.267,307.2s68.267-30.564,68.267-68.267
-                        S105.969,170.667,68.267,170.667z M68.267,273.067c-18.851,0-34.133-15.282-34.133-34.133c0-18.851,15.282-34.133,34.133-34.133
-                        s34.133,15.282,34.133,34.133C102.4,257.785,87.118,273.067,68.267,273.067z"/>
-                </g>
-                <g>
-                    <path d="M238.933,170.667c-37.703,0-68.267,30.564-68.267,68.267s30.564,68.267,68.267,68.267s68.267-30.564,68.267-68.267
-                        S276.636,170.667,238.933,170.667z M238.933,273.067c-18.851,0-34.133-15.282-34.133-34.133c0-18.851,15.282-34.133,34.133-34.133
-                        c18.851,0,34.133,15.282,34.133,34.133C273.067,257.785,257.785,273.067,238.933,273.067z"/>
-                </g>
-                <g>
-                    <path d="M409.6,170.667c-37.703,0-68.267,30.564-68.267,68.267S371.897,307.2,409.6,307.2s68.267-30.564,68.267-68.267
-                        S447.303,170.667,409.6,170.667z M409.6,273.067c-18.851,0-34.133-15.282-34.133-34.133c0-18.851,15.282-34.133,34.133-34.133
-                        s34.133,15.282,34.133,34.133C443.733,257.785,428.451,273.067,409.6,273.067z"/>
-                </g>
+            <symbol id="filter" perserveAspectRatio="xMinYMin" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+                <path d="m 0.11,17.10 c 0,-11.03 8.00,-19.98 17.88,-19.98 H 281.99 c 3.68,0 7.27,1.27 10.28,3.63 8.07,6.34 10.02,18.81 4.33,27.84 l -92.06,107.91 -0.29,121.78 c -0.01,7.60 0.43,15.02 -3.33,21.35 -10.60,17.77 -17.63,20.10 -50.49,10.73 L 112.80,275.57 C 102.80,268.12 96.82,255.56 96.88,242.13 L 97.26,137.25 3.43,28.69 C 1.27,25.31 0.11,21.25 0.11,17.10 Z M 133.61,124.55 l -0.43,117.76 34.80,13.48 0.32,-131.98 79.25,-86.73 H 52.69 Z"/>
+            </symbol>
+            <symbol id="repeat" xmlns="http://www.w3.org/2000/svg" viewBox="140 156 76 39">
+                <path class="activerepeat" d="m 126.28485,171.4635 h 18.89596 v 23.46681 h -18.89596 z"/>
+                <path class="repeat" d="m 150.09738,171.4635 h 18.89596 v 23.46681 h -18.89596 z"/>
+                <path class="repeat" d="m 173.9099,171.4635 h 18.89595 v 23.46681 h -18.89595 z"/>
+                <path class="repeat" d="m 197.72241,171.4635 h 18.89596 v 23.46681 h -18.89596 z"/>
+                <path class="repeat" d="m 221.53493,171.4635 h 18.89595 v 23.46681 h -18.89595 z"/>
+                <path class="activerepeat" d="m 228.97867,168.1051 v -6.85593 h -27.70531 -63.85948 v 3.54333 h 2.65134 l -4.70932,5.36137 -4.33514,-5.36137 h 2.49636 v -7.54775 c 0,0 94.90257,-0.0794 99.3927,-0.0794 0,4.63021 0.024,10.9164 0.024,10.9164 z"/>
             </symbol>
         </defs>
     </svg>
@@ -76,7 +72,7 @@
         <div id="contentsidebyside" (click)='catchClickOnContent($event)'>
             <div id="left" class="textbackground" (swipeleft)="onSwipeLeft($event,-3)" (swiperight)="onSwipeRight($event,3)">
                 <div class="topicview style-7">
-                    <div [@topicAnimation]='ExtendedTopics' class="textcontent">
+                    <div [@topicAnimation]='TopicAnimationState' class="textcontent">
                         <div *ngFor="let entry of entries | async; trackBy: trackTopic; index as i; first as isFirst" class="entryindex" (click)="scrollTo(i)">
                             <div class="entryseparator" *ngIf="!isFirst"></div>
                             <div class="entryinner">
@@ -85,24 +81,51 @@
                         </div>
                     </div>
                 </div>
-                <label class="topicmore form-switch moreswitch">
-                    <p>{{localizationService.FullDetailsText}}</p>
-                    <input type="checkbox" [(ngModel)]="ExtendedTopics">
-                    <i></i>
-                </label>
+                <div class="entry-overview-details" (click)="scrollTo(20000)">
+                    <p>{{CurrentDetailLevel}}</p>
+                    <svg class="filtericon">
+                        <use href="#filter"></use>
+                    </svg>
+                </div>
             </div>
             <div class="spacerbackground" id="betweenleftandright">
             </div>
             <div id="right" class="textbackground style-7" #textbackground (swipeleft)="onSwipeLeft($event,-2)" (swiperight)="onSwipeRight($event,2)">
                 <div class="textcontent" #textcontent tabindex="-1">
-                    <div *ngFor="let entry of entries | async; index as i" #id_{{i}} id=id_{{i}} class="entrycontent">
-                        <app-vita-entry [entry]="entry"></app-vita-entry>
+                    <div *ngFor="let entry of entries | async; trackBy: trackTopic; index as i" 
+                        #id_{{i}} id=id_{{i}} class="entry-full">
+                        <div class="entry-header-line" (click)="expandItem(entry)">
+                            <div class="entry-header-text">{{ entry.title }}</div>
+                            <div class="entry-header-symbol">
+                                <div [hidden]="!entry.canExpand" [class.entry-expanded]="entry.expanded">
+                                    <svg class="headerright">
+                                        <use href="#openSingle"></use>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="entry-content" [smoothHeight]="entry.expanded">
+                            <app-vita-entry [entry]="entry"></app-vita-entry>
+                        </div>
                     </div>
-                    <label class="entrycontent contentmore form-switch moreswitch">
-                        <p>{{localizationService.FullDetailsText}}</p>
-                        <input type="checkbox" [(ngModel)]="ExtendedTopics">
-                        <i></i>
-                    </label>
+                    <div class="entry-full" id=id_20000>
+                        <div class="entry-header-line">
+                            <div class="entry-header-text">{{ localizationService.FilterTitle }}</div>
+                            <svg class="filtericon">
+                                <use href="#filter"></use>
+                            </svg>
+                        </div>
+                        <ul class="filter-container">
+                            <li *ngFor="let action of actions"
+                                class="filter-button"
+                                [class.filter-activated]="isActiveFilter(action)"
+                                (click)="activateFilter(action)">
+                                <div class="filter-button-title">{{action.Title}}</div>
+                                <div class="filter-button-description">{{action.Description}}</div>
+                                <div class="filter-button-duration">{{action.ExpectedDuration}}</div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

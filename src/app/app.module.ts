@@ -13,6 +13,7 @@ import { ContentComponent } from './content/content.component';
 import { LoginComponent } from './base/login.component';
 import { BaseFlightComponent } from './base/base-flight.component';
 import { ReadonlyDirective } from './base/readonly.directive';
+import { SmoothHeightAnimDirective } from './content/smooth-height.directive';
 import { VitaDataService, VitaDataServiceConfig } from './services/vita-data.service';
 import { AuthenticateService } from './services/authenticate.service';
 import { BaseStateService } from './services/base-state.service';
@@ -35,6 +36,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     LoginComponent,
     BaseFlightComponent,
     ReadonlyDirective,
+    SmoothHeightAnimDirective,
     VitaEntryComponent,
   ],
   imports: [

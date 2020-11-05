@@ -1,6 +1,6 @@
 import { Injectable, Component, ViewChild } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, waitForAsync, tick } from '@angular/core/testing';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
@@ -9,10 +9,11 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { BehaviorSubject } from 'rxjs';
 
 import { ContentComponent } from './content.component';
+import { SmoothHeightAnimDirective } from './smooth-height.directive';
 import { IVitaDataService, VitaDataServiceConfig } from '../services/vita-data.service';
 import { VitaEntryComponent } from './vita-entry.component';
 import { routes } from '../app-routing.module';
-import { VitaEntry, VitaEntryEnum } from '../vita-entry';
+import { VitaEntry, VitaEntryEnum, VitaEntryViewModel } from '../vita-entry';
 import { AuthGuardService } from '../services/auth-guard.service';
 import { TrackingService, ITrackedItem } from '../services/tracking.service';
 import { APP_BASE_HREF } from '@angular/common';
@@ -47,7 +48,7 @@ class NoTrackingMock implements Partial<TrackingService>
 @Injectable()
 class VitaDataMock implements IVitaDataService
 {
-  entries: BehaviorSubject<VitaEntry[]>;
+  entries: BehaviorSubject<VitaEntryViewModel[]>;
   duration: string = "S";
   language: string = "German";
 
@@ -67,14 +68,14 @@ class VitaDataMock implements IVitaDataService
 
   public constructor()
   {
-    this.entries = new BehaviorSubject<VitaEntry[]>([]);
+    this.entries = new BehaviorSubject<VitaEntryViewModel[]>([]);
   }
 
   load(vitaEntryType: VitaEntryEnum)
   {
     if (vitaEntryType == VitaEntryEnum.Person) 
     {
-      this.entries.next(this.mockedPersonData);
+      this.entries.next(this.mockedPersonData.map(x => new VitaEntryViewModel(x, x)));
     }
     else
     {
@@ -85,7 +86,12 @@ class VitaDataMock implements IVitaDataService
   setDuration(duration: string)
   {
     this.duration = duration;
-  }  
+  }
+
+  get detailsExpanded() 
+  {
+    return this.duration != "S";
+  }
 }
 
 @Component({
@@ -100,11 +106,12 @@ describe('ContentComponent', () => {
   let component: ContentComponent;
   let fixture: ComponentFixture<TestRootComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         TestRootComponent,
         ContentComponent,
+        SmoothHeightAnimDirective,
         VitaEntryComponent,
       ],
       providers: [

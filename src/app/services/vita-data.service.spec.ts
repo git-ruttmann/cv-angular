@@ -3,11 +3,11 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { VitaDataService, IVitaDataService } from './vita-data.service';
-import { VitaEntry, VitaEntryEnum, VitaSentenceEnum, VitaEntryParagraph, VitaEntryList, VitaEntryLink, VitaEntryListLink } from '../vita-entry';
+import { VitaEntryEnum, VitaSentenceEnum, VitaEntryParagraph, VitaEntryList, VitaEntryLink, VitaEntryListLink, VitaEntryViewModel } from '../vita-entry';
 
 describe('VitaEntryService', () => {
   let httpMock : HttpTestingController;
-  let vitaResult: VitaEntry[];
+  let vitaResult: VitaEntryViewModel[];
 
   function loadsamplevita() {
     const service: VitaDataService = TestBed.inject(VitaDataService);
@@ -114,5 +114,316 @@ describe('VitaEntryService', () => {
     const listLink = list.items[1] as VitaEntryListLink;
     expect(listLink.line).toBe("bullet link");
     expect(listLink.url).toBe("https://my.mycv.com/bullettarget");
+  }));
+});
+
+describe('VitaEntryService duration filter', () => {
+  let httpMock : HttpTestingController;
+  let vitaResult: VitaEntryViewModel[];
+
+  function loaddetaillevelvita(duration: string) {
+    const service: VitaDataService = TestBed.inject(VitaDataService);
+    service.entries.subscribe(x => vitaResult = x);
+
+    let fakeVita = [
+      {"vitaEntryType":"Person","title":"short only","lines":["short content"],"attributes":["English","Short"]},
+      {"vitaEntryType":"Person","title":"short only","lines":["german content must be excluded"],"attributes":["German","Short"]},
+      {"vitaEntryType":"Person","title":"short and medium","lines":["short content",""],"attributes":["English","Short"]},
+      {"vitaEntryType":"Person","title":"short and medium","lines":["medium content",""],"attributes":["English","Medium"]},
+      {"vitaEntryType":"Person","title":"short and long","lines":["short content"],"attributes":["English","Short"]},
+      {"vitaEntryType":"Person","title":"short and long","lines":["long content"],"attributes":["English","Long"]},
+      {"vitaEntryType":"Person","title":"medium only","lines":["medium content"],"attributes":["English","Medium"]},
+      {"vitaEntryType":"Person","title":"medium and long","lines":["medium content"],"attributes":["English","Medium"]},
+      {"vitaEntryType":"Person","title":"medium and long","lines":["long content"],"attributes":["English","Long"]},
+      {"vitaEntryType":"Person","title":"short and medium+long","lines":["short content"],"attributes":["English","Short"]},
+      {"vitaEntryType":"Person","title":"short and medium+long","lines":["medium+long content"],"attributes":["English","Medium","Long"]},
+      {"vitaEntryType":"Person","title":"short and medium and long","lines":["short content"],"attributes":["English","Short"]},
+      {"vitaEntryType":"Person","title":"short and medium and long","lines":["medium content"],"attributes":["English","Medium"]},
+      {"vitaEntryType":"Person","title":"short and medium and long","lines":["long content"],"attributes":["English","Long"]},
+      {"vitaEntryType":"Person","title":"medium and long combined","lines":["medium and long content"],"attributes":["English","Medium","Long"]},
+      {"vitaEntryType":"Person","title":"long only","lines":["long content"],"attributes":["English","Long"]},
+      ];
+  
+    service.preload(true);
+    const interceptedRequest = httpMock.expectOne("api/v1/vita");
+    interceptedRequest.flush( { entries : fakeVita } );
+
+    service.setDuration(duration);
+    service.load(VitaEntryEnum.Person);
+
+    return service;
+  }
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports:
+      [
+        HttpClientTestingModule,
+        LocalStorageModule.forRoot({
+          storageType: 'localStorage',
+        }),
+      ]});
+
+      httpMock = TestBed.inject(HttpTestingController);
+    }
+  );
+
+  it('short filter should show short only content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("S");
+
+    let entries = vitaResult.filter(x => x.title === "short only");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(false);
+    expect(entry.expanded).toBe(false);
+  }));
+
+  it('short filter should show short and medium content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("S");
+
+    let entries = vitaResult.filter(x => x.title === "short and medium");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(false);
+    expect(entry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("short content");
+  }));
+
+  it('short filter should show short and long content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("S");
+
+    let entries = vitaResult.filter(x => x.title === "short and long");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(true);
+    expect(entry.expanded).toBe(false);
+  }));
+
+  it('short filter should show all size content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("S");
+
+    let entries = vitaResult.filter(x => x.title === "short and medium and long");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(true);
+    expect(entry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("short content");
+  }));
+
+  it('short filter should show short version of short,medium+long', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("S");
+
+    let entries = vitaResult.filter(x => x.title === "short and medium+long");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(true);
+    expect(entry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("short content");
+  }));
+
+  it('short filter should hide non-short content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("S");
+
+    let mediumAndLongEntries = vitaResult.filter(x => x.title === "medium and long");
+    expect(mediumAndLongEntries.length).toBe(0);
+
+    let mediumLongCombinedEntries = vitaResult.filter(x => x.title === "medium and long combined");
+    expect(mediumLongCombinedEntries.length).toBe(0);
+    
+    let mediumOnlyEntries = vitaResult.filter(x => x.title === "medium only");
+    expect(mediumOnlyEntries.length).toBe(0);
+    
+    let longOnlyEntries = vitaResult.filter(x => x.title === "long only");
+    expect(longOnlyEntries.length).toBe(0);
+  }));
+
+  it('medium filter should show short only content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("M");
+
+    let entries = vitaResult.filter(x => x.title === "short only");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(false);
+    expect(entry.expanded).toBe(false);
+  }));
+
+  it('medium filter should show short and medium content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("M");
+
+    let entries = vitaResult.filter(x => x.title === "short and medium");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(false);
+    expect(entry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("medium content");
+  }));
+
+  it('medium filter should show short and long content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("M");
+
+    let entries = vitaResult.filter(x => x.title === "short and long");
+    expect(entries.length).toBe(1);
+    let shortAndLongEntry = entries[0];
+    expect(shortAndLongEntry.canExpand).toBe(true);
+    expect(shortAndLongEntry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>shortAndLongEntry.lines[0]).line).toBe("short content");
+  }));
+
+  it('medium filter should show all size content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("M");
+
+    let entry = vitaResult.filter(x => x.title === "short and medium and long");
+    expect(entry.length).toBe(1);
+    let allSizeEntry = entry[0];
+    expect(allSizeEntry.canExpand).toBe(true);
+    expect(allSizeEntry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>allSizeEntry.lines[0]).line).toBe("medium content");
+  }));
+
+  it('medium filter should show medium content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("M");
+
+    let entries = vitaResult.filter(x => x.title === "medium and long");
+    expect(entries.length).toBe(1);
+    let mediumAndLongEntry = entries[0];
+    expect(mediumAndLongEntry.canExpand).toBe(true);
+    expect(mediumAndLongEntry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>mediumAndLongEntry.lines[0]).line).toBe("medium content");
+  }));
+
+  it('medium filter should show medium and long combined content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("M");
+
+    let entry = vitaResult.filter(x => x.title === "medium and long combined");
+    expect(entry.length).toBe(1);
+    let mediumLongCombinedEntry = entry[0];
+    expect(mediumLongCombinedEntry.canExpand).toBe(false);
+    expect(mediumLongCombinedEntry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>mediumLongCombinedEntry.lines[0]).line).toBe("medium and long content");
+  }));
+
+  it('medium filter should show short version of short,medium+long', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("M");
+
+    let entries = vitaResult.filter(x => x.title === "short and medium+long");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(true);
+    expect(entry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("short content");
+  }));
+
+  it('medium filter should show medium only content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("M");
+
+    let entries = vitaResult.filter(x => x.title === "medium only");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(false);
+    expect(entry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("medium content");
+  }));
+
+  it('medium filter should hide non-short-or-medium content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("M");
+
+    let entries = vitaResult.filter(x => x.title === "long only");
+    expect(entries.length).toBe(0);
+  }));
+
+  it('long filter should show short only content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("L");
+
+    let entries = vitaResult.filter(x => x.title === "short only");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(false);
+    expect(entry.expanded).toBe(false);
+  }));
+
+  it('long filter should show short and medium content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("L");
+
+    let entries = vitaResult.filter(x => x.title === "short and medium");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(false);
+    expect(entry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("medium content");
+  }));
+
+  it('long filter should show short and long content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("L");
+
+    let entries = vitaResult.filter(x => x.title === "short and long");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(true);
+    expect(entry.expanded).toBe(true);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("long content");
+  }));
+
+  it('long filter should show all size content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("L");
+
+    let entries = vitaResult.filter(x => x.title === "short and medium and long");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(true);
+    expect(entry.expanded).toBe(true);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("long content");
+  }));
+
+  it('long filter should show medium content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("L");
+
+    let entries = vitaResult.filter(x => x.title === "medium and long");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(true);
+    expect(entry.expanded).toBe(true);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("long content");
+  }));
+
+  it('long filter should show medium and long combined content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("L");
+
+    let entries = vitaResult.filter(x => x.title === "medium and long combined");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(false);
+    expect(entry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("medium and long content");
+  }));
+
+  it('long filter should show short version of short,medium+long', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("L");
+
+    let entries = vitaResult.filter(x => x.title === "short and medium+long");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(true);
+    expect(entry.expanded).toBe(true);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("medium+long content");
+  }));
+
+  it('long filter should show medium only content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("L");
+
+    let entries = vitaResult.filter(x => x.title === "medium only");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect(entry.canExpand).toBe(false);
+    expect(entry.expanded).toBe(false);
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("medium content");
+  }));
+
+  it('long filter should show long only content', fakeAsync(() => {
+    const service: IVitaDataService = loaddetaillevelvita("L");
+
+    let entries = vitaResult.filter(x => x.title === "long only");
+    expect(entries.length).toBe(1);
+    let entry = entries[0];
+    expect((<VitaEntryParagraph>entry.lines[0]).line).toBe("long content");
   }));
 });

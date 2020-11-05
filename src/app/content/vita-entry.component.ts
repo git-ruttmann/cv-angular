@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { TrackingService } from '../services/tracking.service';
-import { VitaEntry, VitaSentenceEnum } from '../vita-entry';
+import { VitaEntryViewModel, VitaSentenceEnum } from '../vita-entry';
 
 @Component({
   selector: 'app-vita-entry',
@@ -11,7 +11,7 @@ export class VitaEntryComponent {
   vitaSentenceEnum = VitaSentenceEnum;
 
   @Input()
-  entry: VitaEntry;
+  entry: VitaEntryViewModel;
 
   constructor(private trackingService : TrackingService) {
   }

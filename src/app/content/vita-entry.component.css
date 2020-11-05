@@ -21,6 +21,10 @@
   margin-block-start: 0.7em;
 }
 
+.ve_paragraph + .ve_link {
+  margin-block-start: 0.4em;
+}
+
 .vitalink {
   margin-block-start: 0.2em;
   margin-block-end: 0.2em;
