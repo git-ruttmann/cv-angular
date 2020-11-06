@@ -7,6 +7,7 @@ import { BackgroundImageViewportService, BackgroundViewportReport } from '../ser
 import { AuthenticateService } from '../services/authenticate.service';
 import { LocalizationTextService } from '../services/localization-text.service';
 import { GooglePathStrings } from './GooglePathStrings';
+import { WelcomePathStrings } from './WelcomePathStrings';
 
 const duration = 4400;
 const toiDuration = 800;
@@ -87,6 +88,29 @@ export class AnimationStuff {
       ])
     ];
   }
+
+  public static welcomeTextTransform() : AnimationMetadata[] {
+    return  [ 
+      // run the SVG animation
+      query('#welcometextcontainer', animate(1400, style({ }))),
+      query('#welcomeletter-3', animate(200, style({ fill: "#FBBC05" }))),
+      query('#welcometextcontainer', animate(400, style({ }))),
+      
+      query('#welcomeletter-2', style({ opacity: 0 })),
+      query('#welcometextcontainer', animate(400, style({ }))),
+
+      query('#welcomeletter-1, #welcomeletter-3, #welcomeletter-4, #welcomeletter-5, #welcomeletter-6',
+        stagger(80, animate(200, style({ fill: '#B8870B' })))),
+
+      query('#welcometextcontainer', animate(250, style({ }))),
+  
+      group([
+        query('#welcomeletter-0', animate(200, style({ opacity: 0 }))),
+        query('#welcomeletter-1, #welcomeletter-3, #welcomeletter-4, #welcomeletter-5, #welcomeletter-6',
+          stagger(90, animate(400, style({ transform: "*" })))),
+      ]),
+    ];
+  }
 }
 
 export const flyPathStates = trigger('flyPathState', [
@@ -95,7 +119,7 @@ export const flyPathStates = trigger('flyPathState', [
 ]);
 
 export const baseStateAnimations = trigger('baseState', [
-  transition('initial => flyin', [
+  transition('initial => flyinPath', [
     group([
       query('.poitext', style({ opacity: 0})),
       query('.flyPathPoi', style({ opacity: 0})),
@@ -155,6 +179,29 @@ export const baseStateAnimations = trigger('baseState', [
       query('.poitext', animate(500, style({ opacity: 1 }))),
     ])
   ]),
+  transition('initial => flyin', [
+    group([
+      query('.poitext', style({ opacity: 0})),
+      query('.flyPathPoi', style({ opacity: 0})),
+      query('.whoamisub', style({ opacity : 0, position: 'relative', transform: 'translate(-10%, 0%)' })),
+      query('.whoami', style({ opacity : 0, position: 'relative', transform: 'translateX(-10%)' })),
+      query('#welcometextcontainer', style({ transform: "translateX(-5%)", opacity: 0 })),
+      query('.welcomeletter', style({ transform: "translate(0px, 0px)", opacity: 1 })),
+    ]),
+
+    query('.whoami', animate(450, style({ opacity : 1, position: 'relative', transform: 'translate(-0.5rem, -0.5rem)' }))),
+    query('.whoamisub', animate(450, style({ opacity : 1, position: 'relative', transform: '*' }))),
+    query('#welcometextcontainer', animate("450ms ease-out", style({ transform: "*", opacity: "*" }))),
+
+    sequence(AnimationStuff.welcomeTextTransform()),
+
+    sequence([
+      query('#welcometextcontainer', animate(150, style({ }))),
+      query('.welcomeletter', animate(150, style({ opacity: 0 }))),
+      query('.flyPathPoi', animate(500, style({ opacity: 1 }))),
+      query('.poitext', animate(500, style({ opacity: 1 }))),
+    ])
+  ]),
   transition('inactive => returned', sequence([
     query('.flyPathPoi, .poitext', style({ opacity: 0 })),
     query('.flyPathPoi, .poitext', animate(700, style({ opacity: 0 }))),
@@ -183,13 +230,8 @@ export const baseStateAnimations = trigger('baseState', [
 export class BaseFlightComponent implements AfterViewInit {
   isFlyPathVisible = false;
   isOpen = false;
-  public GP : GooglePathStrings = new GooglePathStrings();
-  public googleTextAnimation = {
-    duration : '1000ms',
-    keytimes : '0;0.1;0.15;0.2;1',
-    delay: '3000ms'
-  };
-  public googleTextAnimationDuration : string = '4000ms';
+  public GP: GooglePathStrings = new GooglePathStrings();
+  public WP: WelcomePathStrings = new WelcomePathStrings();
 
   @ViewChild('backgroundoverlay', { static : true })
   backgroundOverlayElt: ElementRef;

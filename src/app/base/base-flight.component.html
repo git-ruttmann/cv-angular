@@ -26,44 +26,6 @@ viewBox= "-388 0 705 470" style
 class="backgroundimage"
 #backgroundoverlay>
   <style>
-    .googleletter  {
-      line-height: 1.15;
-      stroke: none;
-      opacity: 0;
-      animation-play-state: paused;
-    }
-    #googleletter-1 {
-      fill: #4285F4;
-      transform: translate(-34px, 69px);
-    }
-    #googleletter-2 {
-      fill: #EA4335;
-      transform: translate(-24px, +119px);
-    }
-    #googleletter-3 {
-      fill: #FBBC05;
-      transform: translate(30px, -72px);
-    }
-    #googleletter-4 {
-      fill: #4285F4;
-      transform: translate(25px, +42px);
-    }
-    #googleletter-5 {
-      opacity: 0;
-      fill: #34A853;
-    }
-    #googleletter-6 {
-      fill: #EA4335;
-      transform: translate(15px, +127px);
-    }
-    .googlewelcome {
-      font-size: 33;
-      font-weight: 800;
-      stroke-width: 0.1;
-      stroke: none;
-      fill: #FBBC05;
-      font-family: "Ubuntu";
-    }
   </style>
   <g id="googletextcontainer">
     <g transform="translate(-100 110) scale(0.9)" >
@@ -110,6 +72,59 @@ class="backgroundimage"
           begin = "2600ms"
           repeatCount = "1"
           [attr.values] = "GP.ValuesFor('L')">
+        </animate>
+      </path>
+    </g>
+  </g>
+  <g id="welcometextcontainer">
+    <g transform="translate(-108 110) scale(0.9)" filter="url(#welcomeshadow)">
+      <path [attr.d]="WP.W1_0" class="welcomeletter" id="welcomeletter-0">
+        <animate attributeName = "d" [attr.dur] = "WP.Duration" [attr.keyTimes] = "WP.KeyTimesFor('W1')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "WP.ValuesFor('W1')">
+        </animate>
+      </path>
+      <path [attr.d]="WP.E1_0" class="welcomeletter" id="welcomeletter-1">
+        <animate attributeName = "d" [attr.dur] = "WP.Duration" [attr.keyTimes] = "WP.KeyTimesFor('E1')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "WP.ValuesFor('E1')">
+        </animate>
+      </path>
+      <path [attr.d]="WP.C1_0" class="welcomeletter" id="welcomeletter-3">
+        <animate attributeName = "d" [attr.dur] = "WP.Duration" [attr.keyTimes] = "WP.KeyTimesFor('C1')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "WP.ValuesFor('C1')">
+        </animate>
+      </path>
+      <path [attr.d]="WP.L1_0" class="welcomeletter" id="welcomeletter-2">
+        <animate attributeName = "d" [attr.dur] = "WP.Duration" [attr.keyTimes] = "WP.KeyTimesFor('L1')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "WP.ValuesFor('L1')">
+        </animate>
+      </path>
+      <path [attr.d]="WP.O1_0" class="welcomeletter" id="welcomeletter-6">
+        <animate attributeName = "d" [attr.dur] = "WP.Duration" [attr.keyTimes] = "WP.KeyTimesFor('O1')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "WP.ValuesFor('O1')">
+        </animate>
+      </path>
+      <path [attr.d]="WP.M1_0" class="welcomeletter" id="welcomeletter-4">
+        <animate attributeName = "d" [attr.dur] = "WP.Duration" [attr.keyTimes] = "WP.KeyTimesFor('M1')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "WP.ValuesFor('M1')">
+        </animate>
+      </path>
+      <path [attr.d]="WP.E2_0" class="welcomeletter" id="welcomeletter-5">
+        <animate attributeName = "d" [attr.dur] = "WP.Duration" [attr.keyTimes] = "WP.KeyTimesFor('E2')"
+          begin = "2600ms"
+          repeatCount = "1"
+          [attr.values] = "WP.ValuesFor('E2')">
         </animate>
       </path>
     </g>
