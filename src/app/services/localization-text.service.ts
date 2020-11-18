@@ -45,6 +45,12 @@ export class LocalizationTextService {
     return "Matthias Ruttmann";
   }
 
+  public get IsIos() : boolean {
+    let is_iPad = navigator.userAgent.includes("iPad");
+    let is_iPhone = navigator.userAgent.includes("iPhone");
+    return is_iPhone || is_iPad;
+  }
+
   public get DeveloperProfileText() : String {
     return "Developer Profile";
   }

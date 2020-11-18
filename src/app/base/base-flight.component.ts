@@ -306,6 +306,16 @@ export class BaseFlightComponent implements AfterViewInit {
     textElement.style.top = ypos + "px";
   }
 
+  performantSelector(performantFilter: string, slowFilter: string) : string
+  {
+    if (this.localizationService.IsIos)
+    {
+      return slowFilter;
+    }
+
+    return performantFilter;
+  }
+
   onClick(event) {
     var target = event.target || event.srcElement || event.currentTarget;
     var idAttr = target.attributes?.id ?? target.parentElement.attributes?.id;

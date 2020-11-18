@@ -77,7 +77,7 @@ class="backgroundimage"
     </g>
   </g>
   <g id="welcometextcontainer">
-    <g transform="translate(-108 110) scale(0.9)" filter="url(#welcomeshadow)">
+    <g transform="translate(-108 110) scale(0.9)" [attr.filter]="performantSelector('url(#welcomeshadow)', '')">
       <path [attr.d]="WP.W1_0" class="welcomeletter" id="welcomeletter-0">
         <animate attributeName = "d" [attr.dur] = "WP.Duration" [attr.keyTimes] = "WP.KeyTimesFor('W1')"
           begin = "2600ms"
