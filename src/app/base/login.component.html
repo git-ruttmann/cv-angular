@@ -46,6 +46,7 @@
     position: relative;
     font-size: xx-large;
     text-align: center;
+    -webkit-text-security: disc;
   }
   .xxbutton
   {
@@ -62,11 +63,14 @@
     <div class="login-overlay" (click)='quick()'>
       <div class="input-wrapper">
         <input id="code"
-          type="password" 
-          autocomplete="off" 
+          #loginpassword
+          type="text"
+          autocomplete="off"
+          autocapitalize="off"
           placeholder="Enter code" 
           autofocus 
-          name="code" 
+          name="code"
+          autocomplete="off"
           (click)='checkCode($event)'
           [(ngModel)]="code" 
           [appReadonly]="codeReadonly"
