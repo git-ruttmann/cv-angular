@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterContentInit } from '@angular/core';
 import { AuthenticateService } from '../services/authenticate.service';
 import { Router } from '@angular/router';
 import { isDevMode } from '@angular/core';
@@ -9,7 +9,7 @@ import { BaseStateService } from '../services/base-state.service';
   templateUrl: './login.component.html',
   styleUrls: ['../app.component.css'],
 })
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements OnInit, AfterViewInit, AfterContentInit {
   code: string = "";
   codeReadonly: boolean = false;
 
@@ -21,6 +21,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private router : Router, 
     private baseStateService : BaseStateService) {
       authService.authenticateSuccess.subscribe(x => this.gotAuthentication(x))
+  }
+  ngAfterContentInit(): void
+  {
+    this.handleUrlParameters();
   }
 
   ngAfterViewInit(): void
@@ -50,6 +54,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (this.passwordInputElt.nativeElement.style.webkitTextSecurity == undefined)
     {
       this.passwordInputElt.nativeElement.type = "password";
+    }
+  }
+
+  private handleUrlParameters()
+  {
+    let urlTree = this.router.parseUrl(this.router.routerState.snapshot.url);
+    if (urlTree.queryParamMap.has("code"))
+    {
+      this.code = urlTree.queryParamMap.get("code");
+      setTimeout(() => this.checkCode(null), 500);
     }
   }
 

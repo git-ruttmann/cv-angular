@@ -60,8 +60,8 @@ export class BaseStateService {
 
   private RouteStateChanged(): void
   {
-    let state = this.router.routerState.snapshot;
-    let section = state.url.split('/', 2).concat("-")[1].toLowerCase();
+    let urlTree = this.router.parseUrl(this.router.routerState.snapshot.url);
+    let section = urlTree.toString().replace("/", "");
 
     this.handleSectionVisit(section);
     if (section == "-")

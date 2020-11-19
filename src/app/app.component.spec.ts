@@ -1,4 +1,4 @@
-import { TestBed, async, tick, fakeAsync, ComponentFixture } from '@angular/core/testing';
+import { TestBed, async, tick, fakeAsync, ComponentFixture, discardPeriodicTasks } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -58,6 +58,7 @@ describe('AppComponent', () => {
     fixture.ngZone.run(() => router.initialNavigation());
     tick();
     const compiled = fixture.debugElement.nativeElement;
+    discardPeriodicTasks();
     expect(compiled.querySelector('.consenttext')?.textContent)
       .toContain('By entering the code, you accept the use of cookies and tracking.');
   }));
