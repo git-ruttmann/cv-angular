@@ -56,7 +56,7 @@ export class TrackingService
   {
     let headers = new HttpHeaders({'Content-Type': 'application/json'});
     this.http.post(
-      "api/v1/track/topics", 
+      "api/v1/reporting/topics", 
       { Url: url, Duration: this.dataService.duration, Topics: items }, 
       { headers: headers })
       .subscribe((response) => {});
@@ -66,7 +66,7 @@ export class TrackingService
   {
     let headers = new HttpHeaders({'Content-Type': 'application/json'});
     this.http.post(
-      "api/v1/track", 
+      "api/v1/reporting", 
       { Url: url, Topic: topic, Scroll: scroll, Duration: this.dataService.duration }, 
       { headers: headers })
       .subscribe((response) => {});
@@ -76,7 +76,7 @@ export class TrackingService
   {
     let headers = new HttpHeaders({'Content-Type': 'application/json'});
     this.http.post(
-      "api/v1/track/link", 
+      "api/v1/reporting/link", 
       { Url: url },
       { headers: headers })
       .subscribe((response) => {});
