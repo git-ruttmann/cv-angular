@@ -209,6 +209,7 @@ export class ContentComponent implements AfterViewInit, OnDestroy {
   public expandItem(item: VitaEntryViewModel)
   {
     item.expanded = !item.expanded;
+    this.trackingEventService.Track("expand");
   }
   
   private onContentScroll()
