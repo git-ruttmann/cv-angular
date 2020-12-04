@@ -31,8 +31,14 @@
   .input-wrapper {
     left: 20%;
     width: 60%;
-    top: calc(50% - 20px);
+    top: calc(50% - 1em - 20px);
     position: absolute;
+  }
+  .input-wrapper p {
+    margin-top: 0.3em;
+    text-align: center;
+    font-size: large;
+    color: whitesmoke;
   }
   .consenttext {
     position: absolute;
@@ -55,6 +61,25 @@
     font-size: xx-large;
     position: relative;
   }
+  .linkedin-login
+  {
+    cursor: pointer;
+    position: absolute;
+    background-size: contain;
+    top: calc(50% + 5em - 20px);
+    text-align: center;
+    height: 3em;
+    width: 100%;
+    background-repeat: no-repeat;
+  }
+  .linkedin-login:hover img
+  {
+    src: url("assets/Sign-In-Large---Hover.png")
+  }
+  .linkedin-login img
+  {
+    height: 3em;
+  }
 </style>
 <div class="login-container">
   <div class="sizing">
@@ -75,6 +100,10 @@
           [(ngModel)]="code" 
           [appReadonly]="codeReadonly"
           (keyup)='checkCode($event)' >
+        <p>or</p>
+      </div>
+      <div class="linkedin-login" (click)='linkedin($event)'>
+        <img src="assets/Sign-In-Large---Default.png"/>
       </div>
       <div class="consenttext">
         By entering the code, you accept the use of cookies and tracking.

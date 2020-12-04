@@ -8,6 +8,7 @@ import { AuthGuardService } from './services/auth-guard.service';
 export const routes: Routes = [
   { path: '', component: BaseFlightComponent, canActivate: [ AuthGuardService ], data: {animation: 'base'} },
   { path: 'login', component: LoginComponent, data: {animation: 'login'} },
+  { path: 'oauthsuccess', component: LoginComponent, data: {animation: 'login'} },
   { path: 'person', component: ContentComponent, canActivate: [ AuthGuardService ], data: {animation: 'content'} },
   { path: 'strength', component: ContentComponent, canActivate: [ AuthGuardService ], data: {animation: 'content'} },
   { path: 'projects', component: ContentComponent, canActivate: [ AuthGuardService ], data: {animation: 'content'} },

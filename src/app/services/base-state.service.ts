@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { PRIMARY_OUTLET, Router } from '@angular/router';
 
 const flyinStateName : string = "flyin";
 const flyinGoogleStateName : string = "flyinGoogle";
@@ -61,14 +61,9 @@ export class BaseStateService {
   private RouteStateChanged(): void
   {
     let urlTree = this.router.parseUrl(this.router.routerState.snapshot.url);
-    let section = urlTree.toString().replace("/", "");
+    let section = urlTree.root.children[PRIMARY_OUTLET]?.segments[0].path ?? "-";
 
     this.handleSectionVisit(section);
-    if (section == "-")
-    {
-      return;
-    }
-    
     this.determineNextState(section);
 
     if (this.nextState != this.state)
@@ -79,7 +74,7 @@ export class BaseStateService {
 
   private handleSectionVisit(section: string)
   {
-    if (section == "-" || section == "")
+    if (section == "-" || section == "" || section == "/")
     {
       this.firstVisitedSection = "";
       this.visitedPages.clear();
@@ -104,12 +99,12 @@ export class BaseStateService {
 
   private determineNextState(section: string)
   {
-    if (section == "login")
+    if (section == "login" || section == "oauthsuccess")
     {
       this.isFirstActivation = true;
       this.nextState = "initial";
     }
-    else if (section != "")
+    else if (section != "" && section != "-")
     {
       // left to a content view. Set the "old" state before FetchState to inactive
       this.nextState = "inactive";

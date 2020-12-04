@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterContentInit } from '@angular/core';
 import { AuthenticateService } from '../services/authenticate.service';
-import { Router } from '@angular/router';
+import { PRIMARY_OUTLET, Router } from '@angular/router';
 import { isDevMode } from '@angular/core';
 import { BaseStateService } from '../services/base-state.service';
 
@@ -49,6 +49,12 @@ export class LoginComponent implements OnInit, AfterViewInit, AfterContentInit {
     this.authService.Authenticate(this.code);
   }
 
+  public linkedin(event: Event)
+  {
+    window.location.href = this.authService.GenerateLinkedInOauthUrl();
+    event.stopPropagation();
+  }
+
   private handleMissingTextSecurity()
   {
     if (this.passwordInputElt.nativeElement.style.webkitTextSecurity == undefined)
@@ -62,8 +68,17 @@ export class LoginComponent implements OnInit, AfterViewInit, AfterContentInit {
     let urlTree = this.router.parseUrl(this.router.routerState.snapshot.url);
     if (urlTree.queryParamMap.has("code"))
     {
-      this.code = urlTree.queryParamMap.get("code");
-      setTimeout(() => this.checkCode(null), 500);
+      let segment = urlTree.root.children[PRIMARY_OUTLET].segments[0].path;
+      if (segment == "oauthsuccess")
+      {
+        this.code = "---";
+        this.authService.OAuthVerifyCode(urlTree.queryParamMap.get("code"));
+      }
+      else
+      {
+        this.code = urlTree.queryParamMap.get("code");
+        setTimeout(() => this.checkCode(null), 500);
+      }
     }
   }
 
